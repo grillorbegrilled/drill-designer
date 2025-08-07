@@ -1,0 +1,18 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f0f0f0;
+}
+
+#controls {
+    padding: 10px;
+    background: #ddd;
+    display: flex;
+    gap: 20px;
+}
+
+canvas {
+    display: block;
+    background: #2a7d2a; /* green field */
+    margin: 0 auto;
+}
