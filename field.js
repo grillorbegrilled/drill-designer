@@ -1,19 +1,32 @@
-function drawField(ctx, stepSizeInches, hashType) {
+function drawField(ctx, stepSizeInches) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-    // Step size scaling
-    let fieldWidthSteps = (160 * 12) / stepSizeInches;
-    let fieldLengthSteps = (300 * 12) / stepSizeInches;
-    let scaleX = ctx.canvas.width / fieldLengthSteps;
-    let scaleY = ctx.canvas.height / fieldWidthSteps;
+    const fieldWidthSteps = (160 * 12) / stepSizeInches;  // 85.33 for 8-to-5
+    const fieldLengthSteps = (300 * 12) / stepSizeInches; // 160 for 8-to-5
+    const scaleX = ctx.canvas.width / fieldLengthSteps;
+    const scaleY = ctx.canvas.height / fieldWidthSteps;
 
-    // Draw sidelines
+    // Draw step grid (light gray)
+    ctx.strokeStyle = "#555";
+    ctx.lineWidth = 0.5;
+
+    for (let x = 0; x <= fieldLengthSteps; x++) {
+        ctx.beginPath();
+        ctx.moveTo(x * scaleX, 0);
+        ctx.lineTo(x * scaleX, ctx.canvas.height);
+        ctx.stroke();
+    }
+
+    for (let y = 0; y <= fieldWidthSteps; y++) {
+        ctx.beginPath();
+        ctx.moveTo(0, y * scaleY);
+        ctx.lineTo(ctx.canvas.width, y * scaleY);
+        ctx.stroke();
+    }
+
+    // Draw yard lines every 8 steps (white, thicker)
     ctx.strokeStyle = "white";
     ctx.lineWidth = 2;
-    ctx.strokeRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-    // Draw yard lines every 8 steps (1 yard line)
-    ctx.lineWidth = 1;
     for (let x = 0; x <= fieldLengthSteps; x += 8) {
         ctx.beginPath();
         ctx.moveTo(x * scaleX, 0);
@@ -21,24 +34,28 @@ function drawField(ctx, stepSizeInches, hashType) {
         ctx.stroke();
     }
 
-    // Draw hashes
-    let hashFromSidelineSteps;
-    if (hashType === "hs") {
-        hashFromSidelineSteps = stepSizeInches === 22.5 ? 28 : 21;
-    } else {
-        let hashInches = 70 * 12 + 9; // 70'9"
-        hashFromSidelineSteps = hashInches / stepSizeInches;
-    }
-
+    // Draw sideline box
     ctx.lineWidth = 2;
-    for (let side = 0; side < 2; side++) {
-        let y = hashFromSidelineSteps * scaleY;
-        if (side === 1) {
-            y = ctx.canvas.height - y;
-        }
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(ctx.canvas.width, y);
+    ctx.strokeRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    // Draw short hash marks (HS only, fixed 28 or 21 steps from sideline)
+    let hashFromSidelineSteps = stepSizeInches === 22.5 ? 28 : 21;
+    let topHashY = hashFromSidelineSteps * scaleY;
+    let bottomHashY = ctx.canvas.height - topHashY;
+
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1;
+
+    for (let x = 0; x <= fieldLengthSteps; x += 8) {
+        const px = x * scaleX;
+        ctx.beginPath(); // top
+        ctx.moveTo(px - 5, topHashY);
+        ctx.lineTo(px + 5, topHashY);
+        ctx.stroke();
+
+        ctx.beginPath(); // bottom
+        ctx.moveTo(px - 5, bottomHashY);
+        ctx.lineTo(px + 5, bottomHashY);
         ctx.stroke();
     }
 
