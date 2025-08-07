@@ -7,7 +7,7 @@ function drawField(ctx, stepSizeInches) {
     const scaleY = ctx.canvas.height / fieldWidthSteps;
 
     // Draw step grid (light gray)
-    ctx.strokeStyle = "#555";
+    ctx.strokeStyle = "white";
     ctx.lineWidth = 0.5;
 
     for (let x = 0; x <= fieldLengthSteps; x++) {
