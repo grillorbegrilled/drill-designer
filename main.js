@@ -3,9 +3,7 @@ const ctx = canvas.getContext("2d");
 
 function render() {
     const stepSizeInches = parseFloat(document.getElementById("stepSize").value);
-    const hashType = document.getElementById("hashType").value;
-
-    const { scaleX, scaleY } = drawField(ctx, stepSizeInches, hashType);
+    const { scaleX, scaleY } = drawField(ctx, stepSizeInches);
     drawKids(ctx, kids, scaleX, scaleY);
 }
 
