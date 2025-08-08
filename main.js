@@ -9,13 +9,32 @@ let isPlaying = false;
 // Define a kid with starting position, facing, and history
 let kids = [
     {
-        x: 40, // steps
-        y: 30, // steps
-        direction: 0, // degrees: 0 = right, 90 = down, etc.
+        x: 40,
+        y: 30,
+        direction: 0,
         moving: true,
-        changes: [
-            // { step: 8, direction: 90 } to turn at step 8
-        ]
+        changes: []
+    },
+    {
+        x: 40,
+        y: 32, // 2 steps down
+        direction: 0,
+        moving: true,
+        changes: []
+    },
+    {
+        x: 38,
+        y: 30, // 2 steps behind (left)
+        direction: 0,
+        moving: true,
+        changes: []
+    },
+    {
+        x: 38,
+        y: 32, // 2 down and 2 behind
+        direction: 0,
+        moving: true,
+        changes: []
     }
 ];
 
