@@ -13,28 +13,40 @@ let kids = [
         y: 30,
         direction: 0,
         moving: true,
-        changes: []
+        changes: [
+            { step: 8, direction: 180 },
+            { step: 16, stop: true }
+        ]
     },
     {
         x: 40,
-        y: 32, // 2 steps down
+        y: 32,
         direction: 0,
         moving: true,
-        changes: []
+        changes: [
+            { step: 8, direction: 180 },
+            { step: 16, stop: true }
+        ]
     },
     {
         x: 38,
-        y: 30, // 2 steps behind (left)
+        y: 30,
         direction: 0,
         moving: true,
-        changes: []
+        changes: [
+            { step: 8, direction: 180 },
+            { step: 16, stop: true }
+        ]
     },
     {
         x: 38,
-        y: 32, // 2 down and 2 behind
+        y: 32,
         direction: 0,
         moving: true,
-        changes: []
+        changes: [
+            { step: 8, direction: 180 },
+            { step: 16, stop: true }
+        ]
     }
 ];
 
@@ -52,7 +64,12 @@ function advanceKids() {
         // Check if direction changes this step
         const change = kid.changes.find(c => c.step === currentStep);
         if (change) {
-            kid.direction = change.direction;
+            if (change.direction !== undefined) {
+                kid.direction = change.direction;
+            }
+            if (change.stop) {
+                kid.moving = false; 
+            }
         }
 
         if (kid.moving) {
