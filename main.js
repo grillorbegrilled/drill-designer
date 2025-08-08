@@ -54,7 +54,7 @@ function drawKids(ctx, kids, scaleX, scaleY) {
     kids.forEach(kid => {
         const px = kid.x * scaleX;
         const py = kid.y * scaleY;
-        const size = 10; // triangle side length (roughly)
+        const size = 10; // triangle length from center to tip
 
         const angleRad = (kid.direction * Math.PI) / 180;
 
@@ -63,9 +63,9 @@ function drawKids(ctx, kids, scaleX, scaleY) {
         ctx.rotate(angleRad);
 
         ctx.beginPath();
-        ctx.moveTo(0, -size / 2); // tip
-        ctx.lineTo(-size / 2, size / 2); // left base
-        ctx.lineTo(size / 2, size / 2); // right base
+        ctx.moveTo(size / 2, 0);              // tip (forward)
+        ctx.lineTo(-size / 2, size / 2);       // back-bottom
+        ctx.lineTo(-size / 2, -size / 2);      // back-top
         ctx.closePath();
 
         ctx.fillStyle = kid.color || "yellow";
