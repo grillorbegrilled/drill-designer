@@ -1,4 +1,5 @@
 // main.js
+const MAX_STEP = 16;
 const canvas = document.getElementById("fieldCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -66,16 +67,12 @@ const startingFormation = kids.map(kid => ({
     color: kid.color
 }));
 
-function advanceKids() {
+function advanceKids(silent = false) {
     kids.forEach(kid => {
         const change = kid.changes.find(c => c.step === currentStep);
         if (change) {
-            if (change.direction !== undefined) {
-                kid.direction = change.direction;
-            }
-            if (change.stop) {
-                kid.moving = false;
-            }
+            if (change.direction !== undefined) kid.direction = change.direction;
+            if (change.stop) kid.moving = false;
         }
 
         if (kid.moving) {
@@ -85,14 +82,17 @@ function advanceKids() {
         }
     });
 
-    currentStep++;
-    render();
+    if (!silent) {
+        currentStep++;
+        render();
+    }
 }
 
 function render() {
     const { scaleX, scaleY } = drawField(ctx, stepSizeInches);
     drawKids(ctx, kids, scaleX, scaleY);
     updateStepDisplay();
+    document.getElementById("scrubSlider").value = currentStep;
 }
 
 function updateStepDisplay() {
@@ -157,7 +157,66 @@ function drawKids(ctx, kids, scaleX, scaleY) {
     });
 }
 
+function stepForward() {
+    if (currentStep < MAX_STEP) {
+        currentStep++;
+        applyStepChanges();
+        render();
+    }
+}
+
+function stepBackward() {
+    if (currentStep <= 0) return;
+
+    currentStep--;
+
+    kids.forEach(kid => {
+        // Revert direction change if one happened at this step
+        const change = kid.changes.find(c => c.step === currentStep);
+        if (change) {
+            if (change.direction !== undefined) {
+                // Try to revert to previous direction (if available)
+                const earlierChange = [...kid.changes]
+                    .filter(c => c.step < currentStep && c.direction !== undefined)
+                    .sort((a, b) => b.step - a.step)[0];
+
+                if (earlierChange) {
+                    kid.direction = earlierChange.direction;
+                } else {
+                    kid.direction = startingFormation.find(s => s.id === kid.id)?.direction || 0;
+                }
+            }
+
+            if (change.stop) {
+                kid.moving = true; // undo the stop
+            }
+        }
+
+        // Move backward 1 step in the opposite of current direction
+        if (kid.moving) {
+            const radians = (kid.direction * Math.PI) / 180;
+            kid.x -= Math.cos(radians);
+            kid.y -= Math.sin(radians);
+        }
+    });
+
+    render();
+}
+
+function scrubToStep(e) {
+    const targetStep = parseInt(e.target.value);
+    rewindDrill();
+    for (let i = 0; i < targetStep; i++) {
+        advanceKids(true);
+    }
+    currentStep = targetStep;
+    render();
+}
+
 document.getElementById("playBtn").addEventListener("click", togglePlay);
 document.getElementById("rewindBtn").addEventListener("click", rewindDrill);
+document.getElementById("stepBackBtn").addEventListener("click", stepBackward);
+document.getElementById("stepForwardBtn").addEventListener("click", stepForward);
+document.getElementById("scrubSlider").addEventListener("input", scrubToStep);
 
 render();
