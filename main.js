@@ -199,13 +199,11 @@ function stepForward() {
         simulateToStep(currentStep + 1);
     }
 }
-}
 
 function stepBackward() {
     if (currentStep > 0) {
         simulateToStep(currentStep - 1);
     }
-}
 }
 
 function scrubToStep(e) {
