@@ -112,7 +112,7 @@ function updateStepDisplay() {
 
 function togglePlay() {
     isPlaying = !isPlaying;
-    document.getElementById("playBtn").textContent = isPlaying ? "Stop" : "Play";
+    document.getElementById("playBtn").textContent = isPlaying ? "⏹️" : "▶️";
 
     if (isPlaying) {
         playLoop();
