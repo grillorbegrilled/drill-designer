@@ -19,6 +19,15 @@ let kids = [
     }
 ];
 
+function drawKids(ctx, kids, scaleX, scaleY) {
+    kids.forEach(kid => {
+        ctx.beginPath();
+        ctx.arc(kid.x * scaleX, kid.y * scaleY, 5, 0, Math.PI * 2);
+        ctx.fillStyle = "yellow";
+        ctx.fill();
+    });
+}
+
 function advanceKids() {
     kids.forEach(kid => {
         // Check if direction changes this step
