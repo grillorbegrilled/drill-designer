@@ -7,8 +7,8 @@ function render() {
     drawKids(ctx, kids, scaleX, scaleY);
 }
 
-// Event listeners
+// Re-render when the step size changes
 document.getElementById("stepSize").addEventListener("change", render);
-document.getElementById("hashType").addEventListener("change", render);
 
+// Initial draw
 render();
