@@ -8,7 +8,7 @@ function render() {
 }
 
 // Re-render when the step size changes
-document.getElementById("stepSize").addEventListener("change", render);
+//document.getElementById("stepSize").addEventListener("change", render);
 
 // Initial draw
 render();
