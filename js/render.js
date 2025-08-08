@@ -1,8 +1,5 @@
 // render.js
-import { kids, stepSizeInches, currentStep, snapshots } from './state.js';
-import { drawField } from './field.js';
-
-export function render() {
+function render() {
     const { scaleX, scaleY } = drawField(ctx, stepSizeInches);
     drawKids(ctx, kids, scaleX, scaleY);
     updateStepDisplay();
@@ -12,7 +9,7 @@ export function render() {
     slider.max = Math.max(...snapshots.keys());
 }
 
-export function drawKids(ctx, kids, scaleX, scaleY) {
+function drawKids(ctx, kids, scaleX, scaleY) {
     kids.forEach(kid => {
         const px = kid.x * scaleX;
         const py = kid.y * scaleY;
@@ -35,7 +32,7 @@ export function drawKids(ctx, kids, scaleX, scaleY) {
     });
 }
 
-export function updateStepDisplay() {
+function updateStepDisplay() {
     const display = document.getElementById("stepDisplay");
     if (display) display.textContent = `Step: ${currentStep}`;
 }
