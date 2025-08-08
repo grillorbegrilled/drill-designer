@@ -1,9 +1,9 @@
 // state.js
-export let stepSizeInches = 22.5; // 8-to-5 default
-export let currentStep = 0;
-export let isPlaying = false;
+stepSizeInches = 22.5; // 8-to-5 default
+currentStep = 0;
+isPlaying = false;
 
-export let kids = [
+kids = [
     {
         id: "A", x: 40, y: 30, direction: 0, moving: true, color: "yellow",
         changes: [{ step: 8, direction: 180 }, { step: 16, stop: true }]
@@ -22,7 +22,7 @@ export let kids = [
     }
 ];
 
-export let startingFormation = kids.map(kid => ({
+startingFormation = kids.map(kid => ({
     id: kid.id,
     x: kid.x,
     y: kid.y,
@@ -31,5 +31,5 @@ export let startingFormation = kids.map(kid => ({
     color: kid.color
 }));
 
-export let snapshots = new Map();
+snapshots = new Map();
 snapshots.set(0, JSON.parse(JSON.stringify(startingFormation)));
