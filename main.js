@@ -52,10 +52,25 @@ let kids = [
 
 function drawKids(ctx, kids, scaleX, scaleY) {
     kids.forEach(kid => {
+        const px = kid.x * scaleX;
+        const py = kid.y * scaleY;
+        const size = 10; // triangle side length (roughly)
+
+        const angleRad = (kid.direction * Math.PI) / 180;
+
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(angleRad);
+
         ctx.beginPath();
-        ctx.arc(kid.x * scaleX, kid.y * scaleY, 5, 0, Math.PI * 2);
-        ctx.fillStyle = "yellow";
+        ctx.moveTo(0, -size / 2); // tip
+        ctx.lineTo(-size / 2, size / 2); // left base
+        ctx.lineTo(size / 2, size / 2); // right base
+        ctx.closePath();
+
+        ctx.fillStyle = kid.color || "yellow";
         ctx.fill();
+        ctx.restore();
     });
 }
 
