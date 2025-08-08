@@ -1,4 +1,4 @@
-// main.js
+/*// main.js
 const canvas = document.getElementById("fieldCanvas");
 const ctx = canvas.getContext("2d");
 
