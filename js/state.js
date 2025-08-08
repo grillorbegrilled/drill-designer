@@ -1,9 +1,9 @@
 // state.js
-stepSizeInches = 22.5; // 8-to-5 default
-currentStep = 0;
-isPlaying = false;
+var stepSizeInches = 22.5; // 8-to-5 default
+var currentStep = 0;
+var isPlaying = false;
 
-kids = [
+var kids = [
     {
         id: "A", x: 40, y: 30, direction: 0, moving: true, color: "yellow",
         changes: [{ step: 8, direction: 180 }, { step: 16, stop: true }]
@@ -22,7 +22,7 @@ kids = [
     }
 ];
 
-startingFormation = kids.map(kid => ({
+var startingFormation = kids.map(kid => ({
     id: kid.id,
     x: kid.x,
     y: kid.y,
@@ -31,5 +31,5 @@ startingFormation = kids.map(kid => ({
     color: kid.color
 }));
 
-snapshots = new Map();
+var snapshots = new Map();
 snapshots.set(0, JSON.parse(JSON.stringify(startingFormation)));
