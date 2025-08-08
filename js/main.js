@@ -1,4 +1,6 @@
 // main.js
+var ctx;
+
 window.onload = () => {
     ctx = document.getElementById("fieldCanvas").getContext("2d");
 
