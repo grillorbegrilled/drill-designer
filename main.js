@@ -9,82 +9,22 @@ let isPlaying = false;
 // Define a kid with starting position, facing, and history
 let kids = [
     {
-        x: 40,
-        y: 30,
-        direction: 0,
+        x: 40, // steps
+        y: 30, // steps
+        direction: 0, // degrees: 0 = right, 90 = down, etc.
         moving: true,
         changes: [
-            { step: 8, direction: 180 },
-            { step: 16, stop: true }
-        ]
-    },
-    {
-        x: 40,
-        y: 32,
-        direction: 0,
-        moving: true,
-        changes: [
-            { step: 8, direction: 180 },
-            { step: 16, stop: true }
-        ]
-    },
-    {
-        x: 38,
-        y: 30,
-        direction: 0,
-        moving: true,
-        changes: [
-            { step: 8, direction: 180 },
-            { step: 16, stop: true }
-        ]
-    },
-    {
-        x: 38,
-        y: 32,
-        direction: 0,
-        moving: true,
-        changes: [
-            { step: 8, direction: 180 },
-            { step: 16, stop: true }
+            // { step: 8, direction: 90 } to turn at step 8
         ]
     }
 ];
-
-function drawKids(ctx, kids, scaleX, scaleY) {
-    kids.forEach(kid => {
-        const px = kid.x * scaleX;
-        const py = kid.y * scaleY;
-        const size = 10; // triangle length from center to tip
-
-        const angleRad = (kid.direction * Math.PI) / 180;
-
-        ctx.save();
-        ctx.translate(px, py);
-        ctx.rotate(angleRad);
-
-        ctx.beginPath();
-        ctx.moveTo(size / 2, 0);              // tip (forward)
-        ctx.lineTo(-size / 2, size / 2);       // back-bottom
-        ctx.lineTo(-size / 2, -size / 2);      // back-top
-        ctx.closePath();
-
-        ctx.fillStyle = kid.color || "yellow";
-        ctx.fill();
-        ctx.restore();
-    });
-}
 
 function advanceKids() {
     kids.forEach(kid => {
         // Check if direction changes this step
         const change = kid.changes.find(c => c.step === currentStep);
         if (change) {
-            if (change.direction !== undefined) {
-                kid.direction = change.direction;
-            }
-            if (change.stop) {
-                kid.moving = false; 
-            }
+            kid.direction = change.direction;
         }
 
         if (kid.moving) {
@@ -112,7 +52,7 @@ function updateStepDisplay() {
 
 function togglePlay() {
     isPlaying = !isPlaying;
-    document.getElementById("playBtn").textContent = isPlaying ? "⏹️" : "▶️";
+    document.getElementById("playBtn").textContent = isPlaying ? "Stop" : "Play";
 
     if (isPlaying) {
         playLoop();
@@ -129,5 +69,5 @@ function playLoop() {
 const playBtn = document.getElementById("playBtn");
 if (playBtn) playBtn.addEventListener("click", togglePlay);
 
-render();
 
+render();
