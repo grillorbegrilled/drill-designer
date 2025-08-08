@@ -194,16 +194,18 @@ function drawKids(ctx, kids, scaleX, scaleY) {
 }
 
 function stepForward() {
-    if (currentStep < MAX_STEP) {
-        advance();
+    const maxStep = Math.max(...snapshots.keys());
+    if (currentStep < maxStep) {
+        simulateToStep(currentStep + 1);
     }
+}
 }
 
 function stepBackward() {
     if (currentStep > 0) {
-        currentStep--;
-        simulateToStep(currentStep);
+        simulateToStep(currentStep - 1);
     }
+}
 }
 
 function scrubToStep(e) {
