@@ -1,12 +1,9 @@
 // animation.js
-import { kids, currentStep, snapshots, startingFormation } from './state.js';
-import { render } from './render.js';
-
-export function cloneKidStates() {
+function cloneKidStates() {
     return kids.map(kid => ({ ...kid }));
 }
 
-export function applySnapshot(state) {
+function applySnapshot(state) {
     kids.forEach(kid => {
         const match = state.find(s => s.id === kid.id);
         if (match) {
@@ -15,7 +12,7 @@ export function applySnapshot(state) {
     });
 }
 
-export function advance(silent = false) {
+function advance(silent = false) {
     kids.forEach(kid => {
         const change = kid.changes.find(c => c.step === currentStep);
         if (change) {
@@ -38,7 +35,7 @@ export function advance(silent = false) {
     if (!silent) render();
 }
 
-export function simulateToStep(targetStep) {
+function simulateToStep(targetStep) {
     let nearestSnapshotStep = 0;
     for (let s of Array.from(snapshots.keys()).sort((a, b) => b - a)) {
         if (s <= targetStep) {
