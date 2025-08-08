@@ -24,15 +24,43 @@ function drawField(ctx, stepSizeInches) {
         ctx.stroke();
     }
 
-    // Draw yard lines every 8 steps (white, thicker)
-    ctx.strokeStyle = "white";
+    //add yard lines and numbers
     ctx.lineWidth = 2;
-    for (let x = 0; x <= fieldLengthSteps; x += 8) {
-        ctx.beginPath();
-        ctx.moveTo(x * scaleX, 0);
-        ctx.lineTo(x * scaleX, ctx.canvas.height);
-        ctx.stroke();
-    }
+ctx.strokeStyle = "white";
+ctx.fillStyle = "white";
+ctx.font = `${scaleY * (72 / stepSizeInches)}px sans-serif`; // 2 yards tall
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+
+// 8 yards = 288" from sideline → convert to steps → then to pixels
+const numberCenterSteps = 288 / stepSizeInches;
+const numberYTop = numberCenterSteps * scaleY;
+const numberYBottom = ctx.canvas.height - numberYTop;
+
+for (let x = 0; x <= fieldLengthSteps; x += 8) {
+    const px = x * scaleX;
+
+    // Yard lines
+    ctx.beginPath();
+    ctx.moveTo(px, 0);
+    ctx.lineTo(px, ctx.canvas.height);
+    ctx.stroke();
+
+    // Yard number (10–50–10 pattern)
+    let yard = x / 8;
+    if (yard > 25) yard = 50 - (yard - 25);
+    const label = String(yard * 5);
+
+    // Bottom-facing number
+    ctx.fillText(label, px, numberYBottom);
+
+    // Top-facing number (rotated upside down)
+    ctx.save();
+    ctx.translate(px, numberYTop);
+    ctx.rotate(Math.PI);
+    ctx.fillText(label, 0, 0);
+    ctx.restore();
+}
 
     // Draw sideline box
     ctx.lineWidth = 2;
