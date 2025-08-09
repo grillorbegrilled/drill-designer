@@ -1,12 +1,14 @@
-// controls.js
+// js/controls.js
 function togglePlay() {
     isPlaying = !isPlaying;
-    document.getElementById("playBtn").textContent = isPlaying ? "⏹️" : "▶️";
+    var playBtn = document.getElementById("playBtn");
+    if (playBtn) playBtn.textContent = isPlaying ? "⏹️" : "▶️";
     if (isPlaying) playLoop();
 }
 
 function playLoop() {
-    const maxStep = Math.max(...snapshots.keys());
+    var keys = Array.from(snapshots.keys());
+    var maxStep = keys.length ? Math.max.apply(null, keys) : 0;
     if (!isPlaying || currentStep >= maxStep) return;
     advance();
     setTimeout(playLoop, 300);
@@ -14,14 +16,16 @@ function playLoop() {
 
 function rewind() {
     isPlaying = false;
-    document.getElementById("playBtn").textContent = "▶️";
+    var playBtn = document.getElementById("playBtn");
+    if (playBtn) playBtn.textContent = "▶️";
     currentStep = 0;
     applySnapshot(snapshots.get(0));
     render();
 }
 
 function stepForward() {
-    const maxStep = Math.max(...snapshots.keys());
+    var keys = Array.from(snapshots.keys());
+    var maxStep = keys.length ? Math.max.apply(null, keys) : 0;
     if (currentStep < maxStep) simulateToStep(currentStep + 1);
 }
 
@@ -30,5 +34,7 @@ function stepBackward() {
 }
 
 function scrubToStep(e) {
-    simulateToStep(parseInt(e.target.value));
+    var v = parseInt(e.target.value, 10);
+    if (isNaN(v)) return;
+    simulateToStep(v);
 }
