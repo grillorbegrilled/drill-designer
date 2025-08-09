@@ -1,27 +1,42 @@
-// animation.js
+// js/animation.js
 function cloneKidStates() {
-    return kids.map(kid => ({ ...kid }));
+    return kids.map(function (kid) {
+        return {
+            id: kid.id,
+            x: kid.x,
+            y: kid.y,
+            direction: kid.direction,
+            moving: kid.moving,
+            color: kid.color
+        };
+    });
 }
 
 function applySnapshot(state) {
-    kids.forEach(kid => {
-        const match = state.find(s => s.id === kid.id);
+    if (!state) return;
+    kids.forEach(function (kid) {
+        var match = state.find(function (s) { return s.id === kid.id; });
         if (match) {
-            Object.assign(kid, match);
+            kid.x = match.x;
+            kid.y = match.y;
+            kid.direction = match.direction;
+            kid.moving = match.moving;
+            kid.color = match.color;
         }
     });
 }
 
-function advance(silent = false) {
-    kids.forEach(kid => {
-        const change = kid.changes.find(c => c.step === currentStep);
+function advance(silent) {
+    silent = !!silent;
+    kids.forEach(function (kid) {
+        var change = (kid.changes || []).find(function (c) { return c.step === currentStep; });
         if (change) {
             if (change.direction !== undefined) kid.direction = change.direction;
             if (change.stop) kid.moving = false;
         }
 
         if (kid.moving) {
-            const radians = (kid.direction * Math.PI) / 180;
+            var radians = (kid.direction * Math.PI) / 180;
             kid.x += Math.cos(radians);
             kid.y += Math.sin(radians);
         }
@@ -29,15 +44,20 @@ function advance(silent = false) {
 
     currentStep++;
     if (currentStep % 16 === 0) {
-        snapshots.set(currentStep, cloneKidStates());
+        snapshots.set(currentStep, JSON.parse(JSON.stringify(cloneKidStates())));
     }
 
     if (!silent) render();
 }
 
 function simulateToStep(targetStep) {
-    let nearestSnapshotStep = 0;
-    for (let s of Array.from(snapshots.keys()).sort((a, b) => b - a)) {
+    if (typeof targetStep !== "number" || targetStep < 0) return;
+
+    // find nearest snapshot <= targetStep
+    var snapshotSteps = Array.from(snapshots.keys()).sort(function (a, b) { return b - a; });
+    var nearestSnapshotStep = 0;
+    for (var i = 0; i < snapshotSteps.length; i++) {
+        var s = snapshotSteps[i];
         if (s <= targetStep) {
             nearestSnapshotStep = s;
             break;
@@ -47,7 +67,7 @@ function simulateToStep(targetStep) {
     applySnapshot(snapshots.get(nearestSnapshotStep));
     currentStep = nearestSnapshotStep;
 
-    for (let step = nearestSnapshotStep; step < targetStep; step++) {
+    for (var step = nearestSnapshotStep; step < targetStep; step++) {
         advance(true);
     }
 
