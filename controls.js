@@ -20,9 +20,10 @@ function rewind() {
 
 function stepForward() {
     const maxStep = Math.max(...snapshots.keys());
-    if (currentStep < maxStep) {
+    if (currentStep < maxStep)
         simulateToStep(currentStep + 1);
-    }
+    else
+        advance();
 }
 
 function stepBackward() {
