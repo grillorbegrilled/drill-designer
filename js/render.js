@@ -1,20 +1,27 @@
-// render.js
+// js/render.js
 function render() {
-    const { scaleX, scaleY } = drawField(ctx, stepSizeInches);
+    var scales = drawField(ctx, stepSizeInches);
+    var scaleX = scales.scaleX;
+    var scaleY = scales.scaleY;
+
     drawKids(ctx, kids, scaleX, scaleY);
     updateStepDisplay();
 
-    const slider = document.getElementById("scrubSlider");
-    slider.value = currentStep;
-    slider.max = Math.max(...snapshots.keys());
+    var slider = document.getElementById("scrubSlider");
+    if (slider) {
+        slider.value = currentStep;
+        var keys = Array.from(snapshots.keys());
+        var maxStep = keys.length ? Math.max.apply(null, keys) : 0;
+        slider.max = maxStep;
+    }
 }
 
 function drawKids(ctx, kids, scaleX, scaleY) {
-    kids.forEach(kid => {
-        const px = kid.x * scaleX;
-        const py = kid.y * scaleY;
-        const size = 10;
-        const angleRad = (kid.direction * Math.PI) / 180;
+    kids.forEach(function (kid) {
+        var px = kid.x * scaleX;
+        var py = kid.y * scaleY;
+        var size = 10;
+        var angleRad = (kid.direction * Math.PI) / 180;
 
         ctx.save();
         ctx.translate(px, py);
@@ -28,11 +35,17 @@ function drawKids(ctx, kids, scaleX, scaleY) {
 
         ctx.fillStyle = kid.color || "yellow";
         ctx.fill();
+
+        // optional outline
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+
         ctx.restore();
     });
 }
 
 function updateStepDisplay() {
-    const display = document.getElementById("stepDisplay");
-    if (display) display.textContent = `Step: ${currentStep}`;
+    var display = document.getElementById("stepDisplay");
+    if (display) display.textContent = "Step: " + currentStep;
 }
