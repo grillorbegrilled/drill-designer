@@ -1,11 +1,7 @@
 // js/main.js
-var ctx;
+var ctx = document.getElementById("fieldCanvas").getContext("2d");
 
 window.onload = function () {
-    var canvas = document.getElementById("fieldCanvas");
-    if (!canvas) return;
-    ctx = canvas.getContext("2d");
-
     var playBtn = document.getElementById("playBtn");
     var rewindBtn = document.getElementById("rewindBtn");
     var stepBackBtn = document.getElementById("stepBackBtn");
@@ -18,5 +14,5 @@ window.onload = function () {
     if (stepForwardBtn) stepForwardBtn.addEventListener("click", stepForward);
     if (scrubSlider) scrubSlider.addEventListener("input", scrubToStep);
 
-    render();
+    render(); // draw field & kids immediately
 };
