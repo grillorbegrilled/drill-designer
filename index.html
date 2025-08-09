@@ -1,14 +1,48 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Marching Drill Designer</title>
     <style>
-        body { background: #0b6623; margin: 0; color: white; font-family: sans-serif; }
-        canvas { background: #0b6623; display: block; margin: auto; }
-        .controls { text-align: center; padding: 10px; }
-        button { font-size: 20px; margin: 0 5px; }
-        input[type="range"] { width: 300px; }
+        body {
+            background: #222; /* neutral page background */
+            margin: 0;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        .controls {
+            text-align: center;
+            padding: 10px;
+            background: #1b1b1b;
+        }
+
+        button {
+            font-size: 20px;
+            margin: 0 5px;
+            padding: 6px 10px;
+        }
+
+        input[type="range"] {
+            width: 300px;
+            vertical-align: middle;
+        }
+
+        #fieldWrapper {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            background: #111;
+        }
+
+        canvas {
+            background: #0b6623; /* green field only */
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #333;
+        }
     </style>
 </head>
 <body>
@@ -18,13 +52,14 @@
         <button id="stepBackBtn">⬅️</button>
         <button id="stepForwardBtn">➡️</button>
         <span id="stepDisplay">Step: 0</span>
-        <br>
+        <br><br>
         <input id="scrubSlider" type="range" min="0" value="0">
     </div>
 
-    <canvas id="fieldCanvas" width="1200" height="600"></canvas>
+    <div id="fieldWrapper">
+        <canvas id="fieldCanvas" width="1200" height="600"></canvas>
+    </div>
 
-    <!-- Script loading order matters -->
     <script src="js/state.js"></script>
     <script src="js/field.js"></script>
     <script src="js/animation.js"></script>
