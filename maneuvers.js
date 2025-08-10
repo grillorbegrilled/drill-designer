@@ -60,3 +60,7 @@ function left() {
 function aboutFace() {
     applyChange(["A"], { direction: 180 });
 }
+
+function stop() {
+    applyChange(["A"], { stop: true });
+}
