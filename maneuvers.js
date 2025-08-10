@@ -6,18 +6,31 @@ function applyChange(ids, change) {
             // Remove future changes
             kid.changes = kid.changes.filter(c => c.step < currentStep);
 
-            // Compute new change based on current state
-            const newChange = { step: currentStep };
-
-            if ("direction" in change) {
-                newChange.direction = (kid.direction + change.direction) % 360;
+            // Determine the most recent state
+            let lastState = { ...kid };
+            for (let j = kid.changes.length - 1; j >= 0; j--) {
+                if (kid.changes[j].step <= currentStep) {
+                    lastState = { ...lastState, ...kid.changes[j] };
+                    break;
+                }
             }
 
-            if ("stop" in change) {
-                newChange.stop = change.stop;
+            // Check for redundancy
+            let isRedundant = true;
+            for (let key in change) {
+                if (change[key] !== lastState[key]) {
+                    isRedundant = false;
+                    break;
+                }
             }
 
-            kid.changes.push(newChange);
+            if (isRedundant) continue; // Skip if no actual change
+
+            // Apply new change
+            kid.changes.push({
+                step: currentStep,
+                ...change
+            });
         }
     }
 
