@@ -9,9 +9,9 @@
  <div class="controls">
   <div class="controls-top">
     <button id="rewindBtn">⏮️</button>
-    <button id="stepBackBtn">◀️</button>
+    <button id="stepBackBtn">⏪</button>
     <button id="playBtn">▶️</button>
-    <button id="stepForwardBtn">▶️</button>
+    <button id="stepForwardBtn">⏩</button>
     <span id="stepDisplay">Step: 0</span>
     <button id="changeBtn">Apply Change</button>
   </div>
@@ -20,7 +20,19 @@
   </div>
  </div>
     <canvas id="fieldCanvas" width="1000" height="500"></canvas>
-
+<div class="maneuver-pad">
+  <div class="pad-row">
+    <button id="forwardBtn">⬆️</button>
+  </div>
+  <div class="pad-row">
+    <button id="leftBtn">⬅️</button>
+    <button id="stopBtn">🛑</button>
+    <button id="rightBtn">➡️</button>
+  </div>
+  <div class="pad-row">
+    <button id="aboutFaceBtn">🔄</button>
+  </div>
+</div>
     <script src="field.js"></script>
     <script src="canvasSetup.js"></script>
 <script src="dataModel.js"></script>
