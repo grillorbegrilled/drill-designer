@@ -48,3 +48,15 @@ function applyChange(ids, change) {
 function right() {
     applyChange(["A"], { direction: 90 }); // Turn right
 }
+
+function forward() {
+    applyChange(["A"], { direction: 0 });
+}
+
+function left() {
+    applyChange(["A"], { direction: 270 });
+}
+
+function aboutFace() {
+    applyChange(["A"], { direction: 180 });
+}
