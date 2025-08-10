@@ -83,3 +83,32 @@ input[type="range"]::-moz-range-thumb {
     border-radius: 50%;
     cursor: pointer;
 }
+
+.maneuver-pad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.pad-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.maneuver-pad button {
+    font-size: 28px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+    min-width: 60px;
+}
+
+.maneuver-pad button:hover {
+    background-color: #555;
+}
