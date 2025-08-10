@@ -1,6 +1,8 @@
 function togglePlay() {
     isPlaying = !isPlaying;
     document.getElementById("playBtn").textContent = isPlaying ? "⏹️" : "▶️";
+    document.getElementById("changeBtn").disabled = isPlaying;
+
     if (isPlaying) playLoop();
 }
 
@@ -13,6 +15,7 @@ function playLoop() {
 function rewind() {
     isPlaying = false;
     document.getElementById("playBtn").textContent = "▶️";
+    document.getElementById("changeBtn").disabled = false;
     currentStep = 0;
     applySnapshot(snapshots.get(0));
     render();
