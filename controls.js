@@ -43,5 +43,8 @@ window.onload = () => {
     document.getElementById("stepBackBtn").addEventListener("click", stepBackward);
     document.getElementById("stepForwardBtn").addEventListener("click", stepForward);
     document.getElementById("scrubSlider").addEventListener("input", scrubToStep);
+    document.getElementById("changeBtn").addEventListener("click", () => {
+      if (!isPlaying) right();
+    });
     render();
 };
