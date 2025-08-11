@@ -71,3 +71,17 @@ function aboutFace() {
 function stop() {
     applyChange(["A", "B", "C", "D"], { moving: false });
 }
+
+function obliqueRight() {
+    applyChange(["A"], {
+        directionDelta: 45,
+        moving: true
+    });
+}
+
+function obliqueLeft() {
+    applyChange(["A"], {
+        directionDelta: 315,
+        moving: true
+    });
+}
