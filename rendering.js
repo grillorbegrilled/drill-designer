@@ -5,7 +5,7 @@ function render() {
     const slider = document.getElementById("scrubSlider");
     slider.value = currentStep;
     slider.max = Math.max(...snapshots.keys());
-    update status display();
+    updateStatusDisplay();
 }
 
 function drawKids(ctx, kids, scaleX, scaleY) {
