@@ -8,7 +8,7 @@ let kids = [
         color: "yellow",
         changes: [
             { step: 8, direction: 180 },
-            { step: 16, stop: true }
+            { step: 16, moving: false }
         ]
     },
     {
@@ -20,7 +20,7 @@ let kids = [
         color: "red",
         changes: [
             { step: 8, direction: 180 },
-            { step: 16, stop: true }
+            { step: 16, moving: false }
         ]
     },
     {
@@ -32,7 +32,7 @@ let kids = [
         color: "blue",
         changes: [
             { step: 8, direction: 180 },
-            { step: 16, stop: true }
+            { step: 16, moving: false }
         ]
     },
     {
@@ -44,7 +44,7 @@ let kids = [
         color: "green",
         changes: [
             { step: 8, direction: 180 },
-            { step: 16, stop: true }
+            { step: 16, moving: false }
         ]
     }
 ];
