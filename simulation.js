@@ -7,9 +7,26 @@ function advance(silent = false) {
         }
 
         if (kid.moving) {
-            const radians = (kid.direction * Math.PI) / 180;
-            kid.x += Math.cos(radians);
-            kid.y += Math.sin(radians);
+            if ([45, 135, 225, 315].includes(kid.direction)) {
+                if (kid.direction === 45 || kid.direction === 135) kid.x += 2/3;
+                else kid.x -= 2/3;
+        
+                if (kid.direction === 45 || kid.direction === 315) kid.y += 2/3;
+                else kid.y -= 2/3;
+    
+                const lastChange = [...kid.changes]
+                    .filter(c => c.step < currentStep)
+                    .sort((a, b) => b.step - a.step)[0];
+
+                if (lastChange && (currentStep - lastChange.step) % 6 === 0) {
+                    kid.x = Math.round(kid.x);
+                    kid.y = Math.round(kid.y);
+                }
+            } else {
+                const radians = (kid.direction * Math.PI) / 180;
+                kid.x += Math.cos(radians);
+                kid.y += Math.sin(radians);
+            }
         }
     });
 
