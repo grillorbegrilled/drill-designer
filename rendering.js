@@ -25,8 +25,7 @@ function drawKids(ctx, kids, scaleX, scaleY) {
 
     const fill = kid.color || "#ffff00"; // default to yellow
     const isSelected = selectedIds.has(kid.id);
-    const stroke = isSelected ? getComplementaryColor(fill) : "#333";
-
+    
     ctx.save();
     ctx.translate(px, py);
 
@@ -47,10 +46,6 @@ function drawKids(ctx, kids, scaleX, scaleY) {
 
     ctx.fillStyle = fill;
     ctx.fill();
-
-    ctx.strokeStyle = stroke;
-    ctx.lineWidth = isSelected ? 3 : 1;
-    ctx.stroke();
 
     ctx.restore();
   });
