@@ -46,21 +46,21 @@ function applyChange(ids, change) {
 }
 
 function right() {
-    applyChange(["A"], { direction: 90 }); // Turn right
+    applyChange(["A", "B", "C", "D"], { direction: 90 }); // Turn right
 }
 
 function forward() {
-    applyChange(["A"], { direction: 0 });
+    applyChange(["A", "B", "C", "D"], { moving: true });
 }
 
 function left() {
-    applyChange(["A"], { direction: 270 });
+    applyChange(["A", "B", "C", "D"], { direction: 270 });
 }
 
 function aboutFace() {
-    applyChange(["A"], { direction: 180 });
+    applyChange(["A", "B", "C", "D"], { direction: 180 });
 }
 
 function stop() {
-    applyChange(["A"], { stop: true });
+    applyChange(["A", "B", "C", "D"], { moving: false });
 }
