@@ -52,5 +52,5 @@ function updateStatusDisplay() {
     const moving = state.moving ? "Marching" : state.stop ? "Stopped" : "—";
 
     document.getElementById("statusDisplay").textContent =
-        `🧍 Kid A — Direction: ${direction}°, Status: ${moving}`;
+        `🧍 Kid A — x: ${state.x}, y: ${state.y}, Direction: ${direction}°, Status: ${moving}`;
 }
