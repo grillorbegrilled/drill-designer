@@ -25,6 +25,7 @@ function drawKids(ctx, kids, scaleX, scaleY) {
 
     const fill = kid.color || "#ffff00"; // default to yellow
     const isSelected = selectedIds.has(kid.id);
+    const stroke = "#000";
     
     ctx.save();
     ctx.translate(px, py);
@@ -46,6 +47,10 @@ function drawKids(ctx, kids, scaleX, scaleY) {
 
     ctx.fillStyle = fill;
     ctx.fill();
+
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 1;
+    ctx.stroke();
 
     ctx.restore();
   });
