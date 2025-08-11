@@ -3,7 +3,7 @@ function advance(silent = false) {
         const change = kid.changes.find(c => c.step === currentStep);
         if (change) {
             if (change.direction !== undefined) kid.direction = change.direction;
-            if (change.stop) kid.moving = false;
+            if (change.moving !== undefined) kid.moving = change.moving;
         }
 
         if (kid.moving) {
