@@ -53,7 +53,7 @@ function applyChange(ids, change) {
 }
 
 function right() {
-    applyChange(["A", "B", "C", "D"], { direction: 90 }); // Turn right
+    applyChange(["A", "B", "C", "D"], { directionDelta: 90 }); // Turn right
 }
 
 function forward() {
@@ -61,11 +61,11 @@ function forward() {
 }
 
 function left() {
-    applyChange(["A", "B", "C", "D"], { direction: 270 });
+    applyChange(["A", "B", "C", "D"], { directionDelta: 270 });
 }
 
 function aboutFace() {
-    applyChange(["A", "B", "C", "D"], { direction: 180 });
+    applyChange(["A", "B", "C", "D"], { directionDelta: 180 });
 }
 
 function stop() {
