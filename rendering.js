@@ -8,30 +8,29 @@ function render() {
     updateStatusDisplay();
 }
 
-function getComplementaryColor(hex) {
-    hex = hex.replace("#", "");
-    const r = 255 - parseInt(hex.substring(0, 2), 16);
-    const g = 255 - parseInt(hex.substring(2, 4), 16);
-    const b = 255 - parseInt(hex.substring(4, 6), 16);
-    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
-}
-
 function drawKids(ctx, kids, scaleX, scaleY) {
+    const size = 10;
     kids.forEach(kid => {
         const px = kid.x * scaleX;
         const py = kid.y * scaleY;
-        const size = 10;
         const angleRad = (kid.direction * Math.PI) / 180;
 
-        const fill = kid.color || "#ffff00"; // default to yellow
+        const fill = kid.color || "#ffff00"; // default yellow
         const isSelected = selectedIds.has(kid.id);
         const stroke = isSelected ? getComplementaryColor(fill) : "#333";
 
         ctx.save();
         ctx.translate(px, py);
+
+        // Draw yellow selection square behind if selected
+        if (isSelected) {
+            ctx.fillStyle = "yellow";
+            ctx.fillRect(-size / 2, -size / 2, size, size);
+        }
+
         ctx.rotate(angleRad);
 
-        // Draw the triangle
+        // Draw the triangle on top
         ctx.beginPath();
         ctx.moveTo(size / 2, 0);
         ctx.lineTo(-size / 2, size / 2);
@@ -41,13 +40,22 @@ function drawKids(ctx, kids, scaleX, scaleY) {
         ctx.fillStyle = fill;
         ctx.fill();
 
-        // Draw border if selected
         ctx.strokeStyle = stroke;
         ctx.lineWidth = isSelected ? 3 : 1;
         ctx.stroke();
 
         ctx.restore();
     });
+}
+
+function pointInSquare(px, py, kid, scaleX, scaleY) {
+    const size = 10;
+    const half = size / 2;
+    const x = kid.x * scaleX;
+    const y = kid.y * scaleY;
+
+    return px >= x - half && px <= x + half &&
+           py >= y - half && py <= y + half;
 }
 
 function updateStepDisplay() {
@@ -72,17 +80,4 @@ function updateStatusDisplay() {
 
     document.getElementById("statusDisplay").textContent =
         `🧍 Kid A — x: ${state.x}, y: ${state.y}, Direction: ${direction}°, Status: ${moving}`;
-}
-
-function getComplementaryColor(hex) {
-    // Remove # if present
-    hex = hex.replace("#", "");
-
-    // Convert to RGB
-    const r = 255 - parseInt(hex.substring(0, 2), 16);
-    const g = 255 - parseInt(hex.substring(2, 4), 16);
-    const b = 255 - parseInt(hex.substring(4, 6), 16);
-
-    // Convert back to hex
-    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
 }
