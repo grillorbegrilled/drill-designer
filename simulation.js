@@ -1,5 +1,4 @@
 function advance(silent = false) {
-    currentStep++;
     kids.forEach(kid => {
         const change = kid.changes.find(c => c.step === currentStep);
         if (change) {
@@ -19,7 +18,7 @@ function advance(silent = false) {
                     .filter(c => c.step < currentStep)
                     .sort((a, b) => b.step - a.step)[0];
 
-                if (lastChange && (currentStep - lastChange.step) % 6 === 0) {
+                if (lastChange && (currentStep - lastChange.step + 1) % 6 === 0) { // +1 because currentStep doesn't update till after the updates.
                     kid.x = Math.round(kid.x);
                     kid.y = Math.round(kid.y);
                 }
@@ -31,6 +30,7 @@ function advance(silent = false) {
         }
     });
 
+    currentStep++;
     if (currentStep % 16 === 0) snapshots.set(currentStep, cloneKidStates());
 
     if (!silent) render();
