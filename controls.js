@@ -38,13 +38,13 @@ function scrubToStep(e) {
     simulateToStep(targetStep);
 }
 
-function toggleSelection(id) {
-    if (selectedIds.has(id)) {
-        selectedIds.delete(id);
-    } else {
-        selectedIds.add(id);
-    }
-    render(); // Re-render to show selection
+function pointInSquare(px, py, kid, scaleX, scaleY) {
+  const size = 10;
+  const half = size / 2;
+  const x = kid.x * scaleX;
+  const y = kid.y * scaleY;
+  return px >= x - half && px <= x + half &&
+         py >= y - half && py <= y + half;
 }
 
 window.onload = () => {
