@@ -8,6 +8,14 @@ function render() {
     updateStatusDisplay();
 }
 
+function getComplementaryColor(hex) {
+    hex = hex.replace("#", "");
+    const r = 255 - parseInt(hex.substring(0, 2), 16);
+    const g = 255 - parseInt(hex.substring(2, 4), 16);
+    const b = 255 - parseInt(hex.substring(4, 6), 16);
+    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+}
+
 function drawKids(ctx, kids, scaleX, scaleY) {
   const size = 10;
   kids.forEach(kid => {
