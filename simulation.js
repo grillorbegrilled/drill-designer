@@ -18,7 +18,7 @@ function advance(silent = false) {
                     .filter(c => c.step < currentStep)
                     .sort((a, b) => b.step - a.step)[0];
 
-                if (lastChange && (currentStep - lastChange.step) % 6 === 0) {
+                if (lastChange && (currentStep - lastChange.step - 1) % 6 === 0) {
                     kid.x = Math.round(kid.x);
                     kid.y = Math.round(kid.y);
                 }
