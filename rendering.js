@@ -9,53 +9,43 @@ function render() {
 }
 
 function drawKids(ctx, kids, scaleX, scaleY) {
-    const size = 10;
-    kids.forEach(kid => {
-        const px = kid.x * scaleX;
-        const py = kid.y * scaleY;
-        const angleRad = (kid.direction * Math.PI) / 180;
+  const size = 10;
+  kids.forEach(kid => {
+    const px = kid.x * scaleX;
+    const py = kid.y * scaleY;
+    const angleRad = (kid.direction * Math.PI) / 180;
 
-        const fill = kid.color || "#ffff00"; // default yellow
-        const isSelected = selectedIds.has(kid.id);
-        const stroke = isSelected ? getComplementaryColor(fill) : "#333";
+    const fill = kid.color || "#ffff00"; // default to yellow
+    const isSelected = selectedIds.has(kid.id);
+    const stroke = isSelected ? getComplementaryColor(fill) : "#333";
 
-        ctx.save();
-        ctx.translate(px, py);
+    ctx.save();
+    ctx.translate(px, py);
 
-        // Draw yellow selection square behind if selected
-        if (isSelected) {
-            ctx.fillStyle = "yellow";
-            ctx.fillRect(-size / 2, -size / 2, size, size);
-        }
+    // Yellow square behind triangle if selected
+    if (isSelected) {
+      ctx.fillStyle = "yellow";
+      ctx.fillRect(-size / 2, -size / 2, size, size);
+    }
 
-        ctx.rotate(angleRad);
+    ctx.rotate(angleRad);
 
-        // Draw the triangle on top
-        ctx.beginPath();
-        ctx.moveTo(size / 2, 0);
-        ctx.lineTo(-size / 2, size / 2);
-        ctx.lineTo(-size / 2, -size / 2);
-        ctx.closePath();
+    // Draw the triangle
+    ctx.beginPath();
+    ctx.moveTo(size / 2, 0);
+    ctx.lineTo(-size / 2, size / 2);
+    ctx.lineTo(-size / 2, -size / 2);
+    ctx.closePath();
 
-        ctx.fillStyle = fill;
-        ctx.fill();
+    ctx.fillStyle = fill;
+    ctx.fill();
 
-        ctx.strokeStyle = stroke;
-        ctx.lineWidth = isSelected ? 3 : 1;
-        ctx.stroke();
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = isSelected ? 3 : 1;
+    ctx.stroke();
 
-        ctx.restore();
-    });
-}
-
-function pointInSquare(px, py, kid, scaleX, scaleY) {
-    const size = 10;
-    const half = size / 2;
-    const x = kid.x * scaleX;
-    const y = kid.y * scaleY;
-
-    return px >= x - half && px <= x + half &&
-           py >= y - half && py <= y + half;
+    ctx.restore();
+  });
 }
 
 function updateStepDisplay() {
