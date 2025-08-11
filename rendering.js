@@ -5,6 +5,7 @@ function render() {
     const slider = document.getElementById("scrubSlider");
     slider.value = currentStep;
     slider.max = Math.max(...snapshots.keys());
+    update status display();
 }
 
 function drawKids(ctx, kids, scaleX, scaleY) {
@@ -33,4 +34,23 @@ function drawKids(ctx, kids, scaleX, scaleY) {
 function updateStepDisplay() {
     const display = document.getElementById("stepDisplay");
     if (display) display.textContent = `Step: ${currentStep}`;
+}
+
+function updateStatusDisplay() {
+    const kid = kids.find(k => k.id === "A");
+    if (!kid) return;
+
+    // Determine effective state at currentStep
+    let state = { ...kid };
+    for (let i = 0; i < kid.changes.length; i++) {
+        if (kid.changes[i].step <= currentStep) {
+            state = { ...state, ...kid.changes[i] };
+        }
+    }
+
+    const direction = state.direction ?? "—";
+    const moving = state.moving ? "Marching" : state.stop ? "Stopped" : "—";
+
+    document.getElementById("statusDisplay").textContent =
+        `🧍 Kid A — Direction: ${direction}°, Status: ${moving}`;
 }
