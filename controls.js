@@ -81,7 +81,7 @@ canvas.addEventListener("click", e => {
     const mouseY = e.clientY - rect.top;
 
     for (const kid of kids) {
-        if (pointInSquare(mouseX, mouseY, kid, scaleX, scaleY)) {
+        if (pointInSquare(mouseX, mouseY, kid, 1, 1)) {
             if (selectedIds.has(kid.id)) selectedIds.delete(kid.id);
             else selectedIds.add(kid.id);
             render();
