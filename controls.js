@@ -102,7 +102,7 @@ canvas.addEventListener('click', function (e) {
         }
     }
 
-    redraw();
+    render();
 });
     
     render();
