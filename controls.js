@@ -1,7 +1,6 @@
 function togglePlay() {
     isPlaying = !isPlaying;
     document.getElementById("playBtn").textContent = isPlaying ? "⏹️" : "▶️";
-    document.getElementById("changeBtn").disabled = isPlaying;
 
     if (isPlaying) playLoop();
 }
