@@ -64,5 +64,11 @@ document.getElementById("aboutFaceBtn").addEventListener("click", () => {
 document.getElementById("stopBtn").addEventListener("click", () => {
     if (!isPlaying) stop();
 });
+    document.getElementById("obliqueRightBtn").addEventListener("click", () => {
+    if (!isPlaying) obliqueRight();
+});
+document.getElementById("obliqueLeftBtn").addEventListener("click", () => {
+    if (!isPlaying) obliqueLeft();
+});
     render();
 };
