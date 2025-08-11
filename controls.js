@@ -80,8 +80,8 @@ canvas.addEventListener('click', function (e) {
     const clickX = e.clientX - rect.left;
     const clickY = e.clientY - rect.top;
 
-    const gridX = Math.round(clickX);
-    const gridY = Math.round(clickY);
+    const gridX = Math.round(clickX / scaleX);
+    const gridY = Math.round(clickY / scaleY);
 
     for (let i = 0; i < kids.length; i++) {
         if (kids[i].x === gridX && kids[i].y === gridY) {
