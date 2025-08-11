@@ -73,14 +73,14 @@ function stop() {
 }
 
 function obliqueRight() {
-    applyChange(["A"], {
+    applyChange(["A", "B", "C", "D"], {
         directionDelta: 45,
         moving: true
     });
 }
 
 function obliqueLeft() {
-    applyChange(["A"], {
+    applyChange(["A", "B", "C", "D"], {
         directionDelta: 315,
         moving: true
     });
