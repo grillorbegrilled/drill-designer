@@ -86,12 +86,8 @@ canvas.addEventListener('click', function (e) {
     for (let i = 0; i < kids.length; i++) {
         if (kids[i].x === gridX && kids[i].y === gridY) {
             const id = kids[i].id;
-            const index = selectedIds.indexOf(id);
-            if (index === -1) {
-                selectedIds.push(id);
-            } else {
-                selectedIds.splice(index, 1);
-            }
+            if (selectedIds.has(id)) selectedIds.delete(id);
+            else selectedIds.add(id);
             break;
         }
     }
