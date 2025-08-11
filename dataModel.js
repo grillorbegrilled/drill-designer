@@ -49,6 +49,8 @@ let kids = [
     }
 ];
 
+let selectedIds = new Set();
+
 const startingFormation = kids.map(kid => ({
     id: kid.id,
     x: kid.x,
