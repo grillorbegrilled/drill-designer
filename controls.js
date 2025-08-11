@@ -75,18 +75,16 @@ window.onload = () => {
         if (!isPlaying) obliqueLeft();
     });
 
-canvas.addEventListener("click", event => {
+canvas.addEventListener("click", e => {
     const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
 
-    // Find the clicked kid
-    for (let kid of kids) {
-        const radius = 10; // Adjust based on your visual size
-        const dx = x - kid.x;
-        const dy = y - kid.y;
-        if (dx * dx + dy * dy < radius * radius) {
-            toggleSelection(kid.id);
+    for (const kid of kids) {
+        if (pointInSquare(mouseX, mouseY, kid, scaleX, scaleY)) {
+            if (selectedIds.has(kid.id)) selectedIds.delete(kid.id);
+            else selectedIds.add(kid.id);
+            render();
             break;
         }
     }
