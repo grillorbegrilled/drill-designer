@@ -74,7 +74,13 @@ window.onload = () => {
     document.getElementById("obliqueLeftBtn").addEventListener("click", () => {
         if (!isPlaying) obliqueLeft();
     });
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = (e.clientX - rect.left) * (ctx.canvas.width / rect.width);
+  const mouseY = (e.clientY - rect.top) * (ctx.canvas.height / rect.height);
 
+  drawGridHighlight(mouseX, mouseY);
+});
 canvas.addEventListener("click", e => {
     const rect = canvas.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
