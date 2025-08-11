@@ -8,10 +8,10 @@ function advance(silent = false) {
 
         if (kid.moving) {
             if ([45, 135, 225, 315].includes(kid.direction)) {
-                if (kid.direction === 45 || kid.direction === 135) kid.x += 2/3;
+                if (kid.direction === 45 || kid.direction === 315) kid.x += 2/3;
                 else kid.x -= 2/3;
         
-                if (kid.direction === 45 || kid.direction === 315) kid.y += 2/3;
+                if (kid.direction === 45 || kid.direction === 135) kid.y += 2/3;
                 else kid.y -= 2/3;
     
                 const lastChange = [...kid.changes]
