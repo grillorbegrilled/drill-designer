@@ -6,44 +6,42 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
- <div class="controls">
-  <div class="controls-top">
-    <button id="rewindBtn">⏮️</button>
-    <button id="stepBackBtn">⏪</button>
-    <button id="playBtn">▶️</button>
-    <button id="stepForwardBtn">⏩</button>
-    <span id="stepDisplay">Step: 0</span>
-    <button id="changeBtn">Apply Change</button>
+  <div class="controls">
+    <div class="controls-top">
+      <button id="rewindBtn">⏮️</button>
+      <button id="stepBackBtn">⏪</button>
+      <button id="playBtn">▶️</button>
+      <button id="stepForwardBtn">⏩</button>
+      <span id="stepDisplay">Step: 0</span>
+    </div>
+    <div class="controls-bottom">
+      <input type="range" id="scrubSlider" min="0" value="0">
+    </div>
+    <div class="maneuver-pad">
+      <div class="pad-row">
+        <button id="obliqueLeftBtn">↖️</button>
+        <button id="forwardBtn">⬆️</button>
+        <button id="obliqueRightBtn">↗️</button>
+      </div>
+      <div class="pad-row">
+        <button id="leftBtn">⬅️</button>
+        <button id="stopBtn">🛑</button>
+        <button id="rightBtn">➡️</button>
+      </div>
+        <div class="pad-row">
+          <button id="aboutFaceBtn">⬇️</button>
+        </div>
+    </div>
   </div>
-  <div class="controls-bottom">
-    <input type="range" id="scrubSlider" min="0" value="0">
-  </div>
-  <div class="maneuver-pad">
-  <div class="pad-row">
-      <button id="obliqueLeftBtn">↖️</button>
-    <button id="forwardBtn">⬆️</button>
-      <button id="obliqueRightBtn">↗️</button>
-  </div>
-  <div class="pad-row">
-    <button id="leftBtn">⬅️</button>
-    <button id="stopBtn">🛑</button>
-    <button id="rightBtn">➡️</button>
-  </div>
-  <div class="pad-row">
-    <button id="aboutFaceBtn">⬇️</button>
-  </div>
-  </div>
- </div>
-    <canvas id="fieldCanvas" width="1000" height="500"></canvas>
+  <canvas id="fieldCanvas" width="1000" height="500"></canvas>
+  <div id="statusDisplay" class="status-display"></div>
     
-    <div id="statusDisplay" class="status-display"></div>
-    
-    <script src="field.js"></script>
-    <script src="canvasSetup.js"></script>
-<script src="dataModel.js"></script>
-<script src="simulation.js"></script>
-<script src="rendering.js"></script>
-    <script src="maneuvers.js"></script>
-<script src="controls.js"></script>
+  <script src="field.js"></script>
+  <script src="canvasSetup.js"></script>
+  <script src="dataModel.js"></script>
+  <script src="simulation.js"></script>
+  <script src="rendering.js"></script>
+  <script src="maneuvers.js"></script>
+  <script src="controls.js"></script>
 </body>
 </html>
