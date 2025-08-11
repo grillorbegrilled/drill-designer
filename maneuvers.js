@@ -53,35 +53,29 @@ function applyChange(ids, change) {
 }
 
 function right() {
-    applyChange(["A", "B", "C", "D"], { directionDelta: 90 }); // Turn right
+    applyChange([...selectedIds], { directionDelta: 90 }); // Turn right
 }
 
 function forward() {
-    applyChange(["A", "B", "C", "D"], { moving: true });
+    applyChange([...selectedIds], { moving: true });
 }
 
 function left() {
-    applyChange(["A", "B", "C", "D"], { directionDelta: 270 });
+    applyChange([...selectedIds], { directionDelta: 270 });
 }
 
 function aboutFace() {
-    applyChange(["A", "B", "C", "D"], { directionDelta: 180 });
+    applyChange([...selectedIds], { directionDelta: 180 });
 }
 
 function stop() {
-    applyChange(["A", "B", "C", "D"], { moving: false });
+    applyChange([...selectedIds], { moving: false });
 }
 
 function obliqueRight() {
-    applyChange(["A", "B", "C", "D"], {
-        directionDelta: 45,
-        moving: true
-    });
+    applyChange([...selectedIds], { directionDelta: 45 });
 }
 
 function obliqueLeft() {
-    applyChange(["A", "B", "C", "D"], {
-        directionDelta: 315,
-        moving: true
-    });
+    applyChange([...selectedIds], { directionDelta: 315 });
 }
