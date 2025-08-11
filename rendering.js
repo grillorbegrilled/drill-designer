@@ -81,3 +81,15 @@ function updateStatusDisplay() {
     document.getElementById("statusDisplay").textContent =
         `🧍 Kid A — x: ${state.x}, y: ${state.y}, Direction: ${direction}°, Status: ${moving}`;
 }
+
+function drawGridHighlight(mouseX, mouseY) {
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+  // Round to nearest whole-number coordinate
+  const gridX = Math.round(mouseX);
+  const gridY = Math.round(mouseY);
+
+  // Draw highlight square centered on that coordinate
+  ctx.fillStyle = 'rgba(255, 255, 0, 0.5)';
+  ctx.fillRect(gridX - 5, gridY - 5, 10, 10);
+}
