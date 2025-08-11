@@ -38,6 +38,15 @@ function scrubToStep(e) {
     simulateToStep(targetStep);
 }
 
+function toggleSelection(id) {
+    if (selectedIds.has(id)) {
+        selectedIds.delete(id);
+    } else {
+        selectedIds.add(id);
+    }
+    render(); // Re-render to show selection
+}
+
 window.onload = () => {
     document.getElementById("playBtn").addEventListener("click", togglePlay);
     document.getElementById("rewindBtn").addEventListener("click", rewind);
