@@ -79,3 +79,11 @@ function obliqueRight() {
 function obliqueLeft() {
     applyChange([...selectedIds], { directionDelta: 315 });
 }
+
+function obliqueBackLeft() {
+    applyChange([...selectedIds], { directionDelta: 225 });
+}
+
+function obliqueBackRight() {
+    applyChange([...selectedIds], { directionDelta: 135 });
+}
