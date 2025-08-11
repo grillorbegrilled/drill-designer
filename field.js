@@ -1,11 +1,12 @@
-function drawField(ctx, stepSizeInches) {
+let stepSizeInches;
+let fieldWidthSteps = (160 * 12) / stepSizeInches;  // 85.33 for 8-to-5
+let fieldLengthSteps = (300 * 12) / stepSizeInches; // 160 for 8-to-5
+let scaleX = ctx.canvas.width / fieldLengthSteps;
+let scaleY = ctx.canvas.height / fieldWidthSteps;
+
+function drawField(ctx, _stepSizeInches) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-    const fieldWidthSteps = (160 * 12) / stepSizeInches;  // 85.33 for 8-to-5
-    const fieldLengthSteps = (300 * 12) / stepSizeInches; // 160 for 8-to-5
-    const scaleX = ctx.canvas.width / fieldLengthSteps;
-    const scaleY = ctx.canvas.height / fieldWidthSteps;
-
+    stepsizeInches = _stepSizeInches;
 // Draw step grid (light gray)==========
     ctx.strokeStyle = "white";
     ctx.lineWidth = 0.5;
