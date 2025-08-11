@@ -81,22 +81,28 @@ canvas.addEventListener('mousemove', e => {
 
   drawGridHighlight(mouseX, mouseY);
 });
-canvas.addEventListener('click', e => {
-  const rect = canvas.getBoundingClientRect();
-  const mouseX = (e.clientX - rect.left) * (ctx.canvas.width / rect.width);
-  const mouseY = (e.clientY - rect.top) * (ctx.canvas.height / rect.height);
+canvas.addEventListener('click', function (e) {
+    const rect = canvas.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
 
-  for (const kid of kids) {
-    if (pointInSquare(mouseX, mouseY, kid, scaleX, scaleY)) {
-      if (selectedIds.has(kid.id)) {
-        selectedIds.delete(kid.id);
-      } else {
-        selectedIds.add(kid.id);
-      }
-      render(); // use your existing render
-      break;
+    const gridX = Math.round(clickX / gridSize);
+    const gridY = Math.round(clickY / gridSize);
+
+    for (let i = 0; i < kids.length; i++) {
+        if (kids[i].x === gridX && kids[i].y === gridY) {
+            const id = kids[i].id;
+            const index = selectedIds.indexOf(id);
+            if (index === -1) {
+                selectedIds.push(id);
+            } else {
+                selectedIds.splice(index, 1);
+            }
+            break;
+        }
     }
-  }
+
+    redraw();
 });
     
     render();
