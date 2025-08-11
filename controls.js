@@ -65,5 +65,23 @@ window.onload = () => {
     document.getElementById("obliqueLeftBtn").addEventListener("click", () => {
         if (!isPlaying) obliqueLeft();
     });
+
+canvas.addEventListener("click", event => {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    // Find the clicked kid
+    for (let kid of kids) {
+        const radius = 10; // Adjust based on your visual size
+        const dx = x - kid.x;
+        const dy = y - kid.y;
+        if (dx * dx + dy * dy < radius * radius) {
+            toggleSelection(kid.id);
+            break;
+        }
+    }
+});
+    
     render();
 };
