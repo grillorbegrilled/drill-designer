@@ -46,29 +46,26 @@ window.onload = () => {
     document.getElementById("stepBackBtn").addEventListener("click", stepBackward);
     document.getElementById("stepForwardBtn").addEventListener("click", stepForward);
     document.getElementById("scrubSlider").addEventListener("input", scrubToStep);
-    document.getElementById("changeBtn").addEventListener("click", () => {
-      if (!isPlaying) right();
-    });
     document.getElementById("forwardBtn").addEventListener("click", () => {
-    if (!isPlaying) forward();
-});
-document.getElementById("leftBtn").addEventListener("click", () => {
-    if (!isPlaying) left();
-});
-document.getElementById("rightBtn").addEventListener("click", () => {
-    if (!isPlaying) right();
-});
-document.getElementById("aboutFaceBtn").addEventListener("click", () => {
-    if (!isPlaying) aboutFace();
-});
-document.getElementById("stopBtn").addEventListener("click", () => {
-    if (!isPlaying) stop();
-});
-    document.getElementById("obliqueRightBtn").addEventListener("click", () => {
-    if (!isPlaying) obliqueRight();
-});
-document.getElementById("obliqueLeftBtn").addEventListener("click", () => {
-    if (!isPlaying) obliqueLeft();
-});
+        if (!isPlaying) forward();
+    });
+    document.getElementById("leftBtn").addEventListener("click", () => {
+        if (!isPlaying) left();
+    });
+    document.getElementById("rightBtn").addEventListener("click", () => {
+        if (!isPlaying) right();
+    });
+    document.getElementById("aboutFaceBtn").addEventListener("click", () => {
+        if (!isPlaying) aboutFace();
+    });
+    document.getElementById("stopBtn").addEventListener("click", () => {
+        if (!isPlaying) stop();
+    });
+        document.getElementById("obliqueRightBtn").addEventListener("click", () => {
+        if (!isPlaying) obliqueRight();
+    });
+    document.getElementById("obliqueLeftBtn").addEventListener("click", () => {
+        if (!isPlaying) obliqueLeft();
+    });
     render();
 };
