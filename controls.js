@@ -83,11 +83,13 @@ window.onload = () => {
 
     canvas.addEventListener('click', function (e) {
         const rect = canvas.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const clickY = e.clientY - rect.top;
     
-        const gridX = Math.round(clickX / scaleX);
-        const gridY = Math.round(clickY / scaleY);
+        // Adjust for browser zoom level (i.e. pinch-zoom on mobile)
+        const zoomAdjustedX = (e.clientX - rect.left) * (canvas.width / rect.width);
+        const zoomAdjustedY = (e.clientY - rect.top) * (canvas.height / rect.height);
+    
+        const gridX = Math.round(zoomAdjustedX / scaleX);
+        const gridY = Math.round(zoomAdjustedY / scaleY);
     
         for (let i = 0; i < kids.length; i++) {
             if (kids[i].x === gridX && kids[i].y === gridY) {
