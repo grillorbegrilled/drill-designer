@@ -74,26 +74,32 @@ window.onload = () => {
     document.getElementById("obliqueLeftBtn").addEventListener("click", () => {
         if (!isPlaying) obliqueLeft();
     });
+    document.getElementById("obliqueBackRightBtn").addEventListener("click", () => {
+        if (!isPlaying) obliqueBackRight();
+    });
+    document.getElementById("obliqueBackLeftBtn").addEventListener("click", () => {
+        if (!isPlaying) obliqueBackLeft();
+    });
 
-canvas.addEventListener('click', function (e) {
-    const rect = canvas.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const clickY = e.clientY - rect.top;
-
-    const gridX = Math.round(clickX / scaleX);
-    const gridY = Math.round(clickY / scaleY);
-
-    for (let i = 0; i < kids.length; i++) {
-        if (kids[i].x === gridX && kids[i].y === gridY) {
-            const id = kids[i].id;
-            if (selectedIds.has(id)) selectedIds.delete(id);
-            else selectedIds.add(id);
-            break;
+    canvas.addEventListener('click', function (e) {
+        const rect = canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+    
+        const gridX = Math.round(clickX / scaleX);
+        const gridY = Math.round(clickY / scaleY);
+    
+        for (let i = 0; i < kids.length; i++) {
+            if (kids[i].x === gridX && kids[i].y === gridY) {
+                const id = kids[i].id;
+                if (selectedIds.has(id)) selectedIds.delete(id);
+                else selectedIds.add(id);
+                break;
+            }
         }
-    }
-
-    render();
-});
+    
+        render();
+    });
     
     render();
 };
