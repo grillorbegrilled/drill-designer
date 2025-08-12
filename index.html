@@ -34,6 +34,41 @@
           <button id="obliqueBackRightBtn">↘️</button>
         </div>
     </div>
+    <!-- Trigger button -->
+<button id="openPinwheelMenuBtn">Pinwheel/Gate Maneuver</button>
+
+<!-- Modal container -->
+<div id="pinwheelMenu" style="display:none; position: fixed; background: white; border: 1px solid #ccc; padding: 16px; width: 280px; z-index: 1000;">
+  <h3>Pinwheel/Gate Settings</h3>
+
+  <label>
+    Vertex:
+    <select id="vertexSelect">
+      <option value="start">⏮️</option>
+      <option value="center" selected>⏺️</option>
+      <option value="end">⏭️</option>
+    </select>
+  </label>
+  <br/><br/>
+
+  <label>
+    Rotation:
+    <select id="rotationSelect">
+      <option value="true">🔃</option>
+      <option value="false" selected>🔄</option>
+    </select>
+  </label>
+  <br/><br/>
+
+  <label>
+    Steps (calculated):
+    <input type="number" id="stepCount" readonly style="width: 60px;"/>
+  </label>
+  <br/><br/>
+
+  <button id="confirmPinwheelBtn">✔️ Confirm</button>
+  <button id="cancelPinwheelBtn">❌ Cancel</button>
+</div>
   </div>
   <canvas id="fieldCanvas" width="1000" height="500"></canvas>
   <div id="statusDisplay" class="status-display"></div>
