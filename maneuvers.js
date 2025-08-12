@@ -95,6 +95,10 @@ function gatePinwheel(type, clockwise) {
     }
 
     const vertex = getVertex(type);
+if (!vertex) {
+    alert("Could not determine vertex point.");
+    return;
+}
     const selectedKids = kids.filter(k => selectedIds.has(k.id));
     const gateSteps = calculateGateSteps(vertex, selectedKids);
 
