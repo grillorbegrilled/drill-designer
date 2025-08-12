@@ -118,11 +118,12 @@ window.onload = () => {
     confirmBtn.addEventListener('click', () => {
         const vertexType = vertexSelect.value;
         const clockwise = rotationSelect.value === 'true';
+        const selectedKids = kids.filter(k => selectedIds.has(k.id));
     
-        const vertex = getVertex(vertexType);
+        const vertex = getVertex(vertexType, selectedKids);
         const steps = parseInt(stepCountInput.value, 10);
     
-        gatePinwheel(vertex, clockwise, steps);
+        gatePinwheel(vertex, clockwise, steps, selectedKids);
         
         pinwheelMenu.style.display = 'none';
     });
