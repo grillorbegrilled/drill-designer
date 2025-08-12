@@ -113,6 +113,7 @@ window.onload = () => {
     
     document.querySelectorAll('input[name="vertex"]').forEach(radio => {
       radio.addEventListener('change', updateStepCount);
+    });
     rotationSelect.addEventListener('change', updateStepCount);
     
     confirmBtn.addEventListener('click', () => {
