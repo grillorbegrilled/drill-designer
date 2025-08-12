@@ -122,7 +122,7 @@ window.onload = () => {
         const vertex = getVertex(vertexType);
         const steps = parseInt(stepCountInput.value, 10);
     
-        GatePinwheel(vertex, clockwise, steps);
+        gatePinwheel(vertex, clockwise, steps);
         
         pinwheelMenu.style.display = 'none';
     });
