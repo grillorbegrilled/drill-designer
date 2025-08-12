@@ -86,8 +86,7 @@ window.onload = () => {
     const openBtn = document.getElementById('openPinwheelMenuBtn');
     const confirmBtn = document.getElementById('confirmPinwheelBtn');
     const cancelBtn = document.getElementById('cancelPinwheelBtn');
-    const vertexSelect = document.getElementById('vertexSelect');
-    const rotationSelect = document.getElementById('rotationSelect');
+    const rotationSelect = document.getElementById('rotationToggle');
     const stepCountInput = document.getElementById('stepCount');
 
     function updateStepCount() {
@@ -112,7 +111,8 @@ window.onload = () => {
         pinwheelMenu.style.display = 'none';
     });
     
-    vertexSelect.addEventListener('change', updateStepCount);
+    document.querySelectorAll('input[name="vertex"]').forEach(radio => {
+      radio.addEventListener('change', updateStepCount);
     rotationSelect.addEventListener('change', updateStepCount);
     
     confirmBtn.addEventListener('click', () => {
