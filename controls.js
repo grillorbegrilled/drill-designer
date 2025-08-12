@@ -47,14 +47,6 @@ function pointInSquare(px, py, kid, scaleX, scaleY) {
          py >= y - half && py <= y + half;
 }
 
-function updateStepCount() {
-    const vertexType = vertexSelect.value; // 'start' | 'center' | 'end'
-    const selectedKidsArr = kids.filter(k => selectedIds.has(k.id));
-    const vertex = getVertex(vertexType);
-    const steps = calculateGateSteps(vertex, selectedKidsArr);
-    stepCountInput.value = steps;
-}
-
 window.onload = () => {
     document.getElementById("playBtn").addEventListener("click", togglePlay);
     document.getElementById("rewindBtn").addEventListener("click", rewind);
@@ -91,41 +83,49 @@ window.onload = () => {
 
     //Pinwheel menu
     const pinwheelMenu = document.getElementById('pinwheelMenu');
-const openBtn = document.getElementById('openPinwheelMenuBtn');
-const confirmBtn = document.getElementById('confirmPinwheelBtn');
-const cancelBtn = document.getElementById('cancelPinwheelBtn');
-const vertexSelect = document.getElementById('vertexSelect');
-const rotationSelect = document.getElementById('rotationSelect');
-const stepCountInput = document.getElementById('stepCount');
+    const openBtn = document.getElementById('openPinwheelMenuBtn');
+    const confirmBtn = document.getElementById('confirmPinwheelBtn');
+    const cancelBtn = document.getElementById('cancelPinwheelBtn');
+    const vertexSelect = document.getElementById('vertexSelect');
+    const rotationSelect = document.getElementById('rotationSelect');
+    const stepCountInput = document.getElementById('stepCount');
 
-openBtn.addEventListener('click', () => {
-    if (!isPlaying) {
-    if (!areKidsAligned()) {
-        alert("Selected kids must be aligned in a straight line.");
-        return;
+    function updateStepCount() {
+        const vertexType = vertexSelect.value; // 'start' | 'center' | 'end'
+        const selectedKidsArr = kids.filter(k => selectedIds.has(k.id));
+        const vertex = getVertex(vertexType);
+        const steps = calculateGateSteps(vertex, selectedKidsArr);
+        stepCountInput.value = steps;
     }
-    pinwheelMenu.style.display = 'block';
-    updateStepCount();
-}});
 
-cancelBtn.addEventListener('click', () => {
-    pinwheelMenu.style.display = 'none';
-});
-
-vertexSelect.addEventListener('change', updateStepCount);
-rotationSelect.addEventListener('change', updateStepCount);
-
-confirmBtn.addEventListener('click', () => {
-    const vertexType = vertexSelect.value;
-    const clockwise = rotationSelect.value === 'true';
-
-    const vertex = getVertex(vertexType);
-    const steps = parseInt(stepCountInput.value, 10);
-
-    GatePinwheel(vertex, clockwise, steps);
+    openBtn.addEventListener('click', () => {
+        if (!isPlaying) {
+        if (!areKidsAligned()) {
+            alert("Selected kids must be aligned in a straight line.");
+            return;
+        }
+        pinwheelMenu.style.display = 'block';
+        updateStepCount();
+    }});
     
-    pinwheelMenu.style.display = 'none';
-});
+    cancelBtn.addEventListener('click', () => {
+        pinwheelMenu.style.display = 'none';
+    });
+    
+    vertexSelect.addEventListener('change', updateStepCount);
+    rotationSelect.addEventListener('change', updateStepCount);
+    
+    confirmBtn.addEventListener('click', () => {
+        const vertexType = vertexSelect.value;
+        const clockwise = rotationSelect.value === 'true';
+    
+        const vertex = getVertex(vertexType);
+        const steps = parseInt(stepCountInput.value, 10);
+    
+        GatePinwheel(vertex, clockwise, steps);
+        
+        pinwheelMenu.style.display = 'none';
+    });
 
     //selecting people on field
     canvas.addEventListener('click', function (e) {
