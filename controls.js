@@ -117,7 +117,7 @@ window.onload = () => {
     rotationSelect.addEventListener('change', updateStepCount);
     
     confirmBtn.addEventListener('click', () => {
-        const vertexType = vertexSelect.value;
+        const vertexType = document.querySelector('input[name="vertex"]:checked').value;
         const clockwise = rotationSelect.value === 'true';
         const selectedKids = kids.filter(k => selectedIds.has(k.id));
     
