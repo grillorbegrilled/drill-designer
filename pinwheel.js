@@ -67,11 +67,15 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
         const baseAngle = Math.atan2(dy, dx); // radians
 
         for (let stepNum = 1; stepNum <= gateSteps; stepNum++) {
-            const fraction = stepNum / gateSteps;
-            const rotationAngle = (clockwise ? 1 : -1) * (Math.PI / 2) * fraction; // radians
-
-            // Current angle along arc
-            const currentAngle = baseAngle + rotationAngle;
+            let currentAngle;
+            if (stepNum === gateSteps) {
+                // Force exact 90° rotation for final step
+                currentAngle = baseAngle + (clockwise ? Math.PI / 2 : -Math.PI / 2);
+            } else {
+                const fraction = stepNum / gateSteps;
+                const rotationAngle = (clockwise ? 1 : -1) * (Math.PI / 2) * fraction;
+                currentAngle = baseAngle + rotationAngle;
+            }
 
             // Tangent to the arc is perpendicular to the radius vector
             const tangentAngle = currentAngle + (clockwise ? Math.PI / 2 : -Math.PI / 2);
@@ -88,6 +92,11 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
                 moving: radius > 0,
             });
         }
+
+        // Snap final position to exact integer alignment
+        const finalAngle = baseAngle + (clockwise ? Math.PI / 2 : -Math.PI / 2);
+        kid.x = Math.round(vertex.x + radius * Math.cos(finalAngle));
+        kid.y = Math.round(vertex.y + radius * Math.sin(finalAngle));
     });
 
     // Re-render next step
