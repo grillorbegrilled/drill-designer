@@ -8,10 +8,7 @@ function areKidsAligned() {
     return allXEqual || allYEqual;
 }
 
-function getVertex(type) {
-    const selectedKids = kids.filter(k => selectedIds.has(k.id))
-                             .sort((a, b) => a.x !== b.x ? a.x - b.x : a.y - b.y);
-
+function getVertex(type, selectedKids) {
     if (type === 'center') {
         // Midpoint between first and last kid on the line
         const first = selectedKids[0];
@@ -44,9 +41,7 @@ function calculateGateSteps(vertex, selectedKids) {
     return Math.ceil(steps / 8) * 8;
 }
 
-function addGatePinwheelChanges(vertex, clockwise, gateSteps) {
-    const selectedKids = kids.filter(k => selectedIds.has(k.id));
-
+function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
     selectedKids.forEach(kid => {
         // Remove future changes for this kid
         kid.changes = kid.changes.filter(c => c.step < currentStep);
