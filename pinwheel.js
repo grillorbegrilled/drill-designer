@@ -74,4 +74,7 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
             });
         }
     });
+
+    // Re-render next step
+    simulateToStep(currentStep + 1);
 }
