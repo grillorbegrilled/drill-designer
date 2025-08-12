@@ -25,8 +25,8 @@ let kids = [
     },
     {
         id: "C",
-        x: 38,
-        y: 30,
+        x: 40,
+        y: 34,
         direction: 0,
         moving: true,
         color: "blue",
@@ -37,8 +37,8 @@ let kids = [
     },
     {
         id: "D",
-        x: 38,
-        y: 32,
+        x: 40,
+        y: 36,
         direction: 0,
         moving: true,
         color: "green",
