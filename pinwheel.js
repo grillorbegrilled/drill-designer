@@ -42,6 +42,7 @@ function calculateGateSteps(vertex, selectedKids) {
 }
 
 function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
+    selectedKids = selectedKids.sort((a, b) => a.x !== b.x ? a.x - b.x : a.y - b.y);
     selectedKids.forEach(kid => {
         // Remove future changes for this kid
         kid.changes = kid.changes.filter(c => c.step < currentStep);
