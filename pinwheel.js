@@ -12,7 +12,7 @@ function getVertex(type) {
     const selectedKids = kids.filter(k => selectedIds.has(k.id))
                              .sort((a, b) => a.x !== b.x ? a.x - b.x : a.y - b.y);
 
-    if (type === 'pinwheel') {
+    if (type === 'center') {
         // Midpoint between first and last kid on the line
         const first = selectedKids[0];
         const last = selectedKids[selectedKids.length - 1];
@@ -20,10 +20,10 @@ function getVertex(type) {
             x: (first.x + last.x) / 2,
             y: (first.y + last.y) / 2
         };
-    } else if (type === 'gate-start') {
+    } else if (type === 'start') {
         // Vertex at start of line (first kid)
         return { x: selectedKids[0].x, y: selectedKids[0].y };
-    } else if (type === 'gate-end') {
+    } else if (type === 'end') {
         // Vertex at end of line (last kid)
         const last = selectedKids[selectedKids.length - 1];
         return { x: last.x, y: last.y };
