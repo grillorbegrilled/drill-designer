@@ -53,51 +53,28 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps) {
 
         const radiusX = kid.x - vertex.x;
         const radiusY = kid.y - vertex.y;
+        const radius = Math.hypot(radiusX, radiusY);
 
-        for (let stepNum = 1; stepNum <= gateSteps; stepNum++) {
-            // fraction of quarter circle completed
+        for (let stepNum = 0; stepNum < gateSteps; stepNum++) {
+            // fraction completed of quarter turn
             const fraction = stepNum / gateSteps;
-            // angle = 90 degrees * fraction; clockwise or counterclockwise
-            const angleDeg = clockwise ? 90 * fraction : -90 * fraction;
-            const angleRad = (angleDeg * Math.PI) / 180;
+            const rotationDeg = (clockwise ? 1 : -1) * 90 * fraction;
 
-            // Rotate original position around vertex by angleRad
-            const cosA = Math.cos(angleRad);
-            const sinA = Math.sin(angleRad);
+            // Convert start angle: atan2 returns angle relative to +X axis, which matches 0° to right
+            let startAngle = (Math.atan2(radiusY, radiusX) * 180) / Math.PI;
+            if (startAngle < 0) startAngle += 360;
 
-            const newX = vertex.x + radiusX * cosA - radiusY * sinA;
-            const newY = vertex.y + radiusX * sinA + radiusY * cosA;
+            const absoluteDirection = (startAngle + rotationDeg + 360) % 360;
 
-            // Calculate direction to next step (approximate)
-            let nextAngleDeg;
-            if (stepNum < gateSteps) {
-                // Calculate next position
-                const nextFraction = (stepNum + 1) / gateSteps;
-                const nextAngleRad = (nextFraction * 90 * (clockwise ? 1 : -1) * Math.PI) / 180;
-                const nextX = vertex.x + radiusX * Math.cos(nextAngleRad) - radiusY * Math.sin(nextAngleRad);
-                const nextY = vertex.y + radiusX * Math.sin(nextAngleRad) + radiusY * Math.cos(nextAngleRad);
-
-                // Direction vector from current to next
-                const dx = nextX - newX;
-                const dy = nextY - newY;
-                nextAngleDeg = (Math.atan2(dy, dx) * 180) / Math.PI;
-                if (nextAngleDeg < 0) nextAngleDeg += 360;
-            } else {
-                // At last step, direction faces tangent to the end of the arc (perpendicular to radius)
-                nextAngleDeg = clockwise
-                    ? (Math.atan2(radiusX, -radiusY) * 180) / Math.PI
-                    : (Math.atan2(-radiusX, radiusY) * 180) / Math.PI;
-
-                if (nextAngleDeg < 0) nextAngleDeg += 360;
-            }
+            // Step size per step is arc length divided by steps
+            const arcLength = (Math.PI / 2) * radius;
+            const stepSize = arcLength / gateSteps;
 
             kid.changes.push({
                 step: currentStep + stepNum,
-                x: newX,
-                y: newY,
-                direction: Math.round(nextAngleDeg),
-                stepSize: 1,
-                moving: true,
+                direction: Math.round(absoluteDirection),
+                stepSize: stepSize,
+                moving: radius > 0,
             });
         }
     });
