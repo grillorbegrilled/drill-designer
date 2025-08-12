@@ -59,21 +59,31 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
         const dy = kid.y - vertex.y;
         const radius = Math.hypot(dx, dy);
 
-        // Start angle in degrees from +X axis
-        let startAngle = Math.atan2(dy, dx) * (180 / Math.PI);
-        if (startAngle < 0) startAngle += 360;
-
+        // Arc length and step size
         const arcLength = (Math.PI / 2) * radius;
         const stepSize = arcLength / gateSteps;
 
+        // Starting angle of kid relative to vertex
+        const baseAngle = Math.atan2(dy, dx); // radians
+
         for (let stepNum = 1; stepNum <= gateSteps; stepNum++) {
             const fraction = stepNum / gateSteps;
-            const angleDelta = (clockwise ? 1 : -1) * 90 * fraction;
-            const absoluteDirection = (startAngle + angleDelta + 360) % 360;
+            const rotationAngle = (clockwise ? 1 : -1) * (Math.PI / 2) * fraction; // radians
+
+            // Current angle along arc
+            const currentAngle = baseAngle + rotationAngle;
+
+            // Tangent to the arc is perpendicular to the radius vector
+            const tangentAngle = currentAngle + (clockwise ? Math.PI / 2 : -Math.PI / 2);
+
+            // Convert to degrees and normalize
+            let directionDeg = (tangentAngle * 180) / Math.PI;
+            if (directionDeg < 0) directionDeg += 360;
+            directionDeg %= 360;
 
             kid.changes.push({
                 step: currentStep + stepNum - 1,
-                direction: Math.round(absoluteDirection),
+                direction: Math.round(directionDeg),
                 stepSize: radius === 0 ? 0 : stepSize,
                 moving: radius > 0,
             });
