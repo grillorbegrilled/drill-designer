@@ -45,7 +45,7 @@ function calculateGateSteps(vertex, selectedKids) {
     const steps = Math.ceil(quarterArc);
     const result = Math.ceil(steps / 8) * 8;
 
-    console.log(result);
+    //console.log(result);
     return result;
 }
 
