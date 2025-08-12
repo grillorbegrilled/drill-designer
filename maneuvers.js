@@ -1,4 +1,4 @@
-function applyChange(ids, change) {
+function applyChange(ids, change, step = currentStep) {
     for (let i = 0; i < kids.length; i++) {
         const kid = kids[i];
 
@@ -16,7 +16,7 @@ function applyChange(ids, change) {
         }
 
         // Compute new change
-        const newChange = { step: currentStep };
+        const newChange = { step: step };
 
         if ("directionDelta" in change) {
             newChange.direction = (state.direction + change.directionDelta + 360) % 360;
