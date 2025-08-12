@@ -50,33 +50,31 @@ function calculateGateSteps(vertex, selectedKids) {
 
 function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
     selectedKids = selectedKids.sort((a, b) => a.x !== b.x ? a.x - b.x : a.y - b.y);
+
     selectedKids.forEach(kid => {
         // Remove future changes for this kid
         kid.changes = kid.changes.filter(c => c.step < currentStep);
 
-        const radiusX = kid.x - vertex.x;
-        const radiusY = kid.y - vertex.y;
-        const radius = Math.hypot(radiusX, radiusY);
+        const dx = kid.x - vertex.x;
+        const dy = kid.y - vertex.y;
+        const radius = Math.hypot(dx, dy);
 
-        for (let stepNum = 0; stepNum < gateSteps; stepNum++) {
-            // fraction completed of quarter turn
+        // Start angle in degrees from +X axis
+        let startAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+        if (startAngle < 0) startAngle += 360;
+
+        const arcLength = (Math.PI / 2) * radius;
+        const stepSize = arcLength / gateSteps;
+
+        for (let stepNum = 1; stepNum <= gateSteps; stepNum++) {
             const fraction = stepNum / gateSteps;
-            const rotationDeg = (clockwise ? 1 : -1) * 90 * fraction;
-
-            // Convert start angle: atan2 returns angle relative to +X axis, which matches 0° to right
-            let startAngle = (Math.atan2(radiusY, radiusX) * 180) / Math.PI;
-            if (startAngle < 0) startAngle += 360;
-
-            const absoluteDirection = (startAngle + rotationDeg + 360) % 360;
-
-            // Step size per step is arc length divided by steps
-            const arcLength = (Math.PI / 2) * radius;
-            const stepSize = arcLength / gateSteps;
+            const angleDelta = (clockwise ? 1 : -1) * 90 * fraction;
+            const absoluteDirection = (startAngle + angleDelta + 360) % 360;
 
             kid.changes.push({
-                step: currentStep + stepNum,
+                step: currentStep + stepNum - 1,
                 direction: Math.round(absoluteDirection),
-                stepSize: stepSize,
+                stepSize: radius === 0 ? 0 : stepSize,
                 moving: radius > 0,
             });
         }
