@@ -93,7 +93,7 @@ window.onload = () => {
     function updateStepCount() {
         const vertexType = vertexSelect.value; // 'start' | 'center' | 'end'
         const selectedKidsArr = kids.filter(k => selectedIds.has(k.id));
-        const vertex = getVertex(vertexType);
+        const vertex = getVertex(vertexType, selectedKidsArr);
         const steps = calculateGateSteps(vertex, selectedKidsArr);
         stepCountInput.value = steps;
     }
