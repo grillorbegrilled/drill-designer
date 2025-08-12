@@ -1,13 +1,16 @@
 function advance(silent = false) {
     kids.forEach(kid => {
         const change = kid.changes.find(c => c.step === currentStep);
+        var stepSize = 1;
+        
         if (change) {
             if (change.direction !== undefined) kid.direction = change.direction;
             if (change.moving !== undefined) kid.moving = change.moving;
+            if (change.stepSize !== undefined) stepSize = change.stepSize;
         }
 
         if (kid.moving) {
-            if ([45, 135, 225, 315].includes(kid.direction)) {
+            if (change?.stepSize === undefined && kid.direction % 45 === 0 && kid.direction % 2 === 1) {
                 if (kid.direction === 45 || kid.direction === 315) kid.x += 2/3;
                 else kid.x -= 2/3;
         
@@ -24,8 +27,8 @@ function advance(silent = false) {
                 }
             } else {
                 const radians = (kid.direction * Math.PI) / 180;
-                kid.x += Math.cos(radians);
-                kid.y += Math.sin(radians);
+                kid.x += Math.cos(radians) * stepSize;
+                kid.y += Math.sin(radians) * stepSize;
             }
         }
     });
