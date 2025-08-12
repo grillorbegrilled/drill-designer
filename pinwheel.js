@@ -41,11 +41,10 @@ function calculateGateSteps(vertex, selectedKids) {
     // Quarter-circle arc length = (π/2) * radius
     const quarterArc = (Math.PI / 2) * maxDist;
 
-    // Steps = arc length rounded up to nearest multiple of 8
-    const steps = Math.ceil(quarterArc);
-    const result = Math.ceil(steps / 8) * 8;
+    // Round to nearest multiple of 4
+    const result = Math.round(quarterArc / 4) * 4;
 
-    //console.log(result);
+    console.log(`maxDist: ${maxDist}, result: ${result}`);
     return result;
 }
 
