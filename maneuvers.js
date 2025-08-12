@@ -88,14 +88,13 @@ function obliqueBackRight() {
     applyChange([...selectedIds], { directionDelta: 135 });
 }
 
-function gatePinwheel(vertex, clockwise, selectedKids) {
+function gatePinwheel(vertex, clockwise, steps, selectedKids) {
     if (!areKidsAligned()) {
         alert("Selected kids must be aligned in a straight line.");
         return;
     }
 
-    const gateSteps = calculateGateSteps(vertex, selectedKids);
 
-    addGatePinwheelChanges(vertex, clockwise, gateSteps);
+    addGatePinwheelChanges(vertex, clockwise, steps, selectedKids);
     render();
 }
