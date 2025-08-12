@@ -9,22 +9,27 @@ function areKidsAligned() {
 }
 
 function getVertex(type, selectedKids) {
+    var result;
+    
     if (type === 'center') {
         // Midpoint between first and last kid on the line
         const first = selectedKids[0];
         const last = selectedKids[selectedKids.length - 1];
-        return { 
+        result = { 
             x: (first.x + last.x) / 2,
             y: (first.y + last.y) / 2
         };
     } else if (type === 'start') {
         // Vertex at start of line (first kid)
-        return { x: selectedKids[0].x, y: selectedKids[0].y };
+        result = { x: selectedKids[0].x, y: selectedKids[0].y };
     } else if (type === 'end') {
         // Vertex at end of line (last kid)
         const last = selectedKids[selectedKids.length - 1];
-        return { x: last.x, y: last.y };
+        result = { x: last.x, y: last.y };
     }
+
+    console.log(result);
+    return result;
 }
 
 function calculateGateSteps(vertex, selectedKids) {
@@ -38,7 +43,10 @@ function calculateGateSteps(vertex, selectedKids) {
 
     // Steps = arc length rounded up to nearest multiple of 8
     const steps = Math.ceil(quarterArc);
-    return Math.ceil(steps / 8) * 8;
+    const result = Math.ceil(steps / 8) * 8;
+
+    console.log(result);
+    return result;
 }
 
 function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
