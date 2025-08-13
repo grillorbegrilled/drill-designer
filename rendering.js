@@ -35,19 +35,9 @@ function getComplementaryColor(hex) {
     return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
 }
 
-function drawKids(ctx, kids, scaleX, scaleY) {
-  const size = 10;
-  kids.forEach(kid => {
-    const px = kid.x * scaleX;
-    const py = kid.y * scaleY;
-    const angleRad = (kid.direction * Math.PI) / 180;
-
-    const fill = kid.color || "#ffff00"; // default to yellow
-    const isSelected = selectedIds.has(kid.id);
-    const stroke = "#000";
-    
+function drawTriangle(size, x, y, radians, fill, stroke, isSelected) {
     ctx.save();
-    ctx.translate(px, py);
+    ctx.translate(x, y);
 
     // Yellow square behind triangle if selected
     if (isSelected) {
@@ -55,7 +45,7 @@ function drawKids(ctx, kids, scaleX, scaleY) {
       ctx.fillRect(-size / 2, -size / 2, size, size);
     }
 
-    ctx.rotate(angleRad);
+    ctx.rotate(radians);
 
     // Draw the triangle
     ctx.beginPath();
@@ -72,6 +62,20 @@ function drawKids(ctx, kids, scaleX, scaleY) {
     ctx.stroke();
 
     ctx.restore();
+}
+
+function drawKids(ctx, kids, scaleX, scaleY) {
+  const size = 10;
+  kids.forEach(kid => {
+    const px = kid.x * scaleX;
+    const py = kid.y * scaleY;
+    const angleRad = (kid.direction * Math.PI) / 180;
+
+    const fill = kid.color || "#ffff00"; // default to yellow
+    const isSelected = selectedIds.has(kid.id);
+    const stroke = "#000";
+    
+    drawTriangle(size, px, py, angleRad, fill, stroke, isSelected);
   });
 }
 
