@@ -7,17 +7,17 @@ function render() {
     slider.max = Math.max(...snapshots.keys());
 
     //selection box
-    if (isDragging && dragStart && dragEnd) {
+    if (selectDragging && selectDragStart && selectDragEnd) {
         ctx.save();
         ctx.strokeStyle = 'rgba(255, 255, 0, 0.9)';
         ctx.lineWidth = 2;
         ctx.setLineDash([]);
         ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
     
-        const x = Math.min(dragStart.x, dragEnd.x);
-        const y = Math.min(dragStart.y, dragEnd.y);
-        const width = Math.abs(dragEnd.x - dragStart.x);
-        const height = Math.abs(dragEnd.y - dragStart.y);
+        const x = Math.min(selectDragStart.x, selectDragEnd.x);
+        const y = Math.min(selectDragStart.y, selectDragEnd.y);
+        const width = Math.abs(selectDragEnd.x - selectDragStart.x);
+        const height = Math.abs(selectDragEnd.y - selectDragStart.y);
     
         ctx.fillRect(x, y, width, height);
         ctx.strokeRect(x, y, width, height);
