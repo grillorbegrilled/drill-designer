@@ -89,7 +89,7 @@ function applySnapshot(state) {
 
 function addKid(x, y, color) {
   kids.push({
-    id: `K${kidIdCounter++}`,
+    id: Date.now() + Math.random(),
     x,
     y,
     direction: 0,
