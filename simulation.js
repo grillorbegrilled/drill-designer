@@ -12,7 +12,7 @@ function advance(silent = false) {
             if (change.y !== undefined) kid.y = change.y;
         }
 
-        if (kid.moving && change.x === undefined && change.y === undefined) {
+        if (kid.moving && change?.x === undefined && change?.y === undefined) {
             if (change?.stepSize === undefined && kid.direction % 45 === 0 && kid.direction % 2 === 1) {
                 if (kid.direction === 45 || kid.direction === 315) kid.x += 2/3;
                 else kid.x -= 2/3;
