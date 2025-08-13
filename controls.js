@@ -258,7 +258,7 @@ window.onload = () => {
     const spacingXInput = document.getElementById("addKidSpacingX");
     const spacingYInput = document.getElementById("addKidSpacingY");
     
-    let gridOrigin = { x: 5, y: 5 };
+    let gridOrigin = { x: 32, y: 32 };
     
     // Modal control
     function enableAddMode() {
