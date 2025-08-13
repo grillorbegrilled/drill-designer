@@ -86,3 +86,15 @@ function applySnapshot(state) {
         }
     });
 }
+
+function addKid(x, y, color) {
+  kids.push({
+    id: `K${kidIdCounter++}`,
+    x,
+    y,
+    direction: 0,
+    moving: true,
+    color,
+    changes: []
+  });
+}
