@@ -212,6 +212,40 @@ window.onload = () => {
         render();
     });
 
+    canvas.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+            e.preventDefault(); // Only block when single-finger (drag)
+            const pos = getCanvasCoordinates(e.touches[0]);
+            selectDragging = true;
+            selectDragStart = pos;
+            selectDragEnd = null;
+        }
+    });
+    
+    canvas.addEventListener('touchmove', (e) => {
+        if (selectDragging && e.touches.length === 1) {
+            e.preventDefault();
+            selectDragEnd = getCanvasCoordinates(e.touches[0]);
+            render();
+        }
+    });
+    
+    canvas.addEventListener('touchend', (e) => {
+        if (selectDragging && selectDragStart && selectDragEnd) {
+            toggleSelectionInRect(selectDragStart, selectDragEnd);
+        }
+        selectDragging = false;
+        selectDragStart = selectDragEnd = null;
+        render();
+    });
+    
+    canvas.addEventListener('touchcancel', () => {
+        selectDragging = false;
+        selectDragStart = selectDragEnd = null;
+        render();
+    });
+
+
     //add kids to field
     const addKidBox = document.getElementById("addKidBox");
     const addKidBtn = document.getElementById("addKidBtn");
