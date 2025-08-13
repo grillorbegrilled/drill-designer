@@ -307,9 +307,7 @@ window.onload = () => {
     }
 
     addKidBtn.addEventListener("click", enableAddMode);
-    addKidCancelBtn.addEventListener("click", () => {
-      disableAddMode();
-    });
+    addKidCancelBtn.addEventListener("click", disableAddMode);
     
     addKidConfirmBtn.addEventListener("click", () => {
       const color = colorSelect.value;
