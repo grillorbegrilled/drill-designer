@@ -66,22 +66,38 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
         const stepSize = arcLength / gateSteps;
         const baseAngle = Math.atan2(dy, dx);
 
+        // Use kid's current direction in radians for smooth rotation of vertex kid
+        const initialDirectionRad = (kid.direction ?? 0) * Math.PI / 180;
+
         for (let stepNum = 1; stepNum <= gateSteps; stepNum++) {
             const fraction = stepNum / gateSteps;
-            const rotationAngle = (clockwise ? 1 : -1) * (Math.PI / 2) * fraction;
-            const currentAngle = baseAngle + rotationAngle;
 
-            const tangentAngle = currentAngle + (clockwise ? Math.PI / 2 : -Math.PI / 2);
+            let directionDeg;
 
-            let directionDeg = (tangentAngle * 180) / Math.PI;
-            if (directionDeg < 0) directionDeg += 360;
-            directionDeg %= 360;
+            if (radius === 0) {
+                // Rotate smoothly through steps based on initial direction
+                const rotationAngle = (clockwise ? 1 : -1) * (Math.PI / 2) * fraction;
+                const currentAngle = initialDirectionRad + rotationAngle;
+                directionDeg = (currentAngle * 180) / Math.PI;
+                if (directionDeg < 0) directionDeg += 360;
+                directionDeg %= 360;
+                directionDeg = Math.round(directionDeg);
+            } else {
+                // Normal tangent angle calculation
+                const rotationAngle = (clockwise ? 1 : -1) * (Math.PI / 2) * fraction;
+                const currentAngle = baseAngle + rotationAngle;
+                const tangentAngle = currentAngle + (clockwise ? Math.PI / 2 : -Math.PI / 2);
+                directionDeg = (tangentAngle * 180) / Math.PI;
+                if (directionDeg < 0) directionDeg += 360;
+                directionDeg %= 360;
+                directionDeg = Math.round(directionDeg);
+            }
 
             const change = {
                 step: currentStep + stepNum - 1,
-                direction: Math.round(directionDeg),
+                direction: directionDeg,
                 stepSize: radius === 0 ? 0 : stepSize,
-                moving: true,  // always moving, even if stepSize is 0
+                moving: true,
             };
 
             if (stepNum === gateSteps) {
