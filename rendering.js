@@ -12,15 +12,14 @@ function render() {
         ctx.strokeStyle = 'rgba(255, 255, 0, 0.9)';
         ctx.lineWidth = 2;
         ctx.setLineDash([]);
-
         ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-        ctx.fillRect(x, y, width, height);
     
         const x = Math.min(dragStart.x, dragEnd.x);
         const y = Math.min(dragStart.y, dragEnd.y);
         const width = Math.abs(dragEnd.x - dragStart.x);
         const height = Math.abs(dragEnd.y - dragStart.y);
     
+        ctx.fillRect(x, y, width, height);
         ctx.strokeRect(x, y, width, height);
         ctx.restore();
     }
