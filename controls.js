@@ -94,6 +94,7 @@ window.onload = () => {
     const stepCountInput = document.getElementById('stepCount');
 
     function updateStepCount() {
+        console.log(rotationSelect.value);
         const vertexType = document.querySelector('input[name="vertex"]:checked').value; // 'start' | 'center' | 'end'
         const selectedKidsArr = kids.filter(k => selectedIds.has(k.id));
         const vertex = getVertex(vertexType, selectedKidsArr);
@@ -122,6 +123,7 @@ window.onload = () => {
     
     confirmBtn.addEventListener('click', () => {
         const vertexType = document.querySelector('input[name="vertex"]:checked').value;
+        console.log(rotationSelect.value);
         const clockwise = rotationSelect.value === 'true';
         const selectedKids = kids.filter(k => selectedIds.has(k.id));
     
