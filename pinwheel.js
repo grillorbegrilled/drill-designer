@@ -51,6 +51,11 @@ function calculateGateSteps(vertex, selectedKids) {
 function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
     selectedKids = selectedKids.sort((a, b) => a.x !== b.x ? a.x - b.x : a.y - b.y);
 
+    // Determine target line orientation
+    const isVertical = Math.abs(selectedKids[0].x - vertex.x) < Math.abs(selectedKids[0].y - vertex.y);
+
+    const finalPositions = [];
+
     selectedKids.forEach(kid => {
         // Remove future changes for this kid
         kid.changes = kid.changes.filter(c => c.step < currentStep);
@@ -59,46 +64,54 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
         const dy = kid.y - vertex.y;
         const radius = Math.hypot(dx, dy);
 
-        // Arc length and step size
         const arcLength = (Math.PI / 2) * radius;
         const stepSize = arcLength / gateSteps;
 
-        // Starting angle of kid relative to vertex
-        const baseAngle = Math.atan2(dy, dx); // radians
+        const baseAngle = Math.atan2(dy, dx);
 
         for (let stepNum = 1; stepNum <= gateSteps; stepNum++) {
-            let currentAngle;
-            if (stepNum === gateSteps) {
-                // Force exact 90° rotation for final step
-                currentAngle = baseAngle + (clockwise ? Math.PI / 2 : -Math.PI / 2);
-            } else {
-                const fraction = stepNum / gateSteps;
-                const rotationAngle = (clockwise ? 1 : -1) * (Math.PI / 2) * fraction;
-                currentAngle = baseAngle + rotationAngle;
-            }
+            const fraction = stepNum / gateSteps;
+            const rotationAngle = (clockwise ? 1 : -1) * (Math.PI / 2) * fraction;
+            const currentAngle = baseAngle + rotationAngle;
 
-            // Tangent to the arc is perpendicular to the radius vector
             const tangentAngle = currentAngle + (clockwise ? Math.PI / 2 : -Math.PI / 2);
 
-            // Convert to degrees and normalize
             let directionDeg = (tangentAngle * 180) / Math.PI;
             if (directionDeg < 0) directionDeg += 360;
             directionDeg %= 360;
 
-            kid.changes.push({
+            const change = {
                 step: currentStep + stepNum - 1,
                 direction: Math.round(directionDeg),
                 stepSize: radius === 0 ? 0 : stepSize,
                 moving: radius > 0,
-            });
-        }
+            };
 
-        // Snap final position to exact integer alignment
-        const finalAngle = baseAngle + (clockwise ? Math.PI / 2 : -Math.PI / 2);
-        kid.x = Math.round(vertex.x + radius * Math.cos(finalAngle));
-        kid.y = Math.round(vertex.y + radius * Math.sin(finalAngle));
+            if (stepNum === gateSteps) {
+                const finalAngle = baseAngle + (clockwise ? Math.PI / 2 : -Math.PI / 2);
+                const fx = vertex.x + radius * Math.cos(finalAngle);
+                const fy = vertex.y + radius * Math.sin(finalAngle);
+                finalPositions.push({ kid, fx, fy, change });
+            }
+
+            kid.changes.push(change);
+        }
     });
 
-    // Re-render next step
+    // Snap shared axis to exact same coordinate
+    if (isVertical) {
+        const avgX = Math.round(finalPositions.reduce((sum, p) => sum + p.fx, 0) / finalPositions.length);
+        finalPositions.forEach(p => {
+            p.change.x = avgX;
+            p.change.y = Math.round(p.fy);
+        });
+    } else {
+        const avgY = Math.round(finalPositions.reduce((sum, p) => sum + p.fy, 0) / finalPositions.length);
+        finalPositions.forEach(p => {
+            p.change.x = Math.round(p.fx);
+            p.change.y = avgY;
+        });
+    }
+
     simulateToStep(currentStep + 1);
 }
