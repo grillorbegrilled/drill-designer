@@ -23,6 +23,17 @@ function render() {
         ctx.strokeRect(x, y, width, height);
         ctx.restore();
     }
+
+    if (addKidPreview) {
+    drawSelectorDots(
+      addKidPreview.originX,
+      addKidPreview.originY,
+      addKidPreview.cols,
+      addKidPreview.rows,
+      addKidPreview.spacingX,
+      addKidPreview.spacingY,
+      addKidPreview.color
+    );
     
     updateStatusDisplay();
 }
@@ -113,4 +124,19 @@ function drawGridHighlight(mouseX, mouseY) {
   // Draw highlight square centered on that coordinate
   ctx.fillStyle = 'rgba(255, 255, 0, 0.5)';
   ctx.fillRect(gridX - 5, gridY - 5, 10, 10);
+}
+
+function drawSelectorDots(originX, originY, cols, rows, spacingX, spacingY, color) {
+  ctx.fillStyle = color;
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const x = originX + col * spacingX;
+      const y = originY + row * spacingY;
+
+      ctx.beginPath();
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
 }
