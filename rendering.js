@@ -8,11 +8,13 @@ function render() {
 
     //selection box
     if (isDragging && dragStart && dragEnd) {
-        const ctx = canvas.getContext('2d');
         ctx.save();
-        ctx.strokeStyle = 'rgba(0, 120, 255, 0.8)';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([4, 2]);
+        ctx.strokeStyle = 'rgba(255, 255, 0, 0.9)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        ctx.fillRect(x, y, width, height);
     
         const x = Math.min(dragStart.x, dragEnd.x);
         const y = Math.min(dragStart.y, dragEnd.y);
