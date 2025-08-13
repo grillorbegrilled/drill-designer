@@ -28,7 +28,7 @@ function getVertex(type, selectedKids) {
         result = { x: last.x, y: last.y };
     }
 
-    console.log(result);
+    //console.log(result);
     return result;
 }
 
@@ -44,7 +44,7 @@ function calculateGateSteps(vertex, selectedKids) {
     // Round to nearest multiple of 4
     const result = Math.round(quarterArc / 4) * 4;
 
-    console.log(`vertex: ${vertex}, maxDist: ${maxDist}, result: ${result}`);
+    //console.log(`vertex: ${vertex}, maxDist: ${maxDist}, result: ${result}`);
     return result;
 }
 
