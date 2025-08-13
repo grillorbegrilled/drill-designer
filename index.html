@@ -67,27 +67,49 @@
     </div>
     <!--Adding kids-->
     <button id="addKidBtn">💂➕</button>
-    <select id="colorSelect" class="hidden">
-      <!-- ANSI 16 colors -->
-      <option value="black">Black</option>
-      <option value="red">Red</option>
-      <option value="green">Green</option>
-      <option value="yellow">Yellow</option>
-      <option value="blue">Blue</option>
-      <option value="magenta">Magenta</option>
-      <option value="cyan">Cyan</option>
-      <option value="white">White</option>
-      <option value="brightBlack">Bright Black</option>
-      <option value="brightRed">Bright Red</option>
-      <option value="brightGreen">Bright Green</option>
-      <option value="brightYellow">Bright Yellow</option>
-      <option value="brightBlue">Bright Blue</option>
-      <option value="brightMagenta">Bright Magenta</option>
-      <option value="brightCyan">Bright Cyan</option>
-      <option value="brightWhite">Bright White</option>
-    </select>
-    <button id="addKidConfirmBtn" class="hidden">✔️</button>
-    <button id="addKidCancelBtn" class="hidden">❌</button>
+    <!-- Add Kid Modal -->
+    <div id="addKidMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 300px; z-index: 1000;">
+      <h3>Add Marchers</h3>
+      <label>
+        Color:
+        <select id="colorSelect">
+          <option value="yellow">Yellow</option>
+          <option value="black">Black</option>
+          <option value="red">Red</option>
+          <option value="green">Green</option>
+          <option value="blue">Blue</option>
+          <option value="magenta">Magenta</option>
+          <option value="cyan">Cyan</option>
+          <option value="white">White</option>
+          <option value="brightBlack">Bright Black</option>
+          <option value="brightRed">Bright Red</option>
+          <option value="brightGreen">Bright Green</option>
+          <option value="brightYellow">Bright Yellow</option>
+          <option value="brightBlue">Bright Blue</option>
+          <option value="brightMagenta">Bright Magenta</option>
+          <option value="brightCyan">Bright Cyan</option>
+          <option value="brightWhite">Bright White</option>
+        </select>
+      </label>
+      <br><br>
+      <label>Rows: <input type="number" id="addKidRows" value="1" min="1" /></label>
+      <label>Cols: <input type="number" id="addKidCols" value="1" min="1" /></label>
+      <br><br>
+      <label>X spacing: <input type="number" id="addKidSpacingX" value="2" /></label>
+      <label>Y spacing: <input type="number" id="addKidSpacingY" value="2" /></label>
+      <br><br>
+      <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 4px;">
+        <button id="moveGridUp">🔼</button>
+        <div style="display: flex; gap: 8px;">
+          <button id="moveGridLeft">◀️</button>
+          <button id="moveGridRight">▶️</button>
+        </div>
+        <button id="moveGridDown">🔽</button>
+      </div>
+      <br>
+      <button id="addKidConfirmBtn">✔️</button>
+      <button id="addKidCancelBtn">❌</button>
+    </div>
   </div>
 
   <div id="canvas-container">
