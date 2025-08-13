@@ -305,15 +305,16 @@ window.onload = () => {
     
     addKidConfirmBtn.addEventListener("click", () => {
       const color = colorSelect.value;
-      const cols = parseInt(colsInput.value, 10);
-      const rows = parseInt(rowsInput.value, 10);
-      const spacingX = parseInt(spacingXInput.value, 10);
-      const spacingY = parseInt(spacingYInput.value, 10);
+      const cols = parseInt(colsInput.value);
+      const rows = parseInt(rowsInput.value);
+      const spacingX = parseInt(spacingXInput.value);
+      const spacingY = parseInt(spacingYInput.value);
     
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
-          const x = gridOrigin.x + col * spacingX;
-          const y = gridOrigin.y + row * spacingY;
+          const x = gridOrigin.x + (col * spacingX);
+          const y = gridOrigin.y + (row * spacingY);
+        console.log(`${gridOrigin.x}, ${gridOrigin.y}; ${scaleX}, ${scaleY}`);
           addKid(x, y, color);
         }
       }
