@@ -342,6 +342,43 @@ window.onload = () => {
       updateAddKidPreview();
       render();
     });
+    document.getElementById("moveGridUpBig").addEventListener("click", () => {
+      gridOrigin.y -= 8;
+      updateAddKidPreview();
+      render();
+    });
+    document.getElementById("moveGridDownBig").addEventListener("click", () => {
+      gridOrigin.y += 8;
+      updateAddKidPreview();
+      render();
+    });
+    document.getElementById("moveGridLeftBig").addEventListener("click", () => {
+      gridOrigin.x -= 8;
+      updateAddKidPreview();
+      render();
+    });
+    document.getElementById("moveGridRightBig").addEventListener("click", () => {
+      gridOrigin.x += 8;
+      updateAddKidPreview();
+      render();
+    });
+    rowsInput.addEventListener('change', () => {
+      updateAddKidPreview();
+      render();
+    });
+    colsInput.addEventListener('change', () => {
+      updateAddKidPreview();
+      render();
+    });
+    spacingXInput.addEventListener('change', () => {
+      updateAddKidPreview();
+      render();
+    });
+    spacingYInput.addEventListener('change', () => {
+      updateAddKidPreview();
+      render();
+    });
+
     
     render();
 };
