@@ -34,40 +34,67 @@
           <button id="obliqueBackRightBtn">↘️</button>
         </div>
     </div>
-    <!-- Trigger button -->
-<button id="openPinwheelMenuBtn">🔃</button>
-
-<!-- Modal container -->
-<div id="pinwheelMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 280px; z-index: 1000;">
-  <h3>Pinwheel/Gate Settings</h3>
-
-    <label>
-      Vertex:
-      <div style="display: flex; gap: 10px; align-items: center;">
-        <label><input type="radio" name="vertex" value="start"> ⏮️</label>
-        <label><input type="radio" name="vertex" value="center" checked> ⏺️</label>
-        <label><input type="radio" name="vertex" value="end"> ⏭️</label>
-      </div>
-    </label>
-    <br/><br/>
+    <!-- Pinwheel trigger button -->
+    <button id="openPinwheelMenuBtn">🔃</button>
+    <!-- Pinwheel modal container -->
+    <div id="pinwheelMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 280px; z-index: 1000;">
+      <h3>Pinwheel/Gate Settings</h3>
     
-    <label>
-      🔃:
-      <input type="checkbox" id="rotationToggle" />
-    </label>
-    <br/><br/>
-
-  <label>
-    Steps:
-    <input type="number" id="stepCount" readonly style="width: 60px;"/>
-  </label>
-  <br/><br/>
-
-  <button id="confirmPinwheelBtn">✔️</button>
-  <button id="cancelPinwheelBtn">❌</button>
-</div>
+        <label>
+          Vertex:
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <label><input type="radio" name="vertex" value="start"> ⏮️</label>
+            <label><input type="radio" name="vertex" value="center" checked> ⏺️</label>
+            <label><input type="radio" name="vertex" value="end"> ⏭️</label>
+          </div>
+        </label>
+        <br/><br/>
+        
+        <label>
+          🔃:
+          <input type="checkbox" id="rotationToggle" />
+        </label>
+        <br/><br/>
+    
+      <label>
+        Steps:
+        <input type="number" id="stepCount" readonly style="width: 60px;"/>
+      </label>
+      <br/><br/>
+    
+      <button id="confirmPinwheelBtn">✔️</button>
+      <button id="cancelPinwheelBtn">❌</button>
+    </div>
+    <!--Adding kids-->
+    <button id="addKidBtn">➕ Add Kid(s)</button>
+    <select id="colorSelect" class="hidden">
+      <!-- ANSI 16 colors -->
+      <option value="black">Black</option>
+      <option value="red">Red</option>
+      <option value="green">Green</option>
+      <option value="yellow">Yellow</option>
+      <option value="blue">Blue</option>
+      <option value="magenta">Magenta</option>
+      <option value="cyan">Cyan</option>
+      <option value="white">White</option>
+      <option value="brightBlack">Bright Black</option>
+      <option value="brightRed">Bright Red</option>
+      <option value="brightGreen">Bright Green</option>
+      <option value="brightYellow">Bright Yellow</option>
+      <option value="brightBlue">Bright Blue</option>
+      <option value="brightMagenta">Bright Magenta</option>
+      <option value="brightCyan">Bright Cyan</option>
+      <option value="brightWhite">Bright White</option>
+    </select>
+    <button id="addKidConfirmBtn" class="hidden">✔️</button>
+    <button id="addKidCancelBtn" class="hidden">❌</button>
   </div>
-  <canvas id="fieldCanvas" width="1000" height="500"></canvas>
+
+  <div id="canvas-container">
+    <canvas id="fieldCanvas" width="1000" height="500"></canvas>
+    <div id="selectorBox" class="hidden"></div>
+  </div>
+  
   <div id="statusDisplay" class="status-display"></div>
   <pre id="log" style="margin-top: 10px; font-family: monospace;"></pre>
   <script>
