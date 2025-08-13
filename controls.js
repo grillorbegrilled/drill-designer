@@ -1,3 +1,7 @@
+let isDragging = false;
+let dragStart = null;
+let dragEnd = null;
+
 function togglePlay() {
     isPlaying = !isPlaying;
     document.getElementById("playBtn").textContent = isPlaying ? "⏹️" : "▶️";
@@ -49,6 +53,33 @@ function pointInSquare(px, py, kid, scaleX, scaleY) {
   const y = kid.y * scaleY;
   return px >= x - half && px <= x + half &&
          py >= y - half && py <= y + half;
+}
+
+function getCanvasCoordinates(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+    return { x, y };
+}
+
+function toggleSelectionInRect(p1, p2) {
+    const minX = Math.min(p1.x, p2.x);
+    const maxX = Math.max(p1.x, p2.x);
+    const minY = Math.min(p1.y, p2.y);
+    const maxY = Math.max(p1.y, p2.y);
+
+    for (let kid of kids) {
+        const kidX = kid.x * scaleX;
+        const kidY = kid.y * scaleY;
+
+        if (kidX >= minX && kidX <= maxX && kidY >= minY && kidY <= maxY) {
+            if (selectedIds.has(kid.id)) {
+                selectedIds.delete(kid.id);
+            } else {
+                selectedIds.add(kid.id);
+            }
+        }
+    }
 }
 
 window.onload = () => {
@@ -135,6 +166,7 @@ window.onload = () => {
     });
 
     //selecting people on field
+    ////click to add
     canvas.addEventListener('click', function (e) {
         const rect = canvas.getBoundingClientRect();
     
@@ -154,6 +186,29 @@ window.onload = () => {
             }
         }
     
+        render();
+    });
+
+    ////drag to mass-add
+    canvas.addEventListener('mousedown', (e) => {
+        const pos = getCanvasCoordinates(e);
+        isDragging = true;
+        dragStart = pos;
+        dragEnd = null;
+    });
+    
+    canvas.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        dragEnd = getCanvasCoordinates(e);
+        render(); // re-render to show drag box
+    });
+    
+    canvas.addEventListener('mouseup', () => {
+        if (isDragging && dragStart && dragEnd) {
+            toggleSelectionInRect(dragStart, dragEnd);
+        }
+        isDragging = false;
+        dragStart = dragEnd = null;
         render();
     });
     
