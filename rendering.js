@@ -5,6 +5,24 @@ function render() {
     const slider = document.getElementById("scrubSlider");
     slider.value = currentStep;
     slider.max = Math.max(...snapshots.keys());
+
+    //selection box
+    if (isDragging && dragStart && dragEnd) {
+        const ctx = canvas.getContext('2d');
+        ctx.save();
+        ctx.strokeStyle = 'rgba(0, 120, 255, 0.8)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 2]);
+    
+        const x = Math.min(dragStart.x, dragEnd.x);
+        const y = Math.min(dragStart.y, dragEnd.y);
+        const width = Math.abs(dragEnd.x - dragStart.x);
+        const height = Math.abs(dragEnd.y - dragStart.y);
+    
+        ctx.strokeRect(x, y, width, height);
+        ctx.restore();
+    }
+    
     updateStatusDisplay();
 }
 
