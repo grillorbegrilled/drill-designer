@@ -7,8 +7,12 @@ function togglePlay() {
 
 function playLoop() {
     if (!isPlaying) return;
+    try {
     advance();
     setTimeout(playLoop, 300);
+        } catch (err) {
+    console.error("Render error:", err);
+    }
 }
 
 function rewind() {
