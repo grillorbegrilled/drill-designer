@@ -112,3 +112,16 @@ input[type="range"]::-moz-range-thumb {
 .maneuver-pad button:hover {
     background-color: #555;
 }
+
+.hidden {
+  display: none;
+}
+#canvas-container {
+  position: relative;
+}
+#selectorBox {
+  position: absolute;
+  border: 2px dashed black;
+  resize: both;
+  overflow: hidden;
+  cursor: move;
