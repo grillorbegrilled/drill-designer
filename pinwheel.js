@@ -51,7 +51,6 @@ function calculateGateSteps(vertex, selectedKids) {
 function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
     selectedKids = selectedKids.sort((a, b) => a.x !== b.x ? a.x - b.x : a.y - b.y);
 
-    // Determine target line orientation (after 90° rotation)
     const isVertical = Math.abs(selectedKids[0].y - vertex.y) < Math.abs(selectedKids[0].x - vertex.x);
 
     const finalPositions = [];
@@ -82,7 +81,7 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
                 step: currentStep + stepNum - 1,
                 direction: Math.round(directionDeg),
                 stepSize: radius === 0 ? 0 : stepSize,
-                moving: radius > 0,
+                moving: true,  // always moving, even if stepSize is 0
             };
 
             if (stepNum === gateSteps) {
@@ -96,18 +95,19 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
         }
     });
 
-    // Snap only the shared axis
     if (isVertical) {
         const avgX = Math.round(finalPositions.reduce((sum, p) => sum + p.fx, 0) / finalPositions.length);
         finalPositions.forEach(p => {
-            p.change.x = avgX;                // shared vertical axis
-            p.change.y = Math.round(p.fy);    // keep each kid's own y
+            if (!p.change) return;
+            p.change.x = avgX;
+            p.change.y = Math.round(p.fy);
         });
     } else {
         const avgY = Math.round(finalPositions.reduce((sum, p) => sum + p.fy, 0) / finalPositions.length);
         finalPositions.forEach(p => {
-            p.change.x = Math.round(p.fx);    // keep each kid's own x
-            p.change.y = avgY;                // shared horizontal axis
+            if (!p.change) return;
+            p.change.x = Math.round(p.fx);
+            p.change.y = avgY;
         });
     }
 
