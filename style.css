@@ -119,9 +119,9 @@ input[type="range"]::-moz-range-thumb {
 #canvas-container {
   position: relative;
 }
-#selectorBox {
+#addKidBox {
   position: absolute;
-  border: 2px dashed black;
+  border: 2px dashed yellow;
   resize: both;
   overflow: hidden;
   cursor: move;
