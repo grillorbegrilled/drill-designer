@@ -342,6 +342,7 @@ window.onload = () => {
         const containerRect = canvas.getBoundingClientRect();
         addKidBox.style.left = `${e.clientX - containerRect.left - addKidBoxDragOffsetX}px`;
         addKidBox.style.top = `${e.clientY - containerRect.top - addKidBoxDragOffsetY}px`;
+        drawSelectorDots();
         render();
       }
     });
