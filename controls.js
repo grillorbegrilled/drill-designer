@@ -314,7 +314,7 @@ window.onload = () => {
         for (let col = 0; col < cols; col++) {
           const x = gridOrigin.x + col * spacingX;
           const y = gridOrigin.y + row * spacingY;
-          addKid(x * scaleX, y * scaleY, color);
+          addKid(x, y, color);
         }
       }
     
