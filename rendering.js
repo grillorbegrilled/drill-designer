@@ -24,16 +24,14 @@ function render() {
         ctx.restore();
     }
 
-    if (addKidPreview) {
-    drawSelectorDots(
+    if (addKidPreview) drawSelectorDots(
       addKidPreview.originX,
       addKidPreview.originY,
       addKidPreview.cols,
       addKidPreview.rows,
       addKidPreview.spacingX,
       addKidPreview.spacingY,
-      addKidPreview.color
-    );
+      addKidPreview.color);
     
     updateStatusDisplay();
 }
@@ -140,3 +138,4 @@ function drawSelectorDots(originX, originY, cols, rows, spacingX, spacingY, colo
     }
   }
 }
+    
