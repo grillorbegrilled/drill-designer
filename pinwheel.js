@@ -76,7 +76,6 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
 
             if (radius === 0) {
                 // Rotate smoothly through steps based on initial direction
-                console.log(clockwise);
                 const rotationAngle = (clockwise ? 1 : -1) * (Math.PI / 2) * fraction;
                 const currentAngle = initialDirectionRad + rotationAngle;
                 directionDeg = (currentAngle * 180) / Math.PI;
