@@ -340,8 +340,8 @@ window.onload = () => {
     document.addEventListener("mousemove", (e) => {
       if (addKidBoxDragging) {
         const containerRect = canvas.getBoundingClientRect();
-        addKidBox.style.left = `${e.clientX - containerRect.left - dragOffsetX}px`;
-        addKidBox.style.top = `${e.clientY - containerRect.top - dragOffsetY}px`;
+        addKidBox.style.left = `${e.clientX - containerRect.left - addKidBoxDragOffsetX}px`;
+        addKidBox.style.top = `${e.clientY - containerRect.top - addKidBoxDragOffsetY}px`;
         render();
       }
     });
