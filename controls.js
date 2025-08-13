@@ -247,107 +247,101 @@ window.onload = () => {
 
 
     //add kids to field
-    const addKidBox = document.getElementById("addKidBox");
+    const addKidMenu = document.getElementById("addKidMenu");
     const addKidBtn = document.getElementById("addKidBtn");
     const colorSelect = document.getElementById("colorSelect");
     const addKidConfirmBtn = document.getElementById("addKidConfirmBtn");
     const addKidCancelBtn = document.getElementById("addKidCancelBtn");
-
-    function getDotsInBox() {
-      const rect = addKidBox.getBoundingClientRect();
-      const canvasRect = canvas.getBoundingClientRect();
-      const offsetX = rect.left - canvasRect.left;
-      const offsetY = rect.top - canvasRect.top;
-      const width = rect.width;
-      const height = rect.height;
     
-      const dots = [];
+    const rowsInput = document.getElementById("addKidRows");
+    const colsInput = document.getElementById("addKidCols");
+    const spacingXInput = document.getElementById("addKidSpacingX");
+    const spacingYInput = document.getElementById("addKidSpacingY");
     
-      for (let x = offsetX; x <= offsetX + width; x += scaleX * 2) {
-        for (let y = offsetY; y <= offsetY + height; y += scaleY * 2) {
-          dots.push({ x: Math.round(x), y: Math.round(y) });
-        }
-      }
-      return dots;
-    }
-
-    function drawSelectorDots() {
-      const color = colorSelect.value;
-      ctx.fillStyle = color;
-      const dots = getDotsInBox();
-      for (let dot of dots) {
-        ctx.beginPath();
-        ctx.arc(dot.x, dot.y, 3, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
+    let gridOrigin = { x: 5, y: 5 };
+    
+    // Modal control
     function enableAddMode() {
       addKidBtn.disabled = true;
-      colorSelect.classList.remove("hidden");
-      addKidConfirmBtn.classList.remove("hidden");
-      addKidCancelBtn.classList.remove("hidden");
-      addKidBox.classList.remove("hidden");
-    
-      // Reset selector box
-      addKidBox.style.left = "100px";
-      addKidBox.style.top = "100px";
-      addKidBox.style.width = "200px";
-      addKidBox.style.height = "200px";
+      addKidMenu.style.display = 'block';
+      updateAddKidPreview();
       render();
     }
     
     function disableAddMode() {
       addKidBtn.disabled = false;
-      colorSelect.classList.add("hidden");
-      addKidConfirmBtn.classList.add("hidden");
-      addKidCancelBtn.classList.add("hidden");
-      addKidBox.classList.add("hidden");
+      addKidMenu.style.display = 'none';
+      updateAddKidPreview();
       render();
     }
 
+    function updateAddKidPreview() {
+      if (addKidMenu.style.display !== 'block') {
+        addKidPreview = null;
+        return;
+      }
+    
+      const color = colorSelect.value;
+      const cols = parseInt(colsInput.value, 10);
+      const rows = parseInt(rowsInput.value, 10);
+      const spacingX = parseInt(spacingXInput.value, 10);
+      const spacingY = parseInt(spacingYInput.value, 10);
+      const originX = gridOrigin.x * scaleX;
+      const originY = gridOrigin.y * scaleY;
+    
+      addKidPreview = {
+        originX,
+        originY,
+        cols,
+        rows,
+        spacingX: spacingX * scaleX,
+        spacingY: spacingY * scaleY,
+        color
+      };
+    }
+    
     addKidBtn.addEventListener("click", enableAddMode);
     addKidCancelBtn.addEventListener("click", disableAddMode);
     
     addKidConfirmBtn.addEventListener("click", () => {
       const color = colorSelect.value;
-      const dots = getDotsInBox();
-      for (let dot of dots) {
-        addKid(dot.x, dot.y, color);
+      const cols = parseInt(colsInput.value, 10);
+      const rows = parseInt(rowsInput.value, 10);
+      const spacingX = parseInt(spacingXInput.value, 10);
+      const spacingY = parseInt(spacingYInput.value, 10);
+    
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const x = gridOrigin.x + col * spacingX;
+          const y = gridOrigin.y + row * spacingY;
+          addKid(x * scaleX, y * scaleY, color);
+        }
       }
+    
       disableAddMode();
     });
     
-    // Drag and resize logic for selector box
-    let addKidBoxDragging = false;
-    let addKidBoxDragOffsetX = 0;
-    let addKidBoxDragOffsetY = 0;
-    
-    addKidBox.addEventListener("mousedown", (e) => {
-      if (e.target === addKidBox) {
-        addKidBoxDragging = true;
-        addKidBoxDragOffsetX = e.offsetX;
-        addKidBoxDragOffsetY = e.offsetY;
-      }
+    // Directional buttons
+    document.getElementById("moveGridUp").addEventListener("click", () => {
+      gridOrigin.y -= 1;
+      updateAddKidPreview();
+      render();
     });
-    
-    document.addEventListener("mouseup", () => {
-      addKidBoxDragging = false;
+    document.getElementById("moveGridDown").addEventListener("click", () => {
+      gridOrigin.y += 1;
+      updateAddKidPreview();
+      render();
     });
-    
-    document.addEventListener("mousemove", (e) => {
-      if (addKidBoxDragging) {
-        const containerRect = canvas.getBoundingClientRect();
-        addKidBox.style.left = `${e.clientX - containerRect.left - addKidBoxDragOffsetX}px`;
-        addKidBox.style.top = `${e.clientY - containerRect.top - addKidBoxDragOffsetY}px`;
-        drawSelectorDots();
-        render();
-      }
+    document.getElementById("moveGridLeft").addEventListener("click", () => {
+      gridOrigin.x -= 1;
+      updateAddKidPreview();
+      render();
     });
-    
-    addKidBox.addEventListener("mouseup", render);
-    addKidBox.addEventListener("mousemove", render);
-    colorSelect.addEventListener("change", render);
+    document.getElementById("moveGridRight").addEventListener("click", () => {
+      gridOrigin.x += 1;
+      updateAddKidPreview();
+      render();
+    });
     
     render();
 };
