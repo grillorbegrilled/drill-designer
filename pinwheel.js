@@ -51,13 +51,12 @@ function calculateGateSteps(vertex, selectedKids) {
 function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
     selectedKids = selectedKids.sort((a, b) => a.x !== b.x ? a.x - b.x : a.y - b.y);
 
-    // Determine target line orientation
-    const isVertical = Math.abs(selectedKids[0].x - vertex.x) < Math.abs(selectedKids[0].y - vertex.y);
+    // Determine target line orientation (after 90° rotation)
+    const isVertical = Math.abs(selectedKids[0].y - vertex.y) < Math.abs(selectedKids[0].x - vertex.x);
 
     const finalPositions = [];
 
     selectedKids.forEach(kid => {
-        // Remove future changes for this kid
         kid.changes = kid.changes.filter(c => c.step < currentStep);
 
         const dx = kid.x - vertex.x;
@@ -66,7 +65,6 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
 
         const arcLength = (Math.PI / 2) * radius;
         const stepSize = arcLength / gateSteps;
-
         const baseAngle = Math.atan2(dy, dx);
 
         for (let stepNum = 1; stepNum <= gateSteps; stepNum++) {
@@ -98,18 +96,18 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
         }
     });
 
-    // Snap shared axis to exact same coordinate
+    // Snap only the shared axis
     if (isVertical) {
         const avgX = Math.round(finalPositions.reduce((sum, p) => sum + p.fx, 0) / finalPositions.length);
         finalPositions.forEach(p => {
-            p.change.x = avgX;
-            p.change.y = Math.round(p.fy);
+            p.change.x = avgX;                // shared vertical axis
+            p.change.y = Math.round(p.fy);    // keep each kid's own y
         });
     } else {
         const avgY = Math.round(finalPositions.reduce((sum, p) => sum + p.fy, 0) / finalPositions.length);
         finalPositions.forEach(p => {
-            p.change.x = Math.round(p.fx);
-            p.change.y = avgY;
+            p.change.x = Math.round(p.fx);    // keep each kid's own x
+            p.change.y = avgY;                // shared horizontal axis
         });
     }
 
