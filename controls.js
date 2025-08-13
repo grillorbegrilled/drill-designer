@@ -1,6 +1,6 @@
-let isDragging = false;
-let dragStart = null;
-let dragEnd = null;
+let selectDragging = false;
+let selectDragStart = null;
+let selectDragEnd = null;
 
 function togglePlay() {
     isPlaying = !isPlaying;
@@ -189,28 +189,132 @@ window.onload = () => {
         render();
     });
 
-    ////drag to mass-add
+    //drag to mass-select
     canvas.addEventListener('mousedown', (e) => {
         const pos = getCanvasCoordinates(e);
-        isDragging = true;
-        dragStart = pos;
-        dragEnd = null;
+        selectDragging = true;
+        selectDragStart = pos;
+        selectDragEnd = null;
     });
     
     canvas.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        dragEnd = getCanvasCoordinates(e);
+        if (!selectDragging) return;
+        selectDragEnd = getCanvasCoordinates(e);
         render(); // re-render to show drag box
     });
     
     canvas.addEventListener('mouseup', () => {
-        if (isDragging && dragStart && dragEnd) {
-            toggleSelectionInRect(dragStart, dragEnd);
+        if (selectDragging && selectDragStart && selectDragEnd) {
+            toggleSelectionInRect(selectDragStart, selectDragEnd);
         }
-        isDragging = false;
-        dragStart = dragEnd = null;
+        selectDragging = false;
+        selectDragStart = selectDragEnd = null;
         render();
     });
+
+    //add kids to field
+    const addKidBox = document.getElementById("addKidBox");
+    const addKidBtn = document.getElementById("addKidBtn");
+    const colorSelect = document.getElementById("colorSelect");
+    const addKidConfirmBtn = document.getElementById("addKidConfirmBtn");
+    const addKidCancelBtn = document.getElementById("addKidCancelBtn");
+
+    function getDotsInBox() {
+      const rect = addKidBox.getBoundingClientRect();
+      const canvasRect = canvas.getBoundingClientRect();
+      const offsetX = rect.left - canvasRect.left;
+      const offsetY = rect.top - canvasRect.top;
+      const width = rect.width;
+      const height = rect.height;
+    
+      const dots = [];
+    
+      for (let x = offsetX; x <= offsetX + width; x += scaleX * 2) {
+        for (let y = offsetY; y <= offsetY + height; y += scaleY * 2) {
+          dots.push({ x: Math.round(x), y: Math.round(y) });
+        }
+      }
+      return dots;
+    }
+
+    function drawSelectorDots() {
+      const color = colorSelect.value;
+      ctx.fillStyle = color;
+      const dots = getDotsInBox();
+      for (let dot of dots) {
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function enableAddMode() {
+      addKidBtn.disabled = true;
+      colorSelect.classList.remove("hidden");
+      addKidConfirmBtn.classList.remove("hidden");
+      addKidCancelBtn.classList.remove("hidden");
+      addKidBox.classList.remove("hidden");
+    
+      // Reset selector box
+      addKidBox.style.left = "100px";
+      addKidBox.style.top = "100px";
+      addKidBox.style.width = "200px";
+      addKidBox.style.height = "200px";
+      render();
+    }
+    
+    function disableAddMode() {
+      addKidBtn.disabled = false;
+      colorSelect.classList.add("hidden");
+      addKidConfirmBtn.classList.add("hidden");
+      addKidCancelBtn.classList.add("hidden");
+      addKidBox.classList.add("hidden");
+      render();
+    }
+
+    addKidBtn.addEventListener("click", enableAddMode);
+    addKidCancelBtn.addEventListener("click", () => {
+      disableAddMode();
+    });
+    
+    addKidConfirmBtn.addEventListener("click", () => {
+      const color = colorSelect.value;
+      const dots = getDotsInBox();
+      for (let dot of dots) {
+        addKid(dot.x, dot.y, color);
+      }
+      disableAddMode();
+    });
+    
+    // Drag and resize logic for selector box
+    let addKidBoxDragging = false;
+    let addKidBoxDragOffsetX = 0;
+    let addKidBoxDragOffsetY = 0;
+    
+    addKidBox.addEventListener("mousedown", (e) => {
+      if (e.target === addKidBox) {
+        addKidBoxDragging = true;
+        addKidBoxDragOffsetX = e.offsetX;
+        addKidBoxDragOffsetY = e.offsetY;
+      }
+    });
+    
+    document.addEventListener("mouseup", () => {
+      addKidBoxDragging = false;
+    });
+    
+    document.addEventListener("mousemove", (e) => {
+      if (addKidBoxDragging) {
+        const containerRect = canvas.getBoundingClientRect();
+        addKidBox.style.left = `${e.clientX - containerRect.left - dragOffsetX}px`;
+        addKidBox.style.top = `${e.clientY - containerRect.top - dragOffsetY}px`;
+        render();
+      }
+    });
+    
+    addKidBox.addEventListener("mouseup", render);
+    addKidBox.addEventListener("mousemove", render);
+    colorSelect.addEventListener("change", render);
     
     render();
 };
