@@ -87,6 +87,8 @@ function applySnapshot(state) {
     });
 }
 
+let addKidPreview = null; // Will hold dot preview data or null
+
 function addKid(x, y, color) {
   kids.push({
     id: Date.now() + Math.random(),
