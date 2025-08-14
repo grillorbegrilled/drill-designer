@@ -96,6 +96,55 @@ function toggleSelectionInRect(p1, p2) {
 }
 
 window.onload = () => {
+    document.getElementById('saveBtn').addEventListener('click', () => {
+        let filename = document.getElementById('projectName').value.trim();
+    
+        if (!filename) filename = prompt("Enter project name.", "Drill");
+    
+        if (!filename) {
+          // User cancelled or still empty, do nothing
+          alert("Download cancelled: filename required.");
+          return;
+        }
+    
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(kids, null, 2));
+        const dlAnchorElem = document.createElement('a');
+        dlAnchorElem.setAttribute("href", dataStr);
+        dlAnchorElem.setAttribute("download", filename + ".json");
+        dlAnchorElem.click();
+      });
+
+    document.getElementById('loadBtn').addEventListener('click', () => {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert("Please select a JSON file first.");
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = function(event) {
+        try {
+          const json = JSON.parse(event.target.result);
+
+          if (!Array.isArray(json)) {
+            alert("Invalid format: JSON must be an array.");
+            return;
+          }
+
+          kids = json;
+          alert("JSON loaded successfully! 'kids' array updated.");
+          console.log("Loaded kids:", kids);
+        } catch (e) {
+          alert("Error parsing JSON: " + e.message);
+        }
+      };
+
+      reader.readAsText(file);
+    });
+    
     document.getElementById("playBtn").addEventListener("click", togglePlay);
     document.getElementById("rewindBtn").addEventListener("click", rewind);
     document.getElementById("stepBackBtn").addEventListener("click", stepBackward);
