@@ -95,18 +95,16 @@ input[type="range"]::-moz-range-thumb {
 .pad-row {
     display: flex;
     justify-content: center;
-    gap: 10px;
 }
 
 .maneuver-pad button {
     font-size: 28px;
-    padding: 14px 20px;
+    padding: 14px;
     border: none;
     border-radius: 8px;
     background-color: #333;
     color: white;
     cursor: pointer;
-    min-width: 60px;
 }
 
 .maneuver-pad button:hover {
@@ -119,9 +117,3 @@ input[type="range"]::-moz-range-thumb {
 #canvas-container {
   position: relative;
 }
-#addKidBox {
-  position: absolute;
-  border: 2px dashed yellow;
-  resize: both;
-  overflow: hidden;
-  cursor: move;
