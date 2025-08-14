@@ -109,9 +109,8 @@ function drawKids(ctx, kids, scaleX, scaleY) {
     const isSelected = selectedIds.has(kid.id);
     const stroke = "#000";
 
-    //Just do dots for now.
-    drawDot(size, px, py, angleRad, fill, stroke, isSelected);
-    //drawTriangle(size, px, py, angleRad, fill, stroke, isSelected);
+    //drawDot(size, px, py, angleRad, fill, stroke, isSelected);
+    drawTriangle(size, px, py, angleRad, fill, stroke, isSelected);
   });
 }
 
