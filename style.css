@@ -95,6 +95,7 @@ input[type="range"]::-moz-range-thumb {
 .pad-row {
     display: flex;
     justify-content: center;
+    gap: 5px;
 }
 
 .maneuver-pad button {
