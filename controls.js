@@ -129,7 +129,7 @@ window.onload = () => {
         if (!isPlaying) obliqueBackLeft();
     });
     document.getElementById('turnHaltToggle').addEventListener("change", (e) => {
-        turnAndHalt = e.target.checked;
+        turnAndStop = e.target.checked;
     });
 
     //Pinwheel menu
