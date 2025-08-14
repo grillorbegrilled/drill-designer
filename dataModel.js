@@ -51,7 +51,9 @@ let kids = [
 
 let selectedIds = new Set();
 
-const startingFormation = kids.map(kid => ({
+var startingFormation;
+
+function setStartingFormation() => startingFormation = kids.map(kid => ({
     id: kid.id,
     x: kid.x,
     y: kid.y,
@@ -99,4 +101,6 @@ function addKid(x, y, color) {
     color,
     changes: []
   });
+
+    setStartingFormation();
 }
