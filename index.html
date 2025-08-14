@@ -34,11 +34,11 @@
         <button id="stopBtn">🛑</button>
         <button id="rightBtn">➡️</button>
       </div>
-        <div class="pad-row">
-          <button id="obliqueBackLeftBtn">↙️</button>
-          <button id="aboutFaceBtn">⬇️</button>
-          <button id="obliqueBackRightBtn">↘️</button>
-        </div>
+      <div class="pad-row">
+        <button id="obliqueBackLeftBtn">↙️</button>
+        <button id="aboutFaceBtn">⬇️</button>
+        <button id="obliqueBackRightBtn">↘️</button>
+      </div>
     </div>
     <!-- Pinwheel trigger button -->
     <button id="openPinwheelMenuBtn">🔃</button>
@@ -104,28 +104,35 @@
       <label>X spacing: <input type="number" id="addKidSpacingX" value="2" /></label>
       <label>Y spacing: <input type="number" id="addKidSpacingY" value="2" /></label>
       <br><br>
+      <div class="maneuver-pad">
+      <label>Direction</label>
+      <div class="pad-row">
+        <button id="addKidNWBtn">↖️</button>
+        <button id="addKidNBtn">⬆️</button>
+        <button id="addKidNEBtn">↗️</button>
+      </div>
+      <div class="pad-row">
+        <button id="addKidWBtn">⬅️</button>
+        <button id="addKidEBtn">➡️</button>
+      </div>
+      <div class="pad-row">
+        <button id="addKidSWBtn">↙️</button>
+        <button id="addKidSBtn">⬇️</button>
+        <button id="addKidSEBtn">↘️</button>
+      </div>
+    </div>
       <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 4px;">
+        <button id="moveGridUpBig">🔼8</button>
         <button id="moveGridUp">🔼</button>
         <div style="display: flex; gap: 8px;">
-          <button id="moveGridLeft">◀️</button>
+          <button id="moveGridLeftBig">◀️8</button><button id="moveGridLeft">◀️</button>
           <button id="moveGridRight">▶️</button>
+          <button id="moveGridRightBig">▶️8</button>
+          <button id="moveGridDownBig">🔽8</button>
         </div>
         <button id="moveGridDown">🔽</button>
       </div>
-        <div class="grid-move-pad">
-          <div class="pad-row">
-            <button id="moveGridUpBig">🔼8</button>
-          </div>
-          <div class="pad-row">
-            <button id="moveGridLeftBig">◀️8</button>
-            <div style="width: 40px;"></div>
-            <button id="moveGridRightBig">▶️8</button>
-          </div>
-          <div class="pad-row">
-            <button id="moveGridDownBig">🔽8</button>
-          </div>
-        </div>
-
+        
       <br>
       <button id="addKidConfirmBtn">✔️</button>
       <button id="addKidCancelBtn">❌</button>
