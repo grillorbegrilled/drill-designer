@@ -73,6 +73,31 @@ function drawTriangle(size, x, y, radians, fill, stroke, isSelected) {
     ctx.restore();
 }
 
+function drawDot(size, x, y, fill, stroke, isSelected) {
+    ctx.save();
+    ctx.translate(x, y);
+
+    // Yellow square behind dot if selected
+    if (isSelected) {
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(-size / 2, -size / 2, size, size);
+    }
+
+    // Draw the dot (circle)
+    ctx.beginPath();
+    ctx.arc(0, 0, size / 2, 0, Math.PI * 2);
+    ctx.closePath();
+
+    ctx.fillStyle = fill;
+    ctx.fill();
+
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.restore();
+}
+
 function drawKids(ctx, kids, scaleX, scaleY) {
   const size = 10;
   kids.forEach(kid => {
@@ -83,8 +108,10 @@ function drawKids(ctx, kids, scaleX, scaleY) {
     const fill = kid.color || "#ffff00"; // default to yellow
     const isSelected = selectedIds.has(kid.id);
     const stroke = "#000";
-    
-    drawTriangle(size, px, py, angleRad, fill, stroke, isSelected);
+
+    //Just do dots for now.
+    drawDot(size, px, py, angleRad, fill, stroke, isSelected);
+    //drawTriangle(size, px, py, angleRad, fill, stroke, isSelected);
   });
 }
 
