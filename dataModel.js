@@ -52,7 +52,7 @@ function addKid(x, y, color) {
     x,
     y,
     direction: 0,
-    moving: true,
+    moving: false,
     color,
     changes: []
   });
