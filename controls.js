@@ -183,9 +183,11 @@ window.onload = () => {
     });
     document.getElementById("selectAllBtn").addEventListener("click", () => {
         selectedIds = new Set(kids.map(kid => kid.id));
+        render();
     });
-    document.getElementById("selectAllBtn").addEventListener("click", () => {
+    document.getElementById("deselectAllBtn").addEventListener("click", () => {
         selectedIds = new Set();
+        render();
     });
 
     //Pinwheel menu
