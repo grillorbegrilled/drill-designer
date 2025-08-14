@@ -46,12 +46,12 @@ function applySnapshot(state) {
 
 let addKidPreview = null; // Will hold dot preview data or null
 
-function addKid(x, y, color) {
+function addKid(x, y, color, direction) {
   kids.push({
     id: Date.now() + Math.random(),
     x,
     y,
-    direction: 0,
+    direction: direction ?? 0,
     moving: false,
     color,
     changes: []
