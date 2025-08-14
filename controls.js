@@ -183,7 +183,7 @@ window.onload = () => {
     });
 
     //selecting people on field
-    ////click to add
+    ////click to select
     canvas.addEventListener('click', function (e) {
         const rect = canvas.getBoundingClientRect();
     
@@ -276,6 +276,7 @@ window.onload = () => {
     const spacingYInput = document.getElementById("addKidSpacingY");
     
     let gridOrigin = { x: 32, y: 32 };
+    let direction = 0;
     
     // Modal control
     function enableAddMode() {
@@ -332,7 +333,7 @@ window.onload = () => {
           const x = gridOrigin.x + (col * spacingX);
           const y = gridOrigin.y + (row * spacingY);
         console.log(`${gridOrigin.x}, ${gridOrigin.y}; ${scaleX}, ${scaleY}`);
-          addKid(x, y, color);
+          addKid(x, y, color, direction);
         }
       }
     
@@ -396,6 +397,16 @@ window.onload = () => {
       updateAddKidPreview();
       render();
     });
+
+    //Orientation buttons
+    document.getElementById("addKidEBtn").addEventListener("click", () => { direction = 0; });
+    document.getElementById("addKidSEBtn").addEventListener("click", () => { direction = 45; });
+    document.getElementById("addKidSBtn").addEventListener("click", () => { direction = 90; });
+    document.getElementById("addKidSWBtn").addEventListener("click", () => { direction = 135; });
+    document.getElementById("addKidWBtn").addEventListener("click", () => { direction = 180; });
+    document.getElementById("addKidNWBtn").addEventListener("click", () => { direction = 225; });
+    document.getElementById("addKidNBtn").addEventListener("click", () => { direction = 270; });
+    document.getElementById("addKidNEBtn").addEventListener("click", () => { direction = 315; });
 
     document.getElementById("removeKidBtn").addEventListener("click", removeKids);
 
