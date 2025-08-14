@@ -386,5 +386,6 @@ window.onload = () => {
     });
 
     setStartingFormation();
+    snapshots.set(0, JSON.parse(JSON.stringify(startingFormation)));
     render();
 };
