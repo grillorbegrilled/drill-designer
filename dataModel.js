@@ -1,53 +1,4 @@
-let kids = [
-    {
-        id: "A",
-        x: 40,
-        y: 30,
-        direction: 0,
-        moving: true,
-        color: "yellow",
-        changes: [
-            { step: 8, direction: 180 },
-            { step: 16, moving: false }
-        ]
-    },
-    {
-        id: "B",
-        x: 40,
-        y: 32,
-        direction: 0,
-        moving: true,
-        color: "red",
-        changes: [
-            { step: 8, direction: 180 },
-            { step: 16, moving: false }
-        ]
-    },
-    {
-        id: "C",
-        x: 40,
-        y: 34,
-        direction: 0,
-        moving: true,
-        color: "blue",
-        changes: [
-            { step: 8, direction: 180 },
-            { step: 16, moving: false }
-        ]
-    },
-    {
-        id: "D",
-        x: 40,
-        y: 36,
-        direction: 0,
-        moving: true,
-        color: "green",
-        changes: [
-            { step: 8, direction: 180 },
-            { step: 16, moving: false }
-        ]
-    }
-];
+let kids = [];
 
 let selectedIds = new Set();
 
@@ -107,4 +58,12 @@ function addKid(x, y, color) {
   });
 
     setStartingFormation();
+}
+
+function removeKids() {
+    for (let i = kids.length - 1; i >= 0; i--) {
+        if (selectedIds.has(kids[i].id)) {
+            kids.splice(i, 1);
+        }
+    }
 }
