@@ -54,7 +54,7 @@ function applyChange(ids, change, step = currentStep) {
 
 function right() {
     const change = { directionDelta: 90 };
-    if (turnAndStop) change.moving = false;
+    change.moving = !turnAndStop;
     applyChange([...selectedIds], change); // Turn right
 }
 
@@ -64,13 +64,13 @@ function forward() {
 
 function left() {
     const change = { directionDelta: 270 };
-    if (turnAndStop) change.moving = false;
+    change.moving = !turnAndStop;
     applyChange([...selectedIds], change); // Turn right
 }
 
-function aboutFace() {
+function toTheRear() {
     const change = { directionDelta: 180 };
-    if (turnAndStop) change.moving = false;
+    change.moving = !turnAndStop;
     applyChange([...selectedIds], change); // Turn right
 }
 
@@ -80,25 +80,25 @@ function stop() {
 
 function obliqueRight() {
     const change = { directionDelta: 45 };
-    if (turnAndStop) change.moving = false;
+    change.moving = !turnAndStop;
     applyChange([...selectedIds], change); // Turn right
 }
 
 function obliqueLeft() {
     const change = { directionDelta: 315 };
-    if (turnAndStop) change.moving = false;
+    change.moving = !turnAndStop;
     applyChange([...selectedIds], change); // Turn right
 }
 
 function obliqueBackLeft() {
     const change = { directionDelta: 225 };
-    if (turnAndStop) change.moving = false;
+    change.moving = !turnAndStop;
     applyChange([...selectedIds], change); // Turn right
 }
 
 function obliqueBackRight() {
     const change = { directionDelta: 135 };
-    if (turnAndStop) change.moving = false;
+    change.moving = !turnAndStop;
     applyChange([...selectedIds], change); // Turn right
 }
 
