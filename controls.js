@@ -88,7 +88,6 @@ function toggleSelectionInRect(p1, p2) {
 }
 
 window.onload = () => {
-    setStartingFormation();
     document.getElementById("playBtn").addEventListener("click", togglePlay);
     document.getElementById("rewindBtn").addEventListener("click", rewind);
     document.getElementById("stepBackBtn").addEventListener("click", stepBackward);
@@ -386,6 +385,6 @@ window.onload = () => {
       render();
     });
 
-    
+    setStartingFormation();
     render();
 };
