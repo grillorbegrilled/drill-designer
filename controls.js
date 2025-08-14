@@ -132,6 +132,12 @@ window.onload = () => {
         turnAndStop = e.target.checked;
         console.log(turnAndStop);
     });
+    document.getElementById("selectAllBtn").addEventListener("click", () => {
+        selectedIds = new Set(kids.map(kid => kid.id));
+    });
+    document.getElementById("selectAllBtn").addEventListener("click", () => {
+        selectedIds = new Set();
+    });
 
     //Pinwheel menu
     const pinwheelMenu = document.getElementById('pinwheelMenu');
