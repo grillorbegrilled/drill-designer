@@ -61,9 +61,14 @@ function addKid(x, y, color) {
 }
 
 function removeKids() {
+    if (currentStep === 0) {
     for (let i = kids.length - 1; i >= 0; i--) {
         if (selectedIds.has(kids[i].id)) {
             kids.splice(i, 1);
         }
+    }
+
+    setStartingFormation();
+    render();
     }
 }
