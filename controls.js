@@ -5,7 +5,7 @@ let selectDragEnd = null;
 function togglePlay() {
     isPlaying = !isPlaying;
     document.getElementById("playBtn").textContent = isPlaying ? "⏹️" : "▶️";
-
+    document.getElementById("addKidBtn").enabled = false;
     if (isPlaying) playLoop();
 }
 
@@ -23,6 +23,7 @@ function rewind() {
     isPlaying = false;
     document.getElementById("playBtn").textContent = "▶️";
     currentStep = 0;
+    document.getElementById("addKidBtn").enabled = true;
     applySnapshot(snapshots.get(0));
     render();
 }
@@ -33,12 +34,16 @@ function stepForward() {
         simulateToStep(currentStep + 1);
     else
         advance();
+
+    document.getElementById("addKidBtn").enabled = false;
 }
 
 function stepBackward() {
     if (currentStep > 0) {
         simulateToStep(currentStep - 1);
     }
+
+    if (currentStep === 0) document.getElementById("addKidBtn").enabled = true;
 }
 
 function scrubToStep(e) {
