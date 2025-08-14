@@ -6,6 +6,7 @@ function togglePlay() {
     isPlaying = !isPlaying;
     document.getElementById("playBtn").textContent = isPlaying ? "⏹️" : "▶️";
     document.getElementById("addKidBtn").enabled = false;
+    document.getElementById("removeKidBtn").enabled = false;
     if (isPlaying) playLoop();
 }
 
@@ -24,6 +25,7 @@ function rewind() {
     document.getElementById("playBtn").textContent = "▶️";
     currentStep = 0;
     document.getElementById("addKidBtn").enabled = true;
+    document.getElementById("removeKidBtn").enabled = true;
     applySnapshot(snapshots.get(0));
     render();
 }
@@ -36,6 +38,7 @@ function stepForward() {
         advance();
 
     document.getElementById("addKidBtn").enabled = false;
+    document.getElementById("removeKidBtn").enabled = false;
 }
 
 function stepBackward() {
@@ -43,7 +46,11 @@ function stepBackward() {
         simulateToStep(currentStep - 1);
     }
 
-    if (currentStep === 0) document.getElementById("addKidBtn").enabled = true;
+    if (currentStep === 0) {
+        document.getElementById("addKidBtn").enabled = true;
+        document.getElementById("removeKidBtn").enabled = true;
+    }
+    
 }
 
 function scrubToStep(e) {
