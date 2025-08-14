@@ -385,6 +385,8 @@ window.onload = () => {
       render();
     });
 
+    document.getElementById("removeKidBtn").addEventListener("click", removeKids);
+
     setStartingFormation();
     render();
 };
