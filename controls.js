@@ -1,6 +1,7 @@
 let selectDragging = false;
 let selectDragStart = null;
 let selectDragEnd = null;
+let turnAndStop = false;
 
 function togglePlay() {
     isPlaying = !isPlaying;
@@ -126,6 +127,9 @@ window.onload = () => {
     });
     document.getElementById("obliqueBackLeftBtn").addEventListener("click", () => {
         if (!isPlaying) obliqueBackLeft();
+    });
+    document.getElementById('turnHaltToggle').addEventListener("change", (e) => {
+        turn And Halt = e.target.checked;
     });
 
     //Pinwheel menu
