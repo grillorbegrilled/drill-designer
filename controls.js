@@ -143,6 +143,7 @@ window.onload = () => {
       };
 
       reader.readAsText(file);
+      render();
     });
     
     document.getElementById("playBtn").addEventListener("click", togglePlay);
