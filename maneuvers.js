@@ -53,7 +53,9 @@ function applyChange(ids, change, step = currentStep) {
 }
 
 function right() {
-    applyChange([...selectedIds], { directionDelta: 90 }); // Turn right
+    const change = { directionDelta: 90 };
+    if (turnAndStop) change.moving = false;
+    applyChange([...selectedIds], change); // Turn right
 }
 
 function forward() {
@@ -61,11 +63,15 @@ function forward() {
 }
 
 function left() {
-    applyChange([...selectedIds], { directionDelta: 270 });
+    const change = { directionDelta: 270 };
+    if (turnAndStop) change.moving = false;
+    applyChange([...selectedIds], change); // Turn right
 }
 
 function aboutFace() {
-    applyChange([...selectedIds], { directionDelta: 180 });
+    const change = { directionDelta: 180 };
+    if (turnAndStop) change.moving = false;
+    applyChange([...selectedIds], change); // Turn right
 }
 
 function stop() {
@@ -73,19 +79,27 @@ function stop() {
 }
 
 function obliqueRight() {
-    applyChange([...selectedIds], { directionDelta: 45 });
+    const change = { directionDelta: 45 };
+    if (turnAndStop) change.moving = false;
+    applyChange([...selectedIds], change); // Turn right
 }
 
 function obliqueLeft() {
-    applyChange([...selectedIds], { directionDelta: 315 });
+    const change = { directionDelta: 315 };
+    if (turnAndStop) change.moving = false;
+    applyChange([...selectedIds], change); // Turn right
 }
 
 function obliqueBackLeft() {
-    applyChange([...selectedIds], { directionDelta: 225 });
+    const change = { directionDelta: 225 };
+    if (turnAndStop) change.moving = false;
+    applyChange([...selectedIds], change); // Turn right
 }
 
 function obliqueBackRight() {
-    applyChange([...selectedIds], { directionDelta: 135 });
+    const change = { directionDelta: 135 };
+    if (turnAndStop) change.moving = false;
+    applyChange([...selectedIds], change); // Turn right
 }
 
 function gatePinwheel(vertex, clockwise, steps, selectedKids) {
