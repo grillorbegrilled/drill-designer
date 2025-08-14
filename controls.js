@@ -130,6 +130,7 @@ window.onload = () => {
     });
     document.getElementById('turnHaltToggle').addEventListener("change", (e) => {
         turnAndStop = e.target.checked;
+        console.log(turnAndStop);
     });
 
     //Pinwheel menu
