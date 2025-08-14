@@ -52,6 +52,7 @@ let kids = [
 let selectedIds = new Set();
 
 let startingFormation = null;
+let snapshots = new Map();
 
 function setStartingFormation()
 {
@@ -63,9 +64,10 @@ function setStartingFormation()
     moving: kid.moving,
     color: kid.color
 }));
+    
+    snapshots = new Map();
+    snapshots.set(0, JSON.parse(JSON.stringify(startingFormation)));
 }
-
-let snapshots = new Map();
 
 function cloneKidStates() {
     return kids.map(kid => ({
