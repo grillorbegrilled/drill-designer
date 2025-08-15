@@ -106,7 +106,7 @@ window.onload = () => {
           alert("Download cancelled: filename required.");
           return;
         }
-    
+        applySnapshot(snapshots.get(0));
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(kids, null, 2));
         const dlAnchorElem = document.createElement('a');
         dlAnchorElem.setAttribute("href", dataStr);
