@@ -165,7 +165,7 @@ window.onload = () => {
         if (!isPlaying) right();
     });
     document.getElementById("aboutFaceBtn").addEventListener("click", () => {
-        if (!isPlaying) aboutFace();
+        if (!isPlaying) toTheRear();
     });
     document.getElementById("stopBtn").addEventListener("click", () => {
         if (!isPlaying) stop();
