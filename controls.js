@@ -136,7 +136,7 @@ window.onload = () => {
 
           kids = json;
           //alert("JSON loaded successfully! 'kids' array updated.");
-          //console.log("Loaded kids:", kids);
+          console.log(`Loaded ${kids.length} kids`);
           document.getElementById('projectName').value = file.name;
           setStartingFormation();
           render();
