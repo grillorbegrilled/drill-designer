@@ -139,7 +139,7 @@ window.onload = () => {
           kids = json;
           //alert("JSON loaded successfully! 'kids' array updated.");
           console.log(`Loaded ${kids.length} kids`);
-          document.getElementById('projectName').value = file.name;
+          document.getElementById('projectName').value = file.name.replace(/\.json$/, "");
           setStartingFormation();
           render();
         } catch (e) {
