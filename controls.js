@@ -136,14 +136,13 @@ window.onload = () => {
 
           kids = json;
           alert("JSON loaded successfully! 'kids' array updated.");
-          console.log("Loaded kids:", kids);
+          //console.log("Loaded kids:", kids);
+          setStartingFormation();
+          render();
         } catch (e) {
           alert("Error parsing JSON: " + e.message);
         }
       };
-
-      reader.readAsText(file);
-      render();
     });
     
     document.getElementById("playBtn").addEventListener("click", togglePlay);
