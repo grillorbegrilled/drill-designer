@@ -135,14 +135,17 @@ window.onload = () => {
           }
 
           kids = json;
-          alert("JSON loaded successfully! 'kids' array updated.");
+          //alert("JSON loaded successfully! 'kids' array updated.");
           //console.log("Loaded kids:", kids);
+          document.getElementById('projectName').value = file.name;
           setStartingFormation();
           render();
         } catch (e) {
           alert("Error parsing JSON: " + e.message);
         }
       };
+
+        reader.readAsText(file);
     });
     
     document.getElementById("playBtn").addEventListener("click", togglePlay);
