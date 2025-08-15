@@ -115,6 +115,7 @@ window.onload = () => {
       });
 
     document.getElementById('loadBtn').addEventListener('click', () => {
+      console.log("Load button clicked.");
       const fileInput = document.getElementById('fileInput');
       const file = fileInput.files[0];
 
@@ -126,6 +127,7 @@ window.onload = () => {
       const reader = new FileReader();
 
       reader.onload = function(event) {
+        console.log("Loading...");
         try {
           const json = JSON.parse(event.target.result);
 
