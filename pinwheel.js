@@ -26,18 +26,18 @@ function getVertex(type, selectedKids) {
         // Vertex at end of line (last kid)
         const last = selectedKids[selectedKids.length - 1];
         result = { x: last.x, y: last.y };
-    } else if (type === '2fromStart') {
+    } else if (type === '1fromStart') {
         // Vertex before start of line
         const axis = calculateLineAxis(selectedKids);
         const first = selectedKids[0];
-        if (axis === 'x') result = { x: first.x, y: first.y - 2 };
-        else result = { x: first.x - 2, y: first.y };
-    } else if (type === '2fromEnd') {
+        if (axis === 'x') result = { x: first.x, y: first.y - 1 };
+        else result = { x: first.x - 1, y: first.y };
+    } else if (type === '1fromEnd') {
         // Vertex after end of line
         const axis = calculateLineAxis(selectedKids);
         const last = selectedKids[selectedKids.length - 1];
-        if (axis === 'x') result = { x: last.x, y: last.y + 2 };
-        else result = { x: last.x + 2, y: last.y };
+        if (axis === 'x') result = { x: last.x, y: last.y + 1 };
+        else result = { x: last.x + 1, y: last.y };
     }
 
     //console.log(result);
