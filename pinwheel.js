@@ -62,8 +62,10 @@ function calculateGateSteps(vertex, selectedKids) {
     const quarterArc = (Math.PI / 2) * maxDist;
 
     // Round to nearest multiple of 4
-    const result = Math.round(quarterArc / 4) * 4;
-
+    //const result = Math.round(quarterArc / 4) * 4;
+    //Round down instead of up or down
+    const result = Math.floor(quarterArc / 4) * 4;
+    
     //console.log(`vertex: ${vertex}, maxDist: ${maxDist}, result: ${result}`);
     return result;
 }
