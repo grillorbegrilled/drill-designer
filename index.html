@@ -70,6 +70,43 @@
     <button id="addKidConfirmBtn">✔️</button>
     <button id="addKidCancelBtn">❌</button>
   </div>
+  <!--Step-Off Modal-->
+  <div id="stepOffMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 500px; z-index: 1000;">
+    <h3>Step Off</h3>
+  
+    <!-- Direction Input -->
+    <label>Direction</label>
+    <div class="maneuver-pad">
+      <div class="pad-row">
+        <button id="stepOffNWBtn">↖️</button>
+        <button id="stepOffNBtn">⬆️</button>
+        <button id="stepOffNEBtn">↗️</button>
+      </div>
+      <div class="pad-row">
+        <button id="stepOffWBtn">⬅️</button>
+        <button id="stepOffEBtn">➡️</button>
+      </div>
+      <div class="pad-row">
+        <button id="stepOffSWBtn">↙️</button>
+        <button id="stepOffSBtn">⬇️</button>
+        <button id="stepOffSEBtn">↘️</button>
+      </div>
+    </div>
+    <br>
+  
+    <!-- Starting Point Slider -->
+    <label for="startingPointSlider">Starting Point: <span id="startingPointLabel">0</span></label>
+    <input type="range" id="startingPointSlider" min="0" max="0" value="0" />
+    <br><br>
+  
+    <!-- Delay Input -->
+    <label for="delayInput">Delay:</label>
+    <input type="number" id="delayInput" value="2" min="0" />
+    <br><br>
+  
+    <button id="stepOffConfirmBtn">✔️ Step Off</button>
+    <button id="stepOffCancelBtn">❌ Cancel</button>
+  </div>
     <input type="text" id="projectName" placeholder="Project name" />
     <input type="file" id="fileInput" accept=".json" />
   <div class="pad-row">
@@ -110,8 +147,11 @@
         <button id="obliqueBackRightBtn">↘️</button>
       </div>
     </div>
-    <!-- Pinwheel trigger button -->
-    <button id="openPinwheelMenuBtn">🔃</button>
+    <!--Maneuvers-->
+    <div class="pad-row">
+      <button id="openPinwheelMenuBtn">🔃</button>
+      <button id="openStepOffMenuBtn">Step Off</button>
+    </div>
     <!-- Pinwheel modal container -->
     <div id="pinwheelMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 280px; z-index: 1000;">
       <h3>Pinwheel/Gate Settings</h3>
@@ -123,7 +163,7 @@
             <label><input type="radio" name="vertex" value="start">◀️</label>
             <label><input type="radio" name="vertex" value="center" checked>⏺️</label>
             <label><input type="radio" name="vertex" value="end">▶️</label>
-            <label><input type="radio" name="vertex" value="1fromEnd">⏮️</label>
+            <label><input type="radio" name="vertex" value="1fromEnd">⏭️</label>
           </div>
         </label>
         <br/><br/>
