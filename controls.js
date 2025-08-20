@@ -205,7 +205,7 @@ window.onload = () => {
 
     function updateStepCount() {
         const vertexType = document.querySelector('input[name="vertex"]:checked').value; // 'start' | 'center' | 'end'
-        const selectedKidsArr = kids.filter(k => selectedIds.has(k.id));
+        const selectedKidsArr = kids.filter(k => selectedIds.has(k.id)).sort((a, b) => a.x !== b.x ? a.x - b.x : a.y - b.y);;
         const vertex = getVertex(vertexType, selectedKidsArr);
         const steps = calculateGateSteps(vertex, selectedKidsArr);
         stepCountInput.value = steps;
@@ -234,7 +234,7 @@ window.onload = () => {
         const vertexType = document.querySelector('input[name="vertex"]:checked').value;
         
         const clockwise = rotationSelect.checked === true;
-        const selectedKids = kids.filter(k => selectedIds.has(k.id));
+        const selectedKids = kids.filter(k => selectedIds.has(k.id)).sort((a, b) => a.x !== b.x ? a.x - b.x : a.y - b.y);
     
         const vertex = getVertex(vertexType, selectedKids);
         const steps = parseInt(stepCountInput.value, 10);
