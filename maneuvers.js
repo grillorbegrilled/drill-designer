@@ -148,4 +148,6 @@ function stepOff(direction, startingPoint, delay) {
         if (startingPoint + i < len) ids.push(sortedKids[startingPoint + i].id);
         if (ids.length) turnHardDirection(ids, direction, currentStep + (delay * i));
     }
+
+    render();
 }
