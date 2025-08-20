@@ -102,12 +102,21 @@ function obliqueBackRight() {
     applyChange([...selectedIds], change); // Turn right
 }
 
+function areKidsAligned() {
+    if (selectedIds.size < 2) return false; // need at least 2 for a line
+
+    const selectedKids = kids.filter(k => selectedIds.has(k.id));
+    const allXEqual = selectedKids.every(k => k.x === selectedKids[0].x);
+    const allYEqual = selectedKids.every(k => k.y === selectedKids[0].y);
+
+    return allXEqual || allYEqual;
+}
+
 function gatePinwheel(vertex, clockwise, steps, selectedKids) {
     if (!areKidsAligned()) {
         alert("Selected kids must be aligned in a straight line.");
         return;
     }
-
 
     addGatePinwheelChanges(vertex, clockwise, steps, selectedKids);
     render();
