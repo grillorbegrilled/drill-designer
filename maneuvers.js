@@ -139,7 +139,7 @@ function stepOff(direction, startingPoint, delay) {
     if (otherIds.length) applyChange(otherIds, { direction, moving: false });
 
     // Turn the starter immediately
-    turnHardDirection([startKid.id], direction);
+    applyChange([startKid.id], {direction: direction, moving: true});
 
     // Step out from starter
     for (let i = 1; startingPoint - i >= 0 || startingPoint + i < len; i++) {
