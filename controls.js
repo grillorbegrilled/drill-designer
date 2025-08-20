@@ -480,8 +480,6 @@ window.onload = () => {
     const startingPointLabel = document.getElementById("startingPointLabel");
     const delayInput = document.getElementById("delayInput");
   
-    let direction = 0;
-  
     // Map direction buttons
     const directionMap = {
       stepOffEBtn: 0,
