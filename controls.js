@@ -472,6 +472,66 @@ window.onload = () => {
 
     document.getElementById("removeKidBtn").addEventListener("click", removeKids);
 
+    //Step off menu
+    const stepOffMenu = document.getElementById("stepOffMenu");
+    const stepOffConfirmBtn = document.getElementById("stepOffConfirmBtn");
+    const stepOffCancelBtn = document.getElementById("stepOffCancelBtn");
+    const startingPointSlider = document.getElementById("startingPointSlider");
+    const startingPointLabel = document.getElementById("startingPointLabel");
+    const delayInput = document.getElementById("delayInput");
+  
+    let direction = 0;
+  
+    // Map direction buttons
+    const directionMap = {
+      stepOffEBtn: 0,
+      stepOffSEBtn: 45,
+      stepOffSBtn: 90,
+      stepOffSWBtn: 135,
+      stepOffWBtn: 180,
+      stepOffNWBtn: 225,
+      stepOffNBtn: 270,
+      stepOffNEBtn: 315,
+    };
+  
+    Object.entries(directionMap).forEach(([btnId, dirValue]) => {
+      document.getElementById(btnId).addEventListener("click", () => {
+        direction = dirValue;
+      });
+    });
+  
+    // Sync slider and label
+    startingPointSlider.addEventListener("input", () => {
+      startingPointLabel.textContent = startingPointSlider.value;
+    });
+  
+    // Enable menu and update slider range
+    function enableStepOffMenu() {  
+      stepOffMenu.style.display = 'block';
+      startingPointSlider.max = selectedIds.length - 1;
+      startingPointSlider.value = 0;
+      startingPointLabel.textContent = "0";
+    }
+  
+    // Disable menu
+    function disableStepOffMenu() {
+      stepOffMenu.style.display = 'none';
+    }
+  
+    // Launch stepOff on confirm
+    stepOffConfirmBtn.addEventListener("click", () => {
+      const startingPoint = parseInt(startingPointSlider.value);
+      const delay = parseInt(delayInput.value);
+      stepOff(direction, startingPoint, delay);
+      disableStepOffMenu();
+    });
+  
+    stepOffCancelBtn.addEventListener("click", disableStepOffMenu);
+  
+    // Optional: Bind a button in your main UI to open this menu
+    document.getElementById("openStepOffMenuBtn")?.addEventListener("click", enableStepOffMenu);
+    
+////////////////////////////////MUST BE LAST////////////////////////////////////    
     setStartingFormation();
     render();
 };
