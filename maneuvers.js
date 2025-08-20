@@ -18,13 +18,10 @@ function applyChange(ids, change, step = currentStep) {
         // Compute new change
         const newChange = { step: step };
 
-        if ("directionDelta" in change) {
-            newChange.direction = (state.direction + change.directionDelta + 360) % 360;
-        }
+        if ("directionDelta" in change) newChange.direction = (state.direction + change.directionDelta + 360) % 360;
+        else if ("direction" in change) newChange.direction = change.direction;
 
-        if ("moving" in change) {
-            newChange.moving = change.moving;
-        }
+        if ("moving" in change) newChange.moving = change.moving;
 
         // Redundancy check
         let isRedundant = true;
@@ -133,8 +130,18 @@ function stepOff(direction, startingPoint, delay) {
     const len = sortedKids.length;
     if (startingPoint < 0 || startingPoint >= len) return console.warn("Invalid startingPoint index.");
 
-    turnHardDirection([sortedKids[startingPoint].id], direction);
+    const startKid = sortedKids[startingPoint];
 
+    // Apply direction + moving false to everyone *except* the starter
+    const otherIds = sortedKids
+        .filter(kid => kid.id !== startKid.id)
+        .map(kid => kid.id);
+    if (otherIds.length) applyChange(otherIds, { direction, moving: false });
+
+    // Turn the starter immediately
+    turnHardDirection([startKid.id], direction);
+
+    // Step out from starter
     for (let i = 1; startingPoint - i >= 0 || startingPoint + i < len; i++) {
         const ids = [];
         if (startingPoint - i >= 0) ids.push(sortedKids[startingPoint - i].id);
