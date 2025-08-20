@@ -126,27 +126,18 @@ function stepOff(direction, startingPoint, delay) {
     const sortedKids = kids.filter(kid => selectedIds.has(kid.id)).sort((a, b) =>
         a.x !== b.x ? a.x - b.x : a.y - b.y
     );
-
+    const step = currentStep;
     const len = sortedKids.length;
     if (startingPoint < 0 || startingPoint >= len) return console.warn("Invalid startingPoint index.");
-
     const startKid = sortedKids[startingPoint];
 
-    // Apply direction + moving false to everyone *except* the starter
-    const otherIds = sortedKids
-        .filter(kid => kid.id !== startKid.id)
-        .map(kid => kid.id);
-    if (otherIds.length) applyChange(otherIds, { direction, moving: false });
-
-    // Turn the starter immediately
-    applyChange([startKid.id], {direction: direction, moving: true});
-
-    // Step out from starter
+    applyChange([startKid.id], {direction: direction, moving: true}, step);
+    if (len > 1) applyChange(sortedKids.filter(kid => kid.id !== startKid.id).map(kid => kid.id), { direction, moving: false }, step);
     for (let i = 1; startingPoint - i >= 0 || startingPoint + i < len; i++) {
         const ids = [];
         if (startingPoint - i >= 0) ids.push(sortedKids[startingPoint - i].id);
         if (startingPoint + i < len) ids.push(sortedKids[startingPoint + i].id);
-        if (ids.length) turnHardDirection(ids, direction, currentStep + (delay * i));
+        if (ids.length) turnHardDirection(ids, direction, step + (delay * i));
     }
 
     render();
