@@ -119,3 +119,26 @@ function gatePinwheel(vertex, clockwise, steps, selectedKids) {
     addGatePinwheelChanges(vertex, clockwise, steps, selectedKids);
     render();
 }
+
+function stepOff(direction, startingPoint, delay) {
+    if (!areKidsAligned()) {
+        alert("Selected kids must be aligned in a straight line.");
+        return;
+    }
+
+    const sortedKids = kids.filter(kid => selectedIds.has(kid.id)).sort((a, b) =>
+        a.x !== b.x ? a.x - b.x : a.y - b.y
+    );
+
+    const len = sortedKids.length;
+    if (startingPoint < 0 || startingPoint >= len) return console.warn("Invalid startingPoint index.");
+
+    turnHardDirection([sortedKids[startingPoint].id], direction);
+
+    for (let i = 1; startingPoint - i >= 0 || startingPoint + i < len; i++) {
+        const ids = [];
+        if (startingPoint - i >= 0) ids.push(sortedKids[startingPoint - i].id);
+        if (startingPoint + i < len) ids.push(sortedKids[startingPoint + i].id);
+        if (ids.length) turnHardDirection(ids, direction, currentStep + (delay * i));
+    }
+}
