@@ -506,7 +506,7 @@ window.onload = () => {
     // Enable menu and update slider range
     function enableStepOffMenu() {  
       stepOffMenu.style.display = 'block';
-      startingPointSlider.max = selectedIds.length - 1;
+      startingPointSlider.max = selectedIds.size - 1;
       startingPointSlider.value = 0;
       startingPointLabel.textContent = "0";
     }
