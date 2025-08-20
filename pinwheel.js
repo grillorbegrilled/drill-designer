@@ -1,13 +1,3 @@
-function areKidsAligned() {
-    if (selectedIds.size < 2) return false; // need at least 2 for a line
-
-    const selectedKids = kids.filter(k => selectedIds.has(k.id));
-    const allXEqual = selectedKids.every(k => k.x === selectedKids[0].x);
-    const allYEqual = selectedKids.every(k => k.y === selectedKids[0].y);
-
-    return allXEqual || allYEqual;
-}
-
 function getVertex(type, selectedKids) {
     var result;
     
