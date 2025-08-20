@@ -156,31 +156,31 @@ window.onload = () => {
     document.getElementById("stepForwardBtn").addEventListener("click", stepForward);
     document.getElementById("scrubSlider").addEventListener("input", scrubToStep);
     document.getElementById("forwardBtn").addEventListener("click", () => {
-        if (!isPlaying) forward();
+        if (!isPlaying) turnN(); //forward();
     });
     document.getElementById("leftBtn").addEventListener("click", () => {
-        if (!isPlaying) left();
+        if (!isPlaying) turnW(); //left();
     });
     document.getElementById("rightBtn").addEventListener("click", () => {
-        if (!isPlaying) right();
+        if (!isPlaying) turnE(); //right();
     });
     document.getElementById("aboutFaceBtn").addEventListener("click", () => {
-        if (!isPlaying) toTheRear();
+        if (!isPlaying) turnS(); //toTheRear();
     });
     document.getElementById("stopBtn").addEventListener("click", () => {
         if (!isPlaying) stop();
     });
         document.getElementById("obliqueRightBtn").addEventListener("click", () => {
-        if (!isPlaying) obliqueRight();
+        if (!isPlaying) turnNE(); //obliqueRight();
     });
     document.getElementById("obliqueLeftBtn").addEventListener("click", () => {
-        if (!isPlaying) obliqueLeft();
+        if (!isPlaying) turnNW(); //obliqueLeft();
     });
     document.getElementById("obliqueBackRightBtn").addEventListener("click", () => {
-        if (!isPlaying) obliqueBackRight();
+        if (!isPlaying) turnSE(); //obliqueBackRight();
     });
     document.getElementById("obliqueBackLeftBtn").addEventListener("click", () => {
-        if (!isPlaying) obliqueBackLeft();
+        if (!isPlaying) turnSW(); //obliqueBackLeft();
     });
     document.getElementById('turnHaltToggle').addEventListener("change", (e) => {
         turnAndStop = e.target.checked;
