@@ -52,52 +52,52 @@ function applyChange(ids, change, step = currentStep) {
     simulateToStep(currentStep + 1);
 }
 
-function turn(delta, step = currentStep) {
+function turn(ids, delta, step = currentStep) {
     const change = { directionDelta: delta }; //increment kid.direction by delta degrees
     change.moving = !turnAndStop;
-    applyChange([...selectedIds], change, step);
+    applyChange(ids, change, step);
 }
 
-function turnHardDirection(direction, step = currentStep) {
+function turnHardDirection(ids, direction, step = currentStep) {
     const change = { direction: direction }; //set kid.direction to literal value
     change.moving = !turnAndStop;
-    applyChange([...selectedIds], change, step);
+    applyChange(ids, change, step);
 }
 
-function right(step = currentStep) {
-    turn(90, step);
+function right(ids = [...selectedIds], step = currentStep) {
+    turn(ids, 90, step);
 }
 
-function forward(step = currentStep) {
-    applyChange([...selectedIds], { moving: true }, step);
+function forward(ids = [...selectedIds], step = currentStep) {
+    applyChange(ids, { moving: true }, step);
 }
 
-function left(step = currentStep) {
-    turn(270, step);
+function left(ids = [...selectedIds], step = currentStep) {
+    turn(ids, 270, step);
 }
 
-function toTheRear(step = currentStep) {
-    turn(180, step);
+function toTheRear(ids = [...selectedIds], step = currentStep) {
+    turn(ids, 180, step);
 }
 
-function stop(step = currentStep) {
-    applyChange([...selectedIds], { moving: false }, step);
+function stop(ids = [...selectedIds], step = currentStep) {
+    applyChange(ids, { moving: false }, step);
 }
 
-function obliqueRight(step = currentStep) {
-    turn(45, step);
+function obliqueRight(ids = [...selectedIds], step = currentStep) {
+    turn(ids, 45, step);
 }
 
-function obliqueLeft(step = currentStep) {
-    turn(315, step);
+function obliqueLeft(ids = [...selectedIds], step = currentStep) {
+    turn(ids, 315, step);
 }
 
-function obliqueBackLeft(step = currentStep) {
-    turn(225, step);
+function obliqueBackLeft(ids = [...selectedIds], step = currentStep) {
+    turn(ids, 225, step);
 }
 
-function obliqueBackRight(step = currentStep) {
-    turn(135, step);
+function obliqueBackRight(ids = [...selectedIds], step = currentStep) {
+    turn(ids, 135, step);
 }
 
 function areKidsAligned() {
