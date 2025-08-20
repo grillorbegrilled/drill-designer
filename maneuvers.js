@@ -52,54 +52,52 @@ function applyChange(ids, change, step = currentStep) {
     simulateToStep(currentStep + 1);
 }
 
-function right() {
-    const change = { directionDelta: 90 };
+function turn(delta, step = currentStep) {
+    const change = { directionDelta: delta }; //increment kid.direction by delta degrees
     change.moving = !turnAndStop;
-    applyChange([...selectedIds], change); // Turn right
+    applyChange([...selectedIds], change, step);
 }
 
-function forward() {
-    applyChange([...selectedIds], { moving: true });
-}
-
-function left() {
-    const change = { directionDelta: 270 };
+function turnHardDirection(direction, step = currentStep) {
+    const change = { direction: direction }; //set kid.direction to literal value
     change.moving = !turnAndStop;
-    applyChange([...selectedIds], change); // Turn right
+    applyChange([...selectedIds], change, step);
 }
 
-function toTheRear() {
-    const change = { directionDelta: 180 };
-    change.moving = !turnAndStop;
-    applyChange([...selectedIds], change); // Turn right
+function right(step = currentStep) {
+    turn(90, step);
 }
 
-function stop() {
-    applyChange([...selectedIds], { moving: false });
+function forward(step = currentStep) {
+    applyChange([...selectedIds], { moving: true }, step);
 }
 
-function obliqueRight() {
-    const change = { directionDelta: 45 };
-    change.moving = !turnAndStop;
-    applyChange([...selectedIds], change); // Turn right
+function left(step = currentStep) {
+    turn(270, step);
 }
 
-function obliqueLeft() {
-    const change = { directionDelta: 315 };
-    change.moving = !turnAndStop;
-    applyChange([...selectedIds], change); // Turn right
+function toTheRear(step = currentStep) {
+    turn(180, step);
 }
 
-function obliqueBackLeft() {
-    const change = { directionDelta: 225 };
-    change.moving = !turnAndStop;
-    applyChange([...selectedIds], change); // Turn right
+function stop(step = currentStep) {
+    applyChange([...selectedIds], { moving: false }, step);
 }
 
-function obliqueBackRight() {
-    const change = { directionDelta: 135 };
-    change.moving = !turnAndStop;
-    applyChange([...selectedIds], change); // Turn right
+function obliqueRight(step = currentStep) {
+    turn(45, step);
+}
+
+function obliqueLeft(step = currentStep) {
+    turn(315, step);
+}
+
+function obliqueBackLeft(step = currentStep) {
+    turn(225, step);
+}
+
+function obliqueBackRight(step = currentStep) {
+    turn(135, step);
 }
 
 function areKidsAligned() {
