@@ -105,6 +105,15 @@ function obliqueBackRight(ids = [...selectedIds], step = currentStep) {
     turn(ids, 135, step);
 }
 
+const turnS = (ids = [...selectedIds], step = currentStep) => turnHardDirection(ids, 90, step);
+const turnE = (ids = [...selectedIds], step = currentStep) => turnHardDirection(ids, 0, step);
+const turnN = (ids = [...selectedIds], step = currentStep) => turnHardDirection(ids, 270, step);
+const turnW = (ids = [...selectedIds], step = currentStep) => turnHardDirection(ids, 180, step);
+const turnSE = (ids = [...selectedIds], step = currentStep) => turnHardDirection(ids, 45, step);
+const turnNE = (ids = [...selectedIds], step = currentStep) => turnHardDirection(ids, 315, step);
+const turnNW = (ids = [...selectedIds], step = currentStep) => turnHardDirection(ids, 225, step);
+const turnSW = (ids = [...selectedIds], step = currentStep) => turnHardDirection(ids, 135, step);
+
 function areKidsAligned() {
     if (selectedIds.size < 2) return false; // need at least 2 for a line
 
