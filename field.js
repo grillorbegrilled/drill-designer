@@ -3,22 +3,38 @@ function drawField(ctx, _stepSizeInches) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
 // Draw step grid (light gray)==========
+// Draw vertical grid lines (x axis)
+for (let x = 0; x <= fieldLengthSteps; x++) {
+    // Skip yardlines here, they’re drawn later
+    if (x % 8 === 0) continue;
+
+    ctx.beginPath();
+    ctx.moveTo(x * scaleX, 0);
+    ctx.lineTo(x * scaleX, ctx.canvas.height);
+
+    if (x % 4 === 0) {
+        ctx.lineWidth = 1; // every 4th
+    } else {
+        ctx.lineWidth = 0.5; // normal
+    }
     ctx.strokeStyle = "white";
-    ctx.lineWidth = 0.5;
+    ctx.stroke();
+}
 
-    for (let x = 0; x <= fieldLengthSteps; x++) {
-        ctx.beginPath();
-        ctx.moveTo(x * scaleX, 0);
-        ctx.lineTo(x * scaleX, ctx.canvas.height);
-        ctx.stroke();
-    }
+// Draw horizontal grid lines (y axis)
+for (let y = 0; y <= fieldWidthSteps; y++) {
+    ctx.beginPath();
+    ctx.moveTo(0, y * scaleY);
+    ctx.lineTo(ctx.canvas.width, y * scaleY);
 
-    for (let y = 0; y <= fieldWidthSteps; y++) {
-        ctx.beginPath();
-        ctx.moveTo(0, y * scaleY);
-        ctx.lineTo(ctx.canvas.width, y * scaleY);
-        ctx.stroke();
+    if (y % 4 === 0) {
+        ctx.lineWidth = 1; // every 4th (including multiples of 8)
+    } else {
+        ctx.lineWidth = 0.5; // normal
     }
+    ctx.strokeStyle = "white";
+    ctx.stroke();
+}
 
 //add yard lines and numbers============
 ctx.lineWidth = 2;
