@@ -4,7 +4,7 @@ function applyChange(ids, change, step = currentStep) {
 
         if (!ids.includes(kid.id)) continue;
 
-        // Remove future changes
+        // Remove future changes. More efficient than calling removeFutureChanges().
         kid.changes = kid.changes.filter(c => c.step < currentStep);
 
         // Build effective current state
@@ -47,6 +47,14 @@ function applyChange(ids, change, step = currentStep) {
 
     // Re-render next step
     simulateToStep(currentStep + 1);
+}
+
+function removeFutureChanges(ids, step) {
+  for (const kid of kids) {
+    if (ids.has(kid.id)) {
+      kid.changes = kid.changes.filter(c => c.step < step);
+    }
+  }
 }
 
 function turn(ids, delta, step = currentStep) {
@@ -131,6 +139,7 @@ function stepOff(direction, startingPoint, delay) {
     if (startingPoint < 0 || startingPoint >= len) return console.warn("Invalid startingPoint index.");
     const startKid = sortedKids[startingPoint];
 
+    removeFutureChanges(selectedIds, step); //must remove all steps for selected kids starting at currentStep, because the initial hold might not take.
     applyChange([startKid.id], {direction: direction, moving: true}, step);
     if (len > 1) applyChange(sortedKids.filter(kid => kid.id !== startKid.id).map(kid => kid.id), { direction, moving: false }, step);
     for (let i = 1; startingPoint - i >= 0 || startingPoint + i < len; i++) {
