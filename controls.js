@@ -118,14 +118,12 @@ window.onload = () => {
       console.log("Load button clicked.");
       const fileInput = document.getElementById('fileInput');
       const file = fileInput.files[0];
-
       if (!file) {
         alert("Please select a JSON file first.");
         return;
       }
 
       const reader = new FileReader();
-
       reader.onload = function(event) {
         console.log("Loading...");
         try {
@@ -148,6 +146,15 @@ window.onload = () => {
       };
 
         reader.readAsText(file);
+    });
+
+    const slider = document.getElementById("tempo-slider");
+    const valueDisplay = document.getElementById("tempo-value");
+    slider.value = tempo;
+    valueDisplay.textContent = tempo;
+    slider.addEventListener("input", () => {
+      tempo = parseInt(slider.value, 10);
+      valueDisplay.textContent = tempo;
     });
     
     document.getElementById("playBtn").addEventListener("click", togglePlay);
