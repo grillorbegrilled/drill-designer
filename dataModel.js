@@ -5,6 +5,8 @@ let selectedIds = new Set();
 let startingFormation = null;
 let snapshots = new Map();
 
+let tempo = 180;
+
 function setStartingFormation()
 {
     startingFormation = kids.map(kid => ({
