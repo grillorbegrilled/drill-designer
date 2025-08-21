@@ -5,7 +5,7 @@ function applyChange(ids, change, step = currentStep) {
         if (!ids.includes(kid.id)) continue;
 
         // Remove future changes. More efficient than calling removeFutureChanges().
-        kid.changes = kid.changes.filter(c => c.step < currentStep);
+        kid.changes = kid.changes.filter(c => c.step < step);
 
         // Build effective current state
         let state = { ...kid };
@@ -160,8 +160,11 @@ function stepOff(direction, startingPoint, delay, ripples = 0, rippleDelay = 0) 
     const startKid = sortedKids[startingPoint];
 
     removeFutureChanges(selectedIds, step); //must remove all steps for selected kids starting at currentStep, because the initial hold might not take.
+    //Add the first step
     applyChange([startKid.id], {direction: direction, moving: true}, step);
+    //Add ripples, if any
     if (ripples) {
+        console.log(`${step} ${ripples} ${rippleDelay}`);
         for(let i = 1; i <= ripples; i++) {
             toTheRear([startKid.id], step + (rippleDelay * i));
         }
