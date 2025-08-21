@@ -10,7 +10,7 @@ function applyChange(ids, change, step = currentStep) {
         // Build effective current state
         let state = { ...kid };
         for (let j = 0; j < kid.changes.length; j++) {
-            if (kid.changes[j].step <= currentStep) {
+            if (kid.changes[j].step <= step) {
                 state = { ...state, ...kid.changes[j] };
             }
         }
@@ -39,14 +39,14 @@ function applyChange(ids, change, step = currentStep) {
     }
 
     // Clear future snapshots
-    for (let step of Array.from(snapshots.keys())) {
-        if (step > currentStep) {
-            snapshots.delete(step);
+    for (let snapStep of Array.from(snapshots.keys())) {
+        if (snapStep > step) {
+            snapshots.delete(snapStep);
         }
     }
 
     // Re-render next step
-    simulateToStep(currentStep + 1);
+    simulateToStep(step + 1);
 }
 
 function removeFutureChanges(ids, step) {
