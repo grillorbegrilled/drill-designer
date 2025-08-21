@@ -114,6 +114,19 @@ const turnNE = (ids = [...selectedIds], step = currentStep) => turnHardDirection
 const turnNW = (ids = [...selectedIds], step = currentStep) => turnHardDirection(ids, 225, step);
 const turnSW = (ids = [...selectedIds], step = currentStep) => turnHardDirection(ids, 135, step);
 
+function dynamicSort(points) {
+    const xs = points.map(p => p.x);
+    const ys = points.map(p => p.y);
+    const rangeX = Math.max(...xs) - Math.min(...xs);
+    const rangeY = Math.max(...ys) - Math.min(...ys);
+
+    return points.sort(
+        rangeX > rangeY
+            ? (a, b) => (a.x !== b.x ? a.x - b.x : a.y - b.y)
+            : (a, b) => (a.y !== b.y ? a.y - b.y : a.x - b.x)
+    );
+}
+
 function areKidsAligned() {
     if (selectedIds.size < 2) return false; // need at least 2 for a line
 
@@ -135,14 +148,12 @@ function gatePinwheel(vertex, clockwise, steps, selectedKids) {
 }
 
 function stepOff(direction, startingPoint, delay) {
-    if (!areKidsAligned()) {
-        alert("Selected kids must be aligned in a straight line.");
-        return;
-    }
+    //if (!areKidsAligned()) {
+  //      alert("Selected kids must be aligned in a straight line.");
+//        return;
+  //  }
 
-    const sortedKids = kids.filter(kid => selectedIds.has(kid.id)).sort((a, b) =>
-        a.x !== b.x ? a.x - b.x : a.y - b.y
-    );
+    const sortedKids = dynamicSort(kids.filter(kid => selectedIds.has(kid.id));
     const step = currentStep;
     const len = sortedKids.length;
     if (startingPoint < 0 || startingPoint >= len) return console.warn("Invalid startingPoint index.");
