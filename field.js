@@ -13,9 +13,9 @@ for (let x = 0; x <= fieldLengthSteps; x++) {
     ctx.lineTo(x * scaleX, ctx.canvas.height);
 
     if (x % 4 === 0) {
-        ctx.lineWidth = 1; // every 4th
+        ctx.lineWidth = 2; // every 4th
     } else {
-        ctx.lineWidth = 0.5; // normal
+        ctx.lineWidth = 1; // normal
     }
     ctx.strokeStyle = "white";
     ctx.stroke();
@@ -28,16 +28,16 @@ for (let y = 0; y <= fieldWidthSteps; y++) {
     ctx.lineTo(ctx.canvas.width, y * scaleY);
 
     if (y % 4 === 0) {
-        ctx.lineWidth = 1; // every 4th (including multiples of 8)
+        ctx.lineWidth = 2; // every 4th (including multiples of 8)
     } else {
-        ctx.lineWidth = 0.5; // normal
+        ctx.lineWidth = 1; // normal
     }
     ctx.strokeStyle = "white";
     ctx.stroke();
 }
 
 //add yard lines and numbers============
-ctx.lineWidth = 2;
+ctx.lineWidth = 3;
 ctx.strokeStyle = "white";
 ctx.fillStyle = "white";
 ctx.font = `${scaleY * (72 / stepSizeInches)}px sans-serif`; // 2 yards tall
@@ -78,7 +78,7 @@ for (let x = 0; x <= fieldLengthSteps; x += 8) {
 }
 
 // Draw sideline box==========
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 3;
     ctx.strokeRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
 // Draw short hash marks (HS only, fixed 28 or 21 steps from sideline)=======
