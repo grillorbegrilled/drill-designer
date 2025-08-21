@@ -13,9 +13,9 @@ for (let x = 0; x <= fieldLengthSteps; x++) {
     ctx.lineTo(x * scaleX, ctx.canvas.height);
 
     if (x % 4 === 0) {
-        ctx.lineWidth = 2; // every 4th
+        ctx.lineWidth = 1; // every 4th
     } else {
-        ctx.lineWidth = 1; // normal
+        ctx.lineWidth = 0.5; // normal
     }
     ctx.strokeStyle = "white";
     ctx.stroke();
@@ -27,10 +27,10 @@ for (let y = 0; y <= fieldWidthSteps; y++) {
     ctx.moveTo(0, y * scaleY);
     ctx.lineTo(ctx.canvas.width, y * scaleY);
 
-    if (y % 4 === 0) {
-        ctx.lineWidth = 2; // every 4th (including multiples of 8)
+    if ((y + 1) % 4 === 0) {
+        ctx.lineWidth = 1; // every 4th (including multiples of 8)
     } else {
-        ctx.lineWidth = 1; // normal
+        ctx.lineWidth = 0.5; // normal
     }
     ctx.strokeStyle = "white";
     ctx.stroke();
@@ -87,7 +87,7 @@ for (let x = 0; x <= fieldLengthSteps; x += 8) {
     let bottomHashY = ctx.canvas.height - topHashY;
 
     ctx.strokeStyle = "white";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 3;
 
     for (let x = 0; x <= fieldLengthSteps; x += 8) {
         const px = x * scaleX;
