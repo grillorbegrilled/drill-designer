@@ -161,7 +161,7 @@ function stepOff(direction, startingPoint, delay) {
 
     removeFutureChanges(selectedIds, step); //must remove all steps for selected kids starting at currentStep, because the initial hold might not take.
     applyChange([startKid.id], {direction: direction, moving: true}, step);
-    if (len > 1) applyChange(sortedKids.filter(kid => kid.id !== startKid.id).map(kid => kid.id), { direction, moving: false }, step);
+    if (len > 1) stop(sortedKids.filter(kid => kid.id !== startKid.id).map(kid => kid.id), step);//applyChange(sortedKids.filter(kid => kid.id !== startKid.id).map(kid => kid.id), { direction, moving: false }, step);
     for (let i = 1; startingPoint - i >= 0 || startingPoint + i < len; i++) {
         const ids = [];
         if (startingPoint - i >= 0) ids.push(sortedKids[startingPoint - i].id);
