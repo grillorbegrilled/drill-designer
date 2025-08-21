@@ -73,7 +73,6 @@
   <!--Step-Off Modal-->
   <div id="stepOffMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 500px; z-index: 1000;">
     <h3>Step Off/Stack Up</h3>
-  
     <!-- Direction Input -->
     <label>Direction</label>
     <div class="maneuver-pad">
@@ -93,16 +92,17 @@
       </div>
     </div>
     <br>
-  
     <!-- Starting Point Slider -->
     <label for="startingPointSlider">Starting Point: <span id="startingPointLabel">0</span></label>
     <input type="range" id="startingPointSlider" min="0" max="0" value="0" />
     <br><br>
-  
     <!-- Delay Input -->
     <label for="delayInput">Delay:</label>
     <input type="number" id="delayInput" value="2" min="0" />
     <br><br>
+    <label for="rippleInput">Ripples</label>
+    <input type="checkbox" id="rippleInput" />
+    <input type="number" id="rippleDelayInput" value="8" min="0" style="display:none;" />
   
     <button id="stepOffConfirmBtn">✔️ Step Off</button>
     <button id="stepOffCancelBtn">❌ Cancel</button>
