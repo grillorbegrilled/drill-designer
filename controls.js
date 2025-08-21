@@ -33,11 +33,8 @@ function rewind() {
 
 function stepForward() {
     const maxStep = Math.max(...snapshots.keys());
-    if (currentStep < maxStep)
-        simulateToStep(currentStep + 1);
-    else
-        advance();
-
+    if (currentStep < maxStep) simulateToStep(currentStep + 1);
+    else advance();
     document.getElementById("addKidBtn").enabled = false;
     document.getElementById("removeKidBtn").enabled = false;
 }
