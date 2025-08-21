@@ -179,7 +179,7 @@ function stepOff(direction, startingPoint, delay, ripples = 0, rippleDelay = 0) 
 
         if (ripples) {
             for(let j = 1; j <= ripples; j++) {
-                toTheRear([startKid.id], step + (delay * i) + (rippleDelay * j));
+                toTheRear(ids, step + (delay * i) + (rippleDelay * j));
             }
         }
     }
