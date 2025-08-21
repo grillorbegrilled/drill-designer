@@ -153,7 +153,7 @@ function stepOff(direction, startingPoint, delay) {
 //        return;
   //  }
 
-    const sortedKids = dynamicSort(kids.filter(kid => selectedIds.has(kid.id));
+    const sortedKids = dynamicSort(kids.filter(kid => selectedIds.has(kid.id)));
     const step = currentStep;
     const len = sortedKids.length;
     if (startingPoint < 0 || startingPoint >= len) return console.warn("Invalid startingPoint index.");
