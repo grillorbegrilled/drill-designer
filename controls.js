@@ -520,13 +520,14 @@ window.onload = () => {
     stepOffConfirmBtn.addEventListener("click", () => {
       const startingPoint = parseInt(startingPointSlider.value);
       const delay = parseInt(delayInput.value);
-      stepOff(direction, startingPoint, delay);
+      const ripples = parseInt(document.getElementById("rippleInput").value);
+      const rippleDelay = parseInt(document.getElementById("rippleDelayInput").value);
+      stepOff(direction, startingPoint, delay, ripples, rippleDelay);
       disableStepOffMenu();
     });
   
     stepOffCancelBtn.addEventListener("click", disableStepOffMenu);
   
-    // Optional: Bind a button in your main UI to open this menu
     document.getElementById("openStepOffMenuBtn")?.addEventListener("click", enableStepOffMenu);
     
 ////////////////////////////////MUST BE LAST////////////////////////////////////    
