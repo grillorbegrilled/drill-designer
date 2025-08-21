@@ -147,7 +147,7 @@ function gatePinwheel(vertex, clockwise, steps, selectedKids) {
     render();
 }
 
-function stepOff(direction, startingPoint, delay) {
+function stepOff(direction, startingPoint, delay, ripples = 0, rippleDelay = 0) {
     //if (!areKidsAligned()) {
   //      alert("Selected kids must be aligned in a straight line.");
 //        return;
@@ -161,12 +161,24 @@ function stepOff(direction, startingPoint, delay) {
 
     removeFutureChanges(selectedIds, step); //must remove all steps for selected kids starting at currentStep, because the initial hold might not take.
     applyChange([startKid.id], {direction: direction, moving: true}, step);
+    if (ripples) {
+        for(let i = 1; i <= ripples; i++) {
+            toTheRear([startKid.id], step + (rippleDelay * i));
+        }
+    }
+    
     if (len > 1) stop(sortedKids.filter(kid => kid.id !== startKid.id).map(kid => kid.id), step);//applyChange(sortedKids.filter(kid => kid.id !== startKid.id).map(kid => kid.id), { direction, moving: false }, step);
     for (let i = 1; startingPoint - i >= 0 || startingPoint + i < len; i++) {
         const ids = [];
         if (startingPoint - i >= 0) ids.push(sortedKids[startingPoint - i].id);
         if (startingPoint + i < len) ids.push(sortedKids[startingPoint + i].id);
         if (ids.length) turnHardDirection(ids, direction, step + (delay * i));
+
+        if (ripples) {
+            for(let j = 1; j <= ripples; j++) {
+                toTheRear([startKid.id], step + (delay * i) + (rippleDelay * j));
+            }
+        }
     }
 
     render();
