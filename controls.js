@@ -14,10 +14,10 @@ function togglePlay() {
 function playLoop() {
     if (!isPlaying) return;
     try {
-    advance();
-    setTimeout(playLoop, 300);
-        } catch (err) {
-    console.error("Render error:", err);
+        advance();
+        setTimeout(playLoop, (60 / tempo) * 1000);
+    } catch (err) {
+        console.log("Render error:", err);
     }
 }
 
