@@ -72,7 +72,7 @@
   </div>
   <!--Step-Off Modal-->
   <div id="stepOffMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 500px; z-index: 1000;">
-    <h3>Step Off/Stack Up</h3>
+    <h3 id="stepOffTitle"></h3>
     <!-- Direction Input -->
     <label>Direction</label>
     <div class="maneuver-pad">
@@ -105,8 +105,9 @@
     <label for="rippleDelayInput">every</label>
     <input type="number" id="rippleDelayInput" value="8" min="0" />
   
-    <button id="stepOffConfirmBtn">✔️ Step Off</button>
-    <button id="stepOffCancelBtn">❌ Cancel</button>
+    <button id="stepOffConfirmBtn" style="display:none;">✔️</button>
+    <button id="dropOffConfirmBtn" style="display:none;">✔️</button>
+    <button id="stepOffCancelBtn">❌</button>
   </div>
     <input type="text" id="projectName" placeholder="Project name" />
     <input type="file" id="fileInput" accept=".json" />
