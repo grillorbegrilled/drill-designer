@@ -528,7 +528,7 @@ window.onload = () => {
     document.getElementById("dropOffConfirmBtn").addEventListener("click", () => {
       const startingPoint = parseInt(startingPointSlider.value);
       const delay = parseInt(delayInput.value);
-      dropOff(direction, startingPoint, delay);
+      dropOff(startingPoint, delay);
       disableStepOffMenu();
     });
   
