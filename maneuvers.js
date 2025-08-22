@@ -85,8 +85,12 @@ function toTheRear(ids = [...selectedIds], step = currentStep) {
     turn(ids, 180, step);
 }
 
-function stop(ids = [...selectedIds], step = currentStep) {
-    applyChange(ids, { moving: false }, step);
+function stop(ids = [...selectedIds], step = currentStep, direction = null) {
+    const change = { moving: false };
+
+    if (direction) change.direction = direction;
+    
+    applyChange(ids, change, step);
 }
 
 function obliqueRight(ids = [...selectedIds], step = currentStep) {
@@ -182,6 +186,28 @@ function stepOff(direction, startingPoint, delay, ripples = 0, rippleDelay = 0) 
                 toTheRear(ids, step + (delay * i) + (rippleDelay * j));
             }
         }
+    }
+
+    render();
+}
+
+function dropOff(direction, startingPoint, delay) {
+    const sortedKids = dynamicSort(kids.filter(kid => selectedIds.has(kid.id)));
+    const step = currentStep;
+    const len = sortedKids.length;
+    if (startingPoint < 0 || startingPoint >= len) return console.warn("Invalid startingPoint index.");
+    const startKid = sortedKids[startingPoint];
+
+    removeFutureChanges(selectedIds, step);
+
+    applyChange([startKid.id], {direction: direction, moving: false}, step);
+    
+    if (len > 1) stop(sortedKids.filter(kid => kid.id !== startKid.id).map(kid => kid.id), step);
+    for (let i = 1; startingPoint - i >= 0 || startingPoint + i < len; i++) {
+        const ids = [];
+        if (startingPoint - i >= 0) ids.push(sortedKids[startingPoint - i].id);
+        if (startingPoint + i < len) ids.push(sortedKids[startingPoint + i].id);
+        if (ids.length) stop(ids, direction, step + (delay * i));
     }
 
     render();
