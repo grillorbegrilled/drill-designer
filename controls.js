@@ -478,6 +478,7 @@ window.onload = () => {
 
     //Step off menu
     const stepOffMenu = document.getElementById("stepOffMenu");
+    const stepOffTitle = document.getElementById("stepOffTitle");
     const startingPointSlider = document.getElementById("startingPointSlider");
     const startingPointLabel = document.getElementById("startingPointLabel");
     const delayInput = document.getElementById("delayInput");
@@ -532,14 +533,15 @@ window.onload = () => {
     });
   
     document.getElementById("stepOffCancelBtn").addEventListener("click", disableStepOffMenu);
-    document.getElementById("dropOffCancelBtn").addEventListener("click", disableStepOffMenu);
   
     document.getElementById("openStepOffMenuBtn")?.addEventListener("click", () => {
+        stepOffTitle.textContent = "Step Off/Stack Up";
         document.getElementById("stepOffConfirmBtn").style.display = 'block';
         document.getElementById("dropOffConfirmBtn").style.display = 'none';
         enableStepOffMenu(); 
     });
     document.getElementById("openDropOffMenuBtn")?.addEventListener("click", () => {
+        stepOffTitle.textContent = "Drop Off";
         document.getElementById("dropOffConfirmBtn").style.display = 'block';
         document.getElementById("stepOffConfirmBtn").style.display = 'none';
         enableStepOffMenu(); 
