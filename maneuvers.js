@@ -202,7 +202,6 @@ function dropOff(direction, startingPoint, delay) {
 
     applyChange([startKid.id], {direction: direction, moving: false}, step);
     
-    if (len > 1) stop(sortedKids.filter(kid => kid.id !== startKid.id).map(kid => kid.id), step);
     for (let i = 1; startingPoint - i >= 0 || startingPoint + i < len; i++) {
         const ids = [];
         if (startingPoint - i >= 0) ids.push(sortedKids[startingPoint - i].id);
