@@ -478,8 +478,6 @@ window.onload = () => {
 
     //Step off menu
     const stepOffMenu = document.getElementById("stepOffMenu");
-    const stepOffConfirmBtn = document.getElementById("stepOffConfirmBtn");
-    const stepOffCancelBtn = document.getElementById("stepOffCancelBtn");
     const startingPointSlider = document.getElementById("startingPointSlider");
     const startingPointLabel = document.getElementById("startingPointLabel");
     const delayInput = document.getElementById("delayInput");
@@ -502,12 +500,10 @@ window.onload = () => {
       });
     });
   
-    // Sync slider and label
     startingPointSlider.addEventListener("input", () => {
       startingPointLabel.textContent = startingPointSlider.value;
     });
   
-    // Enable menu and update slider range
     function enableStepOffMenu() {  
       stepOffMenu.style.display = 'block';
       startingPointSlider.max = selectedIds.size - 1;
@@ -515,13 +511,11 @@ window.onload = () => {
       startingPointLabel.textContent = "0";
     }
   
-    // Disable menu
     function disableStepOffMenu() {
       stepOffMenu.style.display = 'none';
     }
   
-    // Launch stepOff on confirm
-    stepOffConfirmBtn.addEventListener("click", () => {
+    document.getElementById("stepOffConfirmBtn").addEventListener("click", () => {
       const startingPoint = parseInt(startingPointSlider.value);
       const delay = parseInt(delayInput.value);
       const ripples = parseInt(document.getElementById("rippleInput").value);
@@ -529,10 +523,27 @@ window.onload = () => {
       stepOff(direction, startingPoint, delay, ripples, rippleDelay);
       disableStepOffMenu();
     });
+
+    document.getElementById("dropOffConfirmBtn").addEventListener("click", () => {
+      const startingPoint = parseInt(startingPointSlider.value);
+      const delay = parseInt(delayInput.value);
+      dropOff(direction, startingPoint, delay);
+      disableStepOffMenu();
+    });
   
-    stepOffCancelBtn.addEventListener("click", disableStepOffMenu);
+    document.getElementById("stepOffCancelBtn").addEventListener("click", disableStepOffMenu);
+    document.getElementById("dropOffCancelBtn").addEventListener("click", disableStepOffMenu);
   
-    document.getElementById("openStepOffMenuBtn")?.addEventListener("click", enableStepOffMenu);
+    document.getElementById("openStepOffMenuBtn")?.addEventListener("click", () => {
+        document.getElementById("stepOffConfirmBtn").style.display = 'block';
+        document.getElementById("dropOffConfirmBtn").style.display = 'none';
+        enableStepOffMenu(); 
+    });
+    document.getElementById("openDropOffMenuBtn")?.addEventListener("click", () => {
+        document.getElementById("dropOffConfirmBtn").style.display = 'block';
+        document.getElementById("stepOffConfirmBtn").style.display = 'none';
+        enableStepOffMenu(); 
+    });
     
 ////////////////////////////////MUST BE LAST////////////////////////////////////    
     setStartingFormation();
