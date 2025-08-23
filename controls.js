@@ -93,13 +93,9 @@ function toggleSelectionInRect(p1, p2) {
 }
 
 window.onload = () => {
-    let dragging = false;
-    let dragStart = null;
-    let dragEnd = null;
-
     function resetDrag() {
-        dragging = false;
-        dragStart = dragEnd = null;
+        selectDragging = false;
+        selectDragStart = selectDragEnd = null;
         render();
     }
 
@@ -107,30 +103,30 @@ window.onload = () => {
         if (e.touches.length === 1) {
             // One-finger gesture → start drag
             e.preventDefault();
-            dragging = true;
-            dragStart = getCanvasCoordinates(e.touches[0]);
-            dragEnd = null;
+            selectDragging = true;
+            selectDragStart = getCanvasCoordinates(e.touches[0]);
+            selectDragEnd = null;
         } else {
             // Two fingers or more → let browser handle (pinch/scroll)
-            dragging = false;
+            selectDragging = false;
         }
     }, { passive: false });
 
     canvas.addEventListener("touchmove", (e) => {
-        if (dragging && e.touches.length === 1) {
+        if (selectDragging && e.touches.length === 1) {
             // Still one finger → continue drag
             e.preventDefault();
-            dragEnd = getCanvasCoordinates(e.touches[0]);
+            selectDragEnd = getCanvasCoordinates(e.touches[0]);
             render();
         } else {
             // More fingers → abort drag, allow pinch/zoom
-            dragging = false;
+            selectDragging = false;
         }
     }, { passive: false });
 
     canvas.addEventListener("touchend", (e) => {
-        if (dragging && e.touches.length === 0 && dragStart && dragEnd) {
-            toggleSelectionInRect(dragStart, dragEnd);
+        if (selectDragging && e.touches.length === 0 && selectDragStart && selectDragEnd) {
+            toggleSelectionInRect(selectDragStart, selectDragEnd);
         }
         resetDrag();
     });
