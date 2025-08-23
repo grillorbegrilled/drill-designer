@@ -11,6 +11,7 @@ canvas {
     margin: auto;
     max-width: 100%;
     height: auto;
+  touch-action: pinch-zoom pan-x pan-y;
 }
 
 .controls {
