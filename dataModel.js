@@ -13,9 +13,9 @@ function setStartingFormation()
     id: kid.id,
     x: kid.x,
     y: kid.y,
-    direction: kid.direction,
-    moving: kid.moving,
-    color: kid.color
+    d: kid.d,
+    m: kid.m,
+    c: kid.c
 }));
     
     snapshots = new Map();
@@ -27,9 +27,9 @@ function cloneKidStates() {
         id: kid.id,
         x: kid.x,
         y: kid.y,
-        direction: kid.direction,
-        moving: kid.moving,
-        color: kid.color
+        d: kid.d,
+        m: kid.m,
+        c: kid.c
     }));
 }
 
@@ -39,9 +39,9 @@ function applySnapshot(state) {
         if (match) {
             kid.x = match.x;
             kid.y = match.y;
-            kid.direction = match.direction;
-            kid.moving = match.moving;
-            kid.color = match.color;
+            kid.d = match.d;
+            kid.m = match.m;
+            kid.c = match.c;
         }
     });
 }
@@ -53,10 +53,10 @@ function addKid(x, y, color, direction) {
     id: Date.now() + Math.random(),
     x,
     y,
-    direction: direction ?? 0,
-    moving: false,
-    color,
-    changes: []
+    d: direction ?? 0,
+    m: false,
+    c,
+    ch: []
   });
 
     setStartingFormation();
