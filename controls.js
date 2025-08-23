@@ -2,6 +2,9 @@ let selectDragging = false;
 let selectDragStart = null;
 let selectDragEnd = null;
 let turnAndStop = false;
+let longPressTimer = null;
+const LONG_PRESS_DELAY = 500; // milliseconds
+
 
 function togglePlay() {
     isPlaying = !isPlaying;
@@ -93,38 +96,44 @@ function toggleSelectionInRect(p1, p2) {
 }
 
 window.onload = () => {
-function resetDrag() {
+  function resetDrag() {
     selectDragging = false;
     selectDragStart = selectDragEnd = null;
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      longPressTimer = null;
+    }
     render();
   }
 
   canvas.addEventListener("touchstart", (e) => {
     if (e.touches.length === 1) {
-      e.preventDefault(); // only block one-finger gestures
       const pos = getCanvasCoordinates(e.touches[0]);
-      selectDragging = true;
-      selectDragStart = pos;
-      selectDragEnd = null;
+
+      // Start a long-press timer
+      longPressTimer = setTimeout(() => {
+        selectDragging = true;
+        selectDragStart = pos;
+        selectDragEnd = null;
+      }, LONG_PRESS_DELAY);
     } else {
-      // Two or more fingers → let the browser handle it
+      // Any multi-touch cancels
       resetDrag();
     }
   }, { passive: false });
 
   canvas.addEventListener("touchmove", (e) => {
     if (selectDragging && e.touches.length === 1) {
-      e.preventDefault();
+      e.preventDefault(); // only block during drag
       selectDragEnd = getCanvasCoordinates(e.touches[0]);
       render();
-    } else {
-      // Any multi-touch gesture → stop dragging, let browser handle it
+    } else if (e.touches.length !== 1) {
       resetDrag();
     }
   }, { passive: false });
 
   canvas.addEventListener("touchend", (e) => {
-    if (selectDragging && selectDragStart && selectDragEnd && e.touches.length === 0) {
+    if (selectDragging && selectDragStart && selectDragEnd) {
       toggleSelectionInRect(selectDragStart, selectDragEnd);
     }
     resetDrag();
