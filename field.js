@@ -27,7 +27,7 @@ for (let y = 0; y <= fieldWidthSteps; y++) {
     ctx.moveTo(0, y * scaleY);
     ctx.lineTo(ctx.canvas.width, y * scaleY);
 
-    if ((y - 1) % 4 === 0) {
+    if (y % 4 === 0) {
         ctx.lineWidth = 1; // every 4th (including multiples of 8)
     } else {
         ctx.lineWidth = 0.5; // normal
