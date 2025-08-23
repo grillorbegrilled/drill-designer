@@ -5,28 +5,28 @@ function applyChange(ids, change, step = currentStep) {
         if (!ids.includes(kid.id)) continue;
 
         // Remove future changes. More efficient than calling removeFutureChanges().
-        kid.changes = kid.changes.filter(c => c.step < step);
+        kid.changes = kid.changes.filter(c => c.s < step);
 
         // Build effective current state
         let state = { ...kid };
         for (let j = 0; j < kid.changes.length; j++) {
-            if (kid.changes[j].step <= step) {
+            if (kid.changes[j].s <= step) {
                 state = { ...state, ...kid.changes[j] };
             }
         }
 
         // Compute new change
-        const newChange = { step: step };
+        const newChange = { s: step };
 
-        if ("directionDelta" in change) newChange.direction = (state.direction + change.directionDelta + 360) % 360;
-        else if ("direction" in change) newChange.direction = change.direction;
+        if ("dd" in change) newChange.d = (state.d + change.dd + 360) % 360;
+        else if ("d" in change) newChange.d = change.d;
 
-        if ("moving" in change) newChange.moving = change.moving;
+        if ("m" in change) newChange.m = change.m;
 
         // Redundancy check
         let isRedundant = true;
         for (let key in newChange) {
-            if (key !== "step" && newChange[key] !== state[key]) {
+            if (key !== "s" && newChange[key] !== state[key]) {
                 isRedundant = false;
                 break;
             }
@@ -52,20 +52,20 @@ function applyChange(ids, change, step = currentStep) {
 function removeFutureChanges(ids, step) {
   for (const kid of kids) {
     if (ids.has(kid.id)) {
-      kid.changes = kid.changes.filter(c => c.step < step);
+      kid.ch = kid.ch.filter(c => c.s < step);
     }
   }
 }
 
 function turn(ids, delta, step = currentStep) {
-    const change = { directionDelta: delta }; //increment kid.direction by delta degrees
-    change.moving = !turnAndStop;
+    const change = { dd: delta }; //increment kid.direction by delta degrees
+    change.m = !turnAndStop;
     applyChange(ids, change, step);
 }
 
 function turnHardDirection(ids, direction, step = currentStep) {
-    const change = { direction: direction }; //set kid.direction to literal value
-    change.moving = !turnAndStop;
+    const change = { d: direction }; //set kid.direction to literal value
+    change.m = !turnAndStop;
     applyChange(ids, change, step);
 }
 
@@ -74,7 +74,7 @@ function right(ids = [...selectedIds], step = currentStep) {
 }
 
 function forward(ids = [...selectedIds], step = currentStep) {
-    applyChange(ids, { moving: true }, step);
+    applyChange(ids, { m: true }, step);
 }
 
 function left(ids = [...selectedIds], step = currentStep) {
@@ -86,7 +86,7 @@ function toTheRear(ids = [...selectedIds], step = currentStep) {
 }
 
 function stop(ids = [...selectedIds], step = currentStep) {
-    applyChange(ids, { moving: false }, step);
+    applyChange(ids, { m: false }, step);
 }
 
 function obliqueRight(ids = [...selectedIds], step = currentStep) {
@@ -161,7 +161,7 @@ function stepOff(direction, startingPoint, delay, ripples = 0, rippleDelay = 0) 
 
     removeFutureChanges(selectedIds, step); //must remove all steps for selected kids starting at currentStep, because the initial hold might not take.
     //Add the first step
-    applyChange([startKid.id], {direction: direction, moving: true}, step);
+    applyChange([startKid.id], {d: direction, m: true}, step);
     //Add ripples, if any
     if (ripples) {
         console.log(`${step} ${ripples} ${rippleDelay}`);
