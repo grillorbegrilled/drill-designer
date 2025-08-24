@@ -205,7 +205,37 @@
     <canvas id="fieldCanvas" width="1000" height="500"></canvas>
     <div id="addKidBox" class="hidden"></div>
   </div>
+  
+  <div id="statusDisplay" class="status-display"></div>
+  <pre id="log" style="margin-top: 10px; font-family: monospace;"></pre>
+  <script>
+      (function () {
+          const originalLog = console.log;
+          const outputEl = document.getElementById('log');
+        
+          console.log = function (...args) {
+            // Keep original behavior
+            originalLog.apply(console, args);
+        
+            // Format output and write to the page
+            const message = args.map(arg =>
+              typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+            ).join(' ');
+            
+            outputEl.textContent = message;
+          };
+        })();
 
-  <div id="statusDisplay" class="status-display"></ipt>
+      console.log("Ready");
+  </script>
+    
+  <script src="field.js"></script>
+  <script src="canvasSetup.js"></script>
+  <script src="dataModel.js"></script>
+  <script src="simulation.js"></script>
+  <script src="rendering.js"></script>
+  <script src="pinwheel.js"></script>
+  <script src="maneuvers.js"></script>
+  <script src="controls.js"></script>
 </body>
 </html>
