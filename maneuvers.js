@@ -5,13 +5,13 @@ function applyChange(ids, change, step = currentStep) {
         if (!ids.includes(kid.id)) continue;
 
         // Remove future changes. More efficient than calling removeFutureChanges().
-        kid.changes = kid.changes.filter(c => c.s < step);
+        kid.ch = kid.ch.filter(c => c.s < step);
 
         // Build effective current state
         let state = { ...kid };
-        for (let j = 0; j < kid.changes.length; j++) {
-            if (kid.changes[j].s <= step) {
-                state = { ...state, ...kid.changes[j] };
+        for (let j = 0; j < kid.ch.length; j++) {
+            if (kid.ch[j].s <= step) {
+                state = { ...state, ...kid.ch[j] };
             }
         }
 
@@ -35,7 +35,7 @@ function applyChange(ids, change, step = currentStep) {
         if (isRedundant) continue;
 
         // Apply the change
-        kid.changes.push(newChange);
+        kid.ch.push(newChange);
     }
 
     // Clear future snapshots
