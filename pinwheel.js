@@ -68,7 +68,7 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
     const finalPositions = [];
 
     selectedKids.forEach(kid => {
-        kid.changes = kid.changes.filter(c => c.step < currentStep);
+        kid.ch = kid.ch.filter(c => c.s < currentStep);
 
         const dx = kid.x - vertex.x;
         const dy = kid.y - vertex.y;
@@ -79,7 +79,7 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
         const baseAngle = Math.atan2(dy, dx);
 
         // Use kid's current direction in radians for smooth rotation of vertex kid
-        const initialDirectionRad = (kid.direction ?? 0) * Math.PI / 180;
+        const initialDirectionRad = (kid.d ?? 0) * Math.PI / 180;
 
         for (let stepNum = 1; stepNum <= gateSteps; stepNum++) {
             const fraction = stepNum / gateSteps;
@@ -106,10 +106,10 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
             }
 
             const change = {
-                step: currentStep + stepNum - 1,
-                direction: directionDeg,
-                stepSize: radius === 0 ? 0 : stepSize,
-                moving: true,
+                s: currentStep + stepNum - 1,
+                d: directionDeg,
+                ss: radius === 0 ? 0 : stepSize,
+                m: true,
             };
 
             if (stepNum === gateSteps) {
