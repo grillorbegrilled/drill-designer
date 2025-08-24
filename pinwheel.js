@@ -119,7 +119,7 @@ function addGatePinwheelChanges(vertex, clockwise, gateSteps, selectedKids) {
                 finalPositions.push({ kid, fx, fy, change });
             }
 
-            kid.changes.push(change);
+            kid.ch.push(change);
         }
     });
 
