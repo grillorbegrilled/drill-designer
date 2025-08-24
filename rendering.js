@@ -103,9 +103,9 @@ function drawKids(ctx, kids, scaleX, scaleY) {
   kids.forEach(kid => {
     const px = kid.x * scaleX;
     const py = kid.y * scaleY;
-    const angleRad = (kid.direction * Math.PI) / 180;
+    const angleRad = (kid.d * Math.PI) / 180;
 
-    const fill = kid.color || "#ffff00"; // default to yellow
+    const fill = kid.c || "#ffff00"; // default to yellow
     const isSelected = selectedIds.has(kid.id);
     const stroke = "#000";
 
@@ -125,14 +125,14 @@ function updateStatusDisplay() {
 
     // Determine effective state at currentStep
     let state = { ...kid };
-    for (let i = 0; i < kid.changes.length; i++) {
-        if (kid.changes[i].step <= currentStep) {
-            state = { ...state, ...kid.changes[i] };
+    for (let i = 0; i < kid.ch.length; i++) {
+        if (kid.ch[i].step <= currentStep) {
+            state = { ...state, ...kid.ch[i] };
         }
     }
 
-    const direction = state.direction ?? "—";
-    const moving = state.moving ? "Marching" : state.stop ? "Stopped" : "—";
+    const direction = state.d ?? "—";
+    const moving = state.m ? "Marching" : state.stop ? "Stopped" : "—";
 
     document.getElementById("statusDisplay").textContent =
         `🧍 Kid A — x: ${state.x}, y: ${state.y}, Direction: ${direction}°, Status: ${moving}`;
