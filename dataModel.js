@@ -55,7 +55,7 @@ function addKid(x, y, color, direction) {
     y,
     d: direction ?? 0,
     m: false,
-    c,
+    c: color,
     ch: []
   });
 
