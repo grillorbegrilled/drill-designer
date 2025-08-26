@@ -1,28 +1,59 @@
-// Draw yardlines, hash marks, numbers, and sidelines once
+function computeCamDistance(viewportWidth, fovDegrees) {
+    const fovDegrees = 60; // Natural human viewing angle
+    const fovRadians = fovDegrees * Math.PI / 180;
+    return viewportWidth / (2 * Math.tan(fovRadians / 2));
+}
+
+const camDistance = computeCamDistance(vctx.canvas.width, fovDegrees);
+
 function drawStaticField() {
     fctx.clearRect(0, 0, fieldCache.width, fieldCache.height);
 
-    // Draw horizon (optional)
-    const horizonY = horizonOffset;  // from your projection setup
-    fctx.strokeStyle = "#80c0ff";    // light blue for sky horizon
-    fctx.lineWidth = 2;
+    // --- Optional: Draw horizon line for visual depth cue ---
+    fctx.strokeStyle = "#88c8ff"; // light blue
+    fctx.lineWidth = 1;
     fctx.beginPath();
-    fctx.moveTo(0, horizonY);
-    fctx.lineTo(fieldCache.width, horizonY);
+    fctx.moveTo(0, horizonOffset);
+    fctx.lineTo(fieldCache.width, horizonOffset);
     fctx.stroke();
 
-    // Draw field background below horizon
-    fctx.fillStyle = "#006400";  // dark green
-    fctx.fillRect(0, horizonY, fieldCache.width, fieldCache.height - horizonY);
+    // --- Project corners of the field ---
+    const topLeft = project(0, 0, 0);
+    const topRight = project(fieldLengthSteps, 0, 0);
+    const bottomLeft = project(0, fieldWidthSteps, 0);
+    const bottomRight = project(fieldLengthSteps, fieldWidthSteps, 0);
 
-    // Draw yard lines (every 8 steps)
-    fctx.lineWidth = 3;
+    if (!topLeft || !topRight || !bottomLeft || !bottomRight) {
+        console.warn("Field corners out of view — skipping field render");
+        return;
+    }
+
+    // --- Optional: Draw green background field shape ---
+    fctx.fillStyle = "#006400";
+    fctx.beginPath();
+    fctx.moveTo(topLeft.u, topLeft.v);
+    fctx.lineTo(topRight.u, topRight.v);
+    fctx.lineTo(bottomRight.u, bottomRight.v);
+    fctx.lineTo(bottomLeft.u, bottomLeft.v);
+    fctx.closePath();
+    fctx.fill();
+
+    // --- Draw sidelines (field border) ---
     fctx.strokeStyle = "white";
+    fctx.lineWidth = 3;
+    fctx.beginPath();
+    fctx.moveTo(topLeft.u, topLeft.v);
+    fctx.lineTo(topRight.u, topRight.v);
+    fctx.lineTo(bottomRight.u, bottomRight.v);
+    fctx.lineTo(bottomLeft.u, bottomLeft.v);
+    fctx.closePath();
+    fctx.stroke();
 
+    // --- Yard lines every 8 steps (5 yards) ---
+    fctx.lineWidth = 2;
     for (let x = 0; x <= fieldLengthSteps; x += 8) {
         const start = project(x, 0, 0);
         const end = project(x, fieldWidthSteps, 0);
-
         if (start && end) {
             fctx.beginPath();
             fctx.moveTo(start.u, start.v);
@@ -31,74 +62,63 @@ function drawStaticField() {
         }
     }
 
-    // Draw sidelines (4 corners projected)
-    const topLeft = project(0, 0, 0);
-    const topRight = project(fieldLengthSteps, 0, 0);
-    const bottomLeft = project(0, fieldWidthSteps, 0);
-    const bottomRight = project(fieldLengthSteps, fieldWidthSteps, 0);
+    // --- Hash marks ---
+    const hashFromSidelineSteps = 28;
+    const hashLength = 2;
 
-    fctx.lineWidth = 4;
-    fctx.strokeStyle = "white";
-    fctx.beginPath();
-    if (topLeft && topRight && bottomRight && bottomLeft) {
-        fctx.moveTo(topLeft.u, topLeft.v);
-        fctx.lineTo(topRight.u, topRight.v);
-        fctx.lineTo(bottomRight.u, bottomRight.v);
-        fctx.lineTo(bottomLeft.u, bottomLeft.v);
-        fctx.closePath();
-        fctx.stroke();
-    }
-
-    // Hash marks - let's draw them as short horizontal ticks along yard lines
-    const hashFromSidelineSteps = 28;  // distance from sideline
-
+    fctx.lineWidth = 2;
     for (let x = 0; x <= fieldLengthSteps; x += 8) {
-        const leftHashStart = project(x, hashFromSidelineSteps, 0);
-        const leftHashEnd = project(x, hashFromSidelineSteps + 2, 0);  // 2 steps length
+        // Top hash
+        const topStart = project(x, hashFromSidelineSteps, 0);
+        const topEnd = project(x, hashFromSidelineSteps + hashLength, 0);
 
-        const rightHashStart = project(x, fieldWidthSteps - hashFromSidelineSteps, 0);
-        const rightHashEnd = project(x, fieldWidthSteps - hashFromSidelineSteps - 2, 0);
-
-        if (leftHashStart && leftHashEnd) {
+        if (topStart && topEnd) {
             fctx.beginPath();
-            fctx.moveTo(leftHashStart.u, leftHashStart.v);
-            fctx.lineTo(leftHashEnd.u, leftHashEnd.v);
+            fctx.moveTo(topStart.u, topStart.v);
+            fctx.lineTo(topEnd.u, topEnd.v);
             fctx.stroke();
         }
-        if (rightHashStart && rightHashEnd) {
+
+        // Bottom hash
+        const bottomStart = project(x, fieldWidthSteps - hashFromSidelineSteps, 0);
+        const bottomEnd = project(x, fieldWidthSteps - hashFromSidelineSteps - hashLength, 0);
+
+        if (bottomStart && bottomEnd) {
             fctx.beginPath();
-            fctx.moveTo(rightHashStart.u, rightHashStart.v);
-            fctx.lineTo(rightHashEnd.u, rightHashEnd.v);
+            fctx.moveTo(bottomStart.u, bottomStart.v);
+            fctx.lineTo(bottomEnd.u, bottomEnd.v);
             fctx.stroke();
         }
     }
 
-    // Yard numbers
+    // --- Yard numbers ---
     fctx.fillStyle = "white";
     fctx.font = `${vScaleY * (72 / stepSizeInches)}px sans-serif`;
     fctx.textAlign = "center";
     fctx.textBaseline = "middle";
 
-    const numberCenterSteps = 288 / stepSizeInches;  // 2 yards high numbers
+    const numberOffsetSteps = 288 / stepSizeInches;
 
     for (let x = 0; x <= fieldLengthSteps; x += 8) {
         let yardsFromLeft = (x / 8) * 5;
         let yardNumber = yardsFromLeft <= 50 ? yardsFromLeft : 100 - yardsFromLeft;
 
         if (yardNumber % 10 === 0 && yardNumber !== 0) {
-            // Bottom number position (near sideline)
-            const bottomPos = project(x, numberCenterSteps, 0);
-            // Top number position (opposite sideline)
-            const topPos = project(x, fieldWidthSteps - numberCenterSteps, 0);
+            const label = String(yardNumber);
 
-            if (bottomPos) {
-                fctx.fillText(String(yardNumber), bottomPos.u, bottomPos.v);
+            // Bottom (near sideline)
+            const bottom = project(x, numberOffsetSteps, 0);
+            if (bottom) {
+                fctx.fillText(label, bottom.u, bottom.v);
             }
-            if (topPos) {
+
+            // Top (opposite sideline, rotated)
+            const top = project(x, fieldWidthSteps - numberOffsetSteps, 0);
+            if (top) {
                 fctx.save();
-                fctx.translate(topPos.u, topPos.v);
-                fctx.rotate(Math.PI);  // upside down for opposite sideline
-                fctx.fillText(String(yardNumber), 0, 0);
+                fctx.translate(top.u, top.v);
+                fctx.rotate(Math.PI); // upside-down
+                fctx.fillText(label, 0, 0);
                 fctx.restore();
             }
         }
@@ -111,15 +131,21 @@ function project(x, y, z) {
     const dy = y - camY;
     const dz = z - camZ;
 
-    // Rotate around X-axis for camera tilt (camera looking "up" slightly)
     const cosA = Math.cos(cameraAngle);
     const sinA = Math.sin(cameraAngle);
 
+    // Rotate around X-axis for vertical tilt
     const dyRot = dy * cosA - dz * sinA;
     const dzRot = dy * sinA + dz * cosA;
 
     // Perspective projection
-    const perspective = camDistance / (camDistance + dzRot);
+    const depth = camDistance + dzRot;
+
+    // Don't project points behind the camera
+    if (depth <= 0.1) return null;
+
+    const perspective = camDistance / depth;
+
     const u = dx * vScaleX * perspective + viewportCenterX;
     const v = dyRot * vScaleY * perspective + horizonOffset;
 
