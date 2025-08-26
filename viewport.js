@@ -1,5 +1,5 @@
 function computeCamDistance(viewportWidth) {
-    const fovDegrees = 60; // Natural human viewing angle
+    const fovDegrees = 180; // Natural human viewing angle is 60-90 degrees
     const fovRadians = fovDegrees * Math.PI / 180;
     return viewportWidth / (2 * Math.tan(fovRadians / 2));
 }
