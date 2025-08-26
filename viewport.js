@@ -65,8 +65,22 @@ function drawStaticField() {
 
 // --- PERSPECTIVE PROJECTION ---
 function project(x, y, z) {
-    const u = x * vScaleX;
-    const v = y * vScaleY - z * Math.tan(cameraAngle) * vScaleY;
+    const dx = x - camX;
+    const dy = y - camY;
+    const dz = z - camZ;
+
+    // Rotate around X-axis for camera tilt (camera looking "up" slightly)
+    const cosA = Math.cos(cameraAngle);
+    const sinA = Math.sin(cameraAngle);
+
+    const dyRot = dy * cosA - dz * sinA;
+    const dzRot = dy * sinA + dz * cosA;
+
+    // Perspective projection
+    const perspective = camDistance / (camDistance + dzRot);
+    const u = dx * vScaleX * perspective + viewportCenterX;
+    const v = dyRot * vScaleY * perspective + horizonOffset;
+
     return { u, v };
 }
 
@@ -93,6 +107,8 @@ function drawCones() {
 
 // --- RENDER LOOP ---
 function renderViewport() {
+    vctx.clearRect(0, 0, vctx.canvas.width, vctx.canvas.height);
+    
     // copy cached field
     vctx.drawImage(fieldCache, 0, 0);
 
