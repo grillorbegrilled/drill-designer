@@ -1,3 +1,8 @@
+const kids = [];
+const viewport = document.getElementById("viewport");
+const vctx = viewport.getContext("2d");
+
+
 function togglePlay() {
     isPlaying = !isPlaying;
     document.getElementById("playBtn").textContent = isPlaying ? "⏹️" : "▶️";
