@@ -96,6 +96,9 @@ function toggleSelectionInRect(p1, p2) {
 }
 
 window.onload = () => {
+  // Initialize viewport field
+  drawStaticField();
+    
   function resetDrag() {
     selectDragging = false;
     selectDragStart = selectDragEnd = null;
@@ -355,7 +358,7 @@ window.onload = () => {
     const spacingXInput = document.getElementById("addKidSpacingX");
     const spacingYInput = document.getElementById("addKidSpacingY");
     
-    let gridOrigin = { x: 32, y: 32 };
+    let gridOrigin = { x: 80, y: 32 };
     let direction = 0;
     
     // Modal control
