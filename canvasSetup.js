@@ -22,7 +22,7 @@ const coneRadius = 1;   // 1 step radius at top
 const camX = fieldLengthSteps / 2;     // Always on the 50
 //Middle of the home stands
 const camZ = Math.round((12 * 12) / stepSizeInches);      // 12 feet off the ground
-const camY = 200;
+const camY = 200; 
 //const camY = Math.round((244 * 12) / stepSizeInches);    // 244 feet from back sideline
 
 const centerX = fieldLengthSteps / 2;        // Center sideline to sideline
