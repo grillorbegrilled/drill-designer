@@ -97,7 +97,7 @@ function toggleSelectionInRect(p1, p2) {
 
 window.onload = () => {
   // Initialize viewport field
-  drawStaticField();
+  //drawStaticField();
     
   function resetDrag() {
     selectDragging = false;
