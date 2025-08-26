@@ -3,7 +3,7 @@ function computeCamDistance(viewportWidth) {
     const fovRadians = fovDegrees * Math.PI / 180;
     return viewportWidth / (2 * Math.tan(fovRadians / 2));
 }
-
+ 
 const camDistance = computeCamDistance(vctx.canvas.width);
 
 function drawStaticField() {
