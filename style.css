@@ -10,7 +10,8 @@ canvas {
     display: block;
     margin: auto;
     max-width: 100%;
-    height: auto;
+    width: 1000px;   /* match HTML width */
+  height: 500px; 
   touch-action: pinch-zoom pan-x pan-y;
 }
 
