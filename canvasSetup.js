@@ -23,8 +23,15 @@ const coneRadius = 1;   // 1 step radius at top
 const camX = fieldLengthSteps / 2;     // Centered horizontally
 const camY = -2280 / stepSizeInches;    // ≈ -16 steps behind sideline
 const camZ = 60 / stepSizeInches;      // 5 feet high
-const cameraAngle = Math.PI / 12;      // 15 degrees above horizontal
-const camDistance = 100;               // Adjust for stronger/weaker perspective
+
+const centerX = fieldLengthSteps / 2;        // Center sideline to sideline
+const centerY = fieldWidthSteps / 2;         // Center down the field (y-axis)
+const centerZ = 0;                           // Field level (z = 0)
+const centerY = fieldWidthSteps / 2;
+const deltaY = centerY - camY;
+const deltaZ = -camZ;
+const cameraAngle = Math.atan2(deltaZ, deltaY);  // in radians
+
 
 const viewportCenterX = canvas.width / 2;
 const horizonOffset = canvas.height / 2;
