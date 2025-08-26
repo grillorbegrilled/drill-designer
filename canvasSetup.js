@@ -27,7 +27,6 @@ const camZ = 60 / stepSizeInches;      // 5 feet high
 const centerX = fieldLengthSteps / 2;        // Center sideline to sideline
 const centerY = fieldWidthSteps / 2;         // Center down the field (y-axis)
 const centerZ = 0;                           // Field level (z = 0)
-const centerY = fieldWidthSteps / 2;
 const deltaY = centerY - camY;
 const deltaZ = -camZ;
 const cameraAngle = Math.atan2(deltaZ, deltaY);  // in radians
