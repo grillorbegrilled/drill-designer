@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marching Drill Designer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <input type="text" id="projectName" placeholder="Project name" />
+    <input type="file" id="fileInput" accept=".json" />
+  <div class="pad-row">
+    <button id="saveBtn">💾</button>
+    <button id="loadBtn">📂</button>
+    <label for="tempo-slider">BPM:</label>
+    <input type="range" id="tempo-slider" min="30" max="300" step="1">
+  <span id="tempo-value"></span>
+  </div>
+  <div class="controls">
+    <div class="controls-top">
+      <button id="rewindBtn">⏮️</button>
+      <button id="stepBackBtn">⏪</button>
+      <button id="playBtn">▶️</button>
+      <button id="stepForwardBtn">⏩</button>
+      <span id="stepDisplay">Step: 0</span>
+    </div>
+    <div class="controls-bottom">
+      <input type="range" id="scrubSlider" min="0" value="0">
+    </div>
+  <div id="canvas-container">
+    <canvas id="viewport" width="1000" height="500"></canvas>
+  </div>  
+  
+  <div id="statusDisplay" class="status-display"></div>
+  <pre id="log" style="margin-top: 10px; font-family: monospace;"></pre>
+  <script>
+      (function () {
+          const originalLog = console.log;
+          const outputEl = document.getElementById('log');
+        
+          console.log = function (...args) {
+            // Keep original behavior
+            originalLog.apply(console, args);
+        
+            // Format output and write to the page
+            const message = args.map(arg =>
+              typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+            ).join(' ');
+            
+            outputEl.textContent = message;
+          };
+        })();
+
+      console.log("Ready");
+  </script>
+    
+  <script src="canvasSetup.js"></script>
+  <script src="viewport.js"></script>
+  <script src="dataModel.js"></script>
+  <script src="simulation.js"></script>
+  <script src="rendering.js"></script>
+  <script src="controls.js"></script>
+</body>
+</html>
