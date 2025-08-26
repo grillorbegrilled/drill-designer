@@ -36,7 +36,7 @@ function render() {
     updateStatusDisplay();
 
     //Update 3D viewport
-    setInterval(renderViewport, 100);
+    renderScene();
 }
 
 function getComplementaryColor(hex) {
