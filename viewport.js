@@ -127,27 +127,30 @@ function drawStaticField() {
 
 // --- PERSPECTIVE PROJECTION ---
 function project(x, y, z) {
-    const dx = x - camX;
-    const dy = y - camY;
-    const dz = z - camZ;
+    // Step 1: Translate point relative to camera position
+    const relX = x - camX;
+    const relY = y - camY;
+    const relZ = z - camZ;
 
+    // Step 2: Rotate around X axis by cameraAngle
     const cosA = Math.cos(cameraAngle);
     const sinA = Math.sin(cameraAngle);
 
-    // Rotate around X-axis for vertical tilt
-    const dyRot = dy * cosA - dz * sinA;
-    const dzRot = dy * sinA + dz * cosA;
+    // Rotate Y-Z plane
+    const rotY = relY * cosA - relZ * sinA;
+    const rotZ = relY * sinA + relZ * cosA;
 
-    // Perspective projection
-    const depth = camDistance + dzRot;
+    // Step 3: Cull points behind camera (camera looks along negative Y)
+    if (rotY >= 0) return null;
 
-    // Don't project points behind the camera
-    if (depth <= 0.1) return null;
+    // Step 4: Compute focal length in pixels
+    const focalLength = computeCamDistance(); // in grid units
+    const focalLengthPixelsX = focalLength * vScaleX;
+    const focalLengthPixelsY = focalLength * vScaleY;
 
-    const perspective = camDistance / depth;
-
-    const u = dx * vScaleX * perspective + viewportCenterX;
-    const v = dyRot * vScaleY * perspective + horizonOffset;
+    // Step 5: Project to 2D screen coordinates
+    const u = (relX / -rotY) * focalLengthPixelsX + canvas.width / 2;
+    const v = (rotZ / -rotY) * focalLengthPixelsY + canvas.height / 2;
 
     return { u, v };
 }
