@@ -1,10 +1,10 @@
-function computeCamDistance(viewportWidth, fovDegrees) {
+function computeCamDistance(viewportWidth) {
     const fovDegrees = 60; // Natural human viewing angle
     const fovRadians = fovDegrees * Math.PI / 180;
     return viewportWidth / (2 * Math.tan(fovRadians / 2));
 }
 
-const camDistance = computeCamDistance(vctx.canvas.width, fovDegrees);
+const camDistance = computeCamDistance(vctx.canvas.width);
 
 function drawStaticField() {
     fctx.clearRect(0, 0, fieldCache.width, fieldCache.height);
