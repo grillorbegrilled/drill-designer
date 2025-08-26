@@ -21,7 +21,7 @@ const coneHeight = 3;   // cones 3 steps tall
 const coneRadius = 1;   // 1 step radius at top
 
 const camX = fieldLengthSteps / 2;     // Centered horizontally
-const camY = -360 / stepSizeInches;    // ≈ -16 steps behind sideline
+const camY = -2280 / stepSizeInches;    // ≈ -16 steps behind sideline
 const camZ = 60 / stepSizeInches;      // 5 feet high
 const cameraAngle = Math.PI / 12;      // 15 degrees above horizontal
 const camDistance = 100;               // Adjust for stronger/weaker perspective
