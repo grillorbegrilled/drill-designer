@@ -23,6 +23,33 @@ function drawStaticField() {
     const bottomLeft = project(0, fieldWidthSteps, 0);
     const bottomRight = project(fieldLengthSteps, fieldWidthSteps, 0);
 
+//debug
+    const corners = [
+      { name: "topLeft", point: topLeft },
+      { name: "topRight", point: topRight },
+      { name: "bottomLeft", point: bottomLeft },
+      { name: "bottomRight", point: bottomRight }
+    ];
+    
+    corners.forEach(({name, point}) => {
+      if (!point) {
+        console.warn(`${name} is out of view or behind camera.`);
+      } else {
+        console.log(`${name}: u=${point.u.toFixed(1)}, v=${point.v.toFixed(1)}`);
+      }
+    });
+
+    corners.forEach(({point}) => {
+      if (point) {
+        fctx.fillStyle = "red";
+        fctx.beginPath();
+        fctx.arc(point.u, point.v, 5, 0, 2 * Math.PI);
+        fctx.fill();
+      }
+    });
+
+
+    
     if (!topLeft || !topRight || !bottomLeft || !bottomRight) {
         console.warn("Field corners out of view — skipping field render");
         return;
