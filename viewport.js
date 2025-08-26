@@ -49,11 +49,12 @@ function drawStaticField() {
     });
 
 
-    
+    /*
     if (!topLeft || !topRight || !bottomLeft || !bottomRight) {
         console.warn("Field corners out of view — skipping field render");
         return;
     }
+    */
 
     // --- Optional: Draw green background field shape ---
     fctx.fillStyle = "#006400";
