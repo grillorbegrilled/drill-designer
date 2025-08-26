@@ -9,8 +9,8 @@ let currentStep = 0;
 let isPlaying = false;
 
 // --- VIEWPORT SETUP ---
-const viewport = document.getElementById('viewport');
-const vctx = viewport.getContext('2d');
+const viewport = document.getElementById("viewport");
+const vctx = viewport.getContext("2d");
 const camera = { x: 80, y: 130, z: 7 };
 const focalLength = 100;
 const objectHeight = 3;
