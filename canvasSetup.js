@@ -17,9 +17,17 @@ const vScaleX = viewport.width / fieldLengthSteps;
 const vScaleY = viewport.height / fieldWidthSteps;
 
 // CAMERA / CONE SETTINGS
-const cameraAngle = 15 * Math.PI / 180; // 15°
 const coneHeight = 3;   // cones 3 steps tall
 const coneRadius = 1;   // 1 step radius at top
+
+const camX = fieldLengthSteps / 2;     // Centered horizontally
+const camY = -360 / stepSizeInches;    // ≈ -16 steps behind sideline
+const camZ = 60 / stepSizeInches;      // 5 feet high
+const cameraAngle = Math.PI / 12;      // 15 degrees above horizontal
+const camDistance = 100;               // Adjust for stronger/weaker perspective
+
+const viewportCenterX = canvas.width / 2;
+const horizonOffset = canvas.height / 2;
 
 // --- OFFSCREEN FIELD CANVAS (cached static field) ---
 const fieldCache = document.createElement("canvas");
