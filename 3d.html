@@ -42,7 +42,7 @@
     function playLoop() {
         if (!isPlaying) return;
         try {
-            drawRectangle(); //advance();
+            advance();
             setTimeout(playLoop, (60 / tempo) * 1000);
         } catch (err) {
             console.log("Render error:", err);
