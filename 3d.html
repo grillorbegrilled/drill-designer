@@ -10,6 +10,8 @@
   <br>
   <button id="playButton">▶️</button>
 
+  <script src="dataModel.js"></script>
+  <script src="simulation.js"></script>
   <script>
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
@@ -18,7 +20,6 @@
     const objectHeight = 3;
     let currentStep = 0;
     let isPlaying = false;
-    let tempo = 180;
 
     function drawRectangle() {
       ctx.fillStyle = 'blue';
