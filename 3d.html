@@ -6,6 +6,13 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <input type="file" id="fileInput" accept=".json" />
+  <div class="pad-row">
+    <button id="loadBtn">📂</button>
+    <label for="tempo-slider">BPM:</label>
+    <input type="range" id="tempo-slider" min="30" max="300" step="1">
+  <span id="tempo-value"></span>
+  </div>
   <canvas id="myCanvas" width="1000" height="500" style="border:1px solid #000;"></canvas>
   <br>
   <button id="playButton">▶️</button>
@@ -41,6 +48,39 @@
             console.log("Render error:", err);
         }
     }
+
+  function loadfile() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    if (!file) {
+      alert("Please select a JSON file first.");
+      return;
+    }
+  
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      console.log("Loading...");
+      try {
+        const json = JSON.parse(event.target.result);
+  
+        if (!Array.isArray(json)) {
+          alert("Invalid format: JSON must be an array.");
+          return;
+        }
+  
+        kids = json;
+        //alert("JSON loaded successfully! 'kids' array updated.");
+        console.log(`Loaded ${kids.length} kids`);
+        document.getElementById('projectName').value = file.name.replace(/\.json$/, "");
+        setStartingFormation();
+        render();
+      } catch (e) {
+        alert("Error parsing JSON: " + e.message);
+      }
+    };
+
+  reader.readAsText(file);
+}
 
     document.getElementById('playButton').addEventListener('click', togglePlay);
     
