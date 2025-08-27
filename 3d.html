@@ -104,9 +104,7 @@
       for (const kid of sortedKids) {
         const base = project({ x: kid.x, y: kid.y, z: 0 });
         const top = project({ x: kid.x, y: kid.y, z: objectHeight });
-    
         const width = 6 * base.scale / focalLength;
-    
         const rectX = base.x - width / 2;
         const rectY = top.y;
         const rectHeight = base.y - top.y;
