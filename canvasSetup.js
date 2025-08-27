@@ -7,3 +7,4 @@ const scaleX = ctx.canvas.width / fieldLengthSteps;
 const scaleY = ctx.canvas.height / fieldWidthSteps;
 let currentStep = 0;
 let isPlaying = false;
+
