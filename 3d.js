@@ -4,6 +4,7 @@ const camera = { x: 80, y: 130, z: 7 };
 const focalLength = 100;
 const objectHeight = 3;
 let currentStep = 0;
+let isPlaying = false;
 
 function togglePlay() {
     isPlaying = !isPlaying;
