@@ -1,9 +1,9 @@
 const viewport = document.getElementById("viewport");
-let vctx = vctx = viewport.getContext("2d");
+const vctx = vctx = viewport.getContext("2d");
 const camera = { x: 80, y: 130, z: 7 };
 const focalLength = 100;
 const objectHeight = 3;
-let currentStep = 0;
+//let currentStep = 0;
 
 function togglePlay() {
     isPlaying = !isPlaying;
