@@ -58,42 +58,46 @@ function scrubToStep(e) {
     simulateToStep(targetStep);
 }
 
+function loadfile() {
+  const fileInput = document.getElementById('fileInput');
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("Please select a JSON file first.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    console.log("Loading...");
+    try {
+      const json = JSON.parse(event.target.result);
+
+      if (!Array.isArray(json)) {
+        alert("Invalid format: JSON must be an array.");
+        return;
+      }
+
+      kids = json;
+      //alert("JSON loaded successfully! 'kids' array updated.");
+      console.log(`Loaded ${kids.length} kids`);
+      document.getElementById('projectName').value = file.name.replace(/\.json$/, "");
+      setStartingFormation();
+      render();
+    } catch (e) {
+      alert("Error parsing JSON: " + e.message);
+    }
+  };
+
+  reader.readAsText(file);
+}
+
 window.onload = () => {
   // Initialize viewport field
   //drawStaticField();
     
     document.getElementById('loadBtn').addEventListener('click', () => {
       console.log("Load button clicked.");
-      const fileInput = document.getElementById('fileInput');
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Please select a JSON file first.");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        console.log("Loading...");
-        try {
-          const json = JSON.parse(event.target.result);
-
-          if (!Array.isArray(json)) {
-            alert("Invalid format: JSON must be an array.");
-            return;
-          }
-
-          kids = json;
-          //alert("JSON loaded successfully! 'kids' array updated.");
-          console.log(`Loaded ${kids.length} kids`);
-          document.getElementById('projectName').value = file.name.replace(/\.json$/, "");
-          setStartingFormation();
-          render();
-        } catch (e) {
-          alert("Error parsing JSON: " + e.message);
-        }
-      };
-
-        reader.readAsText(file);
+      loadfile();
     });
 
     const slider = document.getElementById("tempo-slider");
