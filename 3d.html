@@ -93,7 +93,7 @@
     }
     
     function render() {
-      vctx.clearRect(0, 0, viewport.width, viewport.height);
+      ctx.clearRect(0, 0, viewport.width, viewport.height);
     
       const sortedKids = [...kids].sort((a, b) => {
         const depthA = a.y - camera.y;
@@ -111,8 +111,8 @@
         const rectY = top.y;
         const rectHeight = base.y - top.y;
     
-        vctx.fillStyle = kid.c;
-        vctx.fillRect(rectX, rectY, width, rectHeight);
+        ctx.fillStyle = kid.c;
+        ctx.fillRect(rectX, rectY, width, rectHeight);
       }
     
       requestAnimationFrame(render);
