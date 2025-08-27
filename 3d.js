@@ -1,5 +1,5 @@
 const viewport = document.getElementById("viewport");
-let vctx = null;
+let vctx = vctx = viewport.getContext("2d");
 const camera = { x: 80, y: 130, z: 7 };
 const focalLength = 100;
 const objectHeight = 3;
@@ -61,7 +61,7 @@ function scrubToStep(e) {
 window.onload = () => {
   // Initialize viewport field
   //drawStaticField();
-    vctx = viewport.getContext("2d");
+    
     document.getElementById('loadBtn').addEventListener('click', () => {
       console.log("Load button clicked.");
       const fileInput = document.getElementById('fileInput');
