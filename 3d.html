@@ -3,19 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <title>Canvas Play Button</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="myCanvas" width="200" height="200" style="border:1px solid #000;"></canvas>
+  <canvas id="myCanvas" width="1000" height="500" style="border:1px solid #000;"></canvas>
   <br>
-  <button id="playButton">Play</button>
+  <button id="playButton">▶️</button>
 
   <script>
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
+    const camera = { x: 80, y: 130, z: 7 };
+    const focalLength = 100;
+    const objectHeight = 3;
+    let currentStep = 0;
+    let isPlaying = false;
 
     function drawRectangle() {
       ctx.fillStyle = 'blue';
       ctx.fillRect(50, 50, 100, 100);
+    }
+
+    function togglePlay() {
+        isPlaying = !isPlaying;
+        document.getElementById("playButton").textContent = isPlaying ? "⏹️" : "▶️";
+        if (isPlaying) playLoop();
+    }
+    
+    function playLoop() {
+        if (!isPlaying) return;
+        try {
+            drawRectangle(); //advance();
+            setTimeout(playLoop, (60 / tempo) * 1000);
+        } catch (err) {
+            console.log("Render error:", err);
+        }
     }
 
     document.getElementById('playButton').addEventListener('click', drawRectangle);
