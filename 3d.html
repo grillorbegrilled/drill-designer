@@ -18,6 +18,7 @@
     const objectHeight = 3;
     let currentStep = 0;
     let isPlaying = false;
+    let tempo = 180;
 
     function drawRectangle() {
       ctx.fillStyle = 'blue';
@@ -40,7 +41,7 @@
         }
     }
 
-    document.getElementById('playButton').addEventListener('click', drawRectangle);
+    document.getElementById('playButton').addEventListener('click', togglePlay);
   </script>
 </body>
 </html>
