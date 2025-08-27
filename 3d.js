@@ -112,3 +112,8 @@ window.onload = () => {
 
     render();
 }
+
+function updateStepDisplay() {
+    const display = document.getElementById("stepDisplay");
+    if (display) display.textContent = `Step: ${currentStep}`;
+}
