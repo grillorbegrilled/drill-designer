@@ -33,5 +33,5 @@ function render() {
     vctx.fillRect(rectX, rectY, width, rectHeight);
   }
 
-  requestAnimationFrame(renderScene);
+  requestAnimationFrame(render);
 }
