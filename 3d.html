@@ -49,51 +49,51 @@
         }
     }
 
-  function loadfile() {
-    const fileInput = document.getElementById('fileInput');
-    const file = fileInput.files[0];
-    if (!file) {
-      alert("Please select a JSON file first.");
-      return;
-    }
-  
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      console.log("Loading...");
-      try {
-        const json = JSON.parse(event.target.result);
-  
-        if (!Array.isArray(json)) {
-          alert("Invalid format: JSON must be an array.");
-          return;
-        }
-  
-        kids = json;
-        //alert("JSON loaded successfully! 'kids' array updated.");
-        console.log(`Loaded ${kids.length} kids`);
-        render();
-      } catch (e) {
-        alert("Error parsing JSON: " + e.message);
+    function loadfile() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please select a JSON file first.");
+        return;
       }
-    };
-
-    reader.readAsText(file);
-  }
+    
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        console.log("Loading...");
+        try {
+          const json = JSON.parse(event.target.result);
+    
+          if (!Array.isArray(json)) {
+            alert("Invalid format: JSON must be an array.");
+            return;
+          }
+    
+          kids = json;
+          //alert("JSON loaded successfully! 'kids' array updated.");
+          console.log(`Loaded ${kids.length} kids`);
+          render();
+        } catch (e) {
+          alert("Error parsing JSON: " + e.message);
+        }
+      };
+  
+      reader.readAsText(file);
+    }
 
     function project(point) {
       const dx = point.x - camera.x;
       const dy = point.y - camera.y;
-      const dz = point.z - camera.z;
+      const dz = point.z ?? 0 - camera.z;
     
       const scale = focalLength / (dz || 0.0001);
-      const x2d = dx * scale + viewport.width / 2;
-      const y2d = dy * scale + viewport.height / 2;
+      const x2d = dx * scale + canvas.width / 2;
+      const y2d = dy * scale + canvas.height / 2;
     
       return { x: x2d, y: y2d, scale };
     }
     
     function render() {
-      ctx.clearRect(0, 0, viewport.width, viewport.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
     
       const sortedKids = [...kids].sort((a, b) => {
         const depthA = a.y - camera.y;
