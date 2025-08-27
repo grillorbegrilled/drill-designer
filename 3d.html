@@ -2,20 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Canvas Rectangle</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Canvas Play Button</title>
 </head>
 <body>
   <canvas id="myCanvas" width="200" height="200" style="border:1px solid #000;"></canvas>
+  <br>
+  <button id="playButton">Play</button>
 
   <script>
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = 'blue';      // Set fill color
-    ctx.fillRect(50, 50, 100, 100); // Draw a rectangle at (50,50) with width 100 and height 100
+
+    function drawRectangle() {
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(50, 50, 100, 100);
+    }
+
+    document.getElementById('playButton').addEventListener('click', drawRectangle);
   </script>
 </body>
 </html>
+
 
 <!--<html lang="en">
 <head>
