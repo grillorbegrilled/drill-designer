@@ -1,19 +1,9 @@
-console.log("3d.js loaded");
-
-const viewport = document.getElementById("viewport");
-console.log("Viewport element:", viewport);
-
-const vctx = viewport.getContext("2d");
-console.log("2D context:", vctx);
-
-
-/*
 const viewport = document.getElementById("viewport");
 const vctx = viewport.getContext("2d");
 const camera = { x: 80, y: 130, z: 7 };
 const focalLength = 100;
 const objectHeight = 3;
-//let currentStep = 0;
+let currentStep = 0;
 
 function togglePlay() {
     isPlaying = !isPlaying;
@@ -128,4 +118,3 @@ function updateStepDisplay() {
     const display = document.getElementById("stepDisplay");
     if (display) display.textContent = `Step: ${currentStep}`;
 }
-*/
