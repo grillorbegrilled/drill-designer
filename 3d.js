@@ -1,8 +1,9 @@
 const viewport = document.getElementById("viewport");
-const vctx = viewport.getContext("2d");
+let vctx = null;
 const camera = { x: 80, y: 130, z: 7 };
 const focalLength = 100;
 const objectHeight = 3;
+let currentStep = 0;
 
 function togglePlay() {
     isPlaying = !isPlaying;
@@ -60,6 +61,7 @@ function scrubToStep(e) {
 window.onload = () => {
   // Initialize viewport field
   //drawStaticField();
+    vctx = viewport.getContext("2d");
     document.getElementById('loadBtn').addEventListener('click', () => {
       console.log("Load button clicked.");
       const fileInput = document.getElementById('fileInput');
