@@ -1,4 +1,22 @@
+<!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas Rectangle</title>
+</head>
+<body>
+  <canvas id="myCanvas" width="200" height="200" style="border:1px solid #000;"></canvas>
+
+  <script>
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'blue';      // Set fill color
+    ctx.fillRect(50, 50, 100, 100); // Draw a rectangle at (50,50) with width 100 and height 100
+  </script>
+</body>
+</html>
+
+<!--<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Marching Drill Designer</title>
@@ -57,3 +75,4 @@
   <script src="viewport.js"></script>
 </body>
 </html>
+-->
