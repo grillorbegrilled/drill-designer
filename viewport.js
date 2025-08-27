@@ -10,7 +10,7 @@ function project(point) {
   return { x: x2d, y: y2d, scale };
 }
 
-function renderScene() {
+function render() {
   vctx.clearRect(0, 0, viewport.width, viewport.height);
 
   const sortedKids = [...kids].sort((a, b) => {
