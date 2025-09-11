@@ -238,7 +238,7 @@
   <script src="pinwheel.js"></script>
   <script src="maneuvers.js"></script>
   <script src="controls.js"></script>
-<button id="exportVideoBtn">Export Video2</button>
+<button id="exportVideoBtn">Export Video</button>
 
 <script>
 const exportBtn = document.getElementById("exportVideoBtn");
@@ -252,7 +252,6 @@ exportBtn.addEventListener("click", async () => {
     let chunks = [];
     currentStep = 0; // reset animation
 
-    // Capture the canvas at fixed FPS
     const stream = canvas.captureStream(fps);
     const recorder = new MediaRecorder(stream, {
         mimeType: "video/webm;codecs=vp9"
@@ -275,18 +274,19 @@ exportBtn.addEventListener("click", async () => {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+        console.log("✅ Video download ready.");
     }
 
     recorder.onstop = downloadVideo;
-
     recorder.start();
 
     async function renderFrames() {
+        const frameDelay = (60 / tempo) * 1000; // ms per frame, same as playLoop
         for (let frame = 0; frame < totalFrames; frame++) {
-            advance(); // render one animation step
-            await new Promise(r => setTimeout(r, 1000 / fps));
+            advance();
+            console.log(`Rendering frame ${frame + 1} / ${totalFrames}`);
+            await new Promise(r => setTimeout(r, frameDelay));
         }
-        // Give recorder a moment to process the last frame
         setTimeout(() => recorder.stop(), 200);
     }
 
