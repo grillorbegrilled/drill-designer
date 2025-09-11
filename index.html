@@ -238,7 +238,7 @@
   <script src="pinwheel.js"></script>
   <script src="maneuvers.js"></script>
   <script src="controls.js"></script>
-<button id="exportVideoBtn">Export Video3</button>
+<button id="exportVideoBtn">Export Video</button>
 
 <script>
 const exportBtn = document.getElementById("exportVideoBtn");
@@ -250,11 +250,21 @@ exportBtn.addEventListener("click", async () => {
     let chunks = [];
     currentStep = 0; // reset animation
 
-    // Firefox: omit fps argument to avoid bugs
+    // Firefox prefers vp8
     const stream = canvas.captureStream();
-    const recorder = new MediaRecorder(stream, {
-        mimeType: "video/webm;codecs=vp9"
-    });
+    let options = { mimeType: "video/webm;codecs=vp8" };
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        options = { mimeType: "video/webm" }; // fallback
+    }
+
+    let recorder;
+    try {
+        recorder = new MediaRecorder(stream, options);
+    } catch (e) {
+        console.error("MediaRecorder not supported:", e);
+        alert("Your browser does not support MediaRecorder.");
+        return;
+    }
 
     recorder.ondataavailable = e => {
         if (e.data && e.data.size > 0) {
@@ -277,18 +287,17 @@ exportBtn.addEventListener("click", async () => {
     }
 
     recorder.onstop = downloadVideo;
+
     recorder.start();
 
     async function renderFrames() {
-        const frameDelay = (60 / tempo) * 1000; // match playLoop
-        // Kick Firefox into producing frames right away
-        advance();
-        console.log(`Rendering frame 1 / ${totalFrames}`);
-        await new Promise(r => setTimeout(r, frameDelay));
+        const frameDelay = (60 / tempo) * 1000;
 
-        for (let frame = 1; frame < totalFrames; frame++) {
+        for (let frame = 0; frame < totalFrames; frame++) {
             advance();
             console.log(`Rendering frame ${frame + 1} / ${totalFrames}`);
+            // Force paint so Firefox knows canvas changed
+            await new Promise(r => requestAnimationFrame(r));
             await new Promise(r => setTimeout(r, frameDelay));
         }
 
