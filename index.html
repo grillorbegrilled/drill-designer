@@ -238,7 +238,7 @@
   <script src="pinwheel.js"></script>
   <script src="maneuvers.js"></script>
   <script src="controls.js"></script>
-<button id="exportVideoBtn">Export Video</button>
+<button id="exportVideoBtn">Export Video3</button>
 
 <script>
 const exportBtn = document.getElementById("exportVideoBtn");
@@ -247,12 +247,11 @@ exportBtn.addEventListener("click", async () => {
     const totalFrames = parseInt(prompt("How many frames?"), 10);
     if (isNaN(totalFrames) || totalFrames <= 0) return;
 
-    const fps = parseInt(prompt("Frames per second? (default 30)"), 10) || 30;
-
     let chunks = [];
     currentStep = 0; // reset animation
 
-    const stream = canvas.captureStream(fps);
+    // Firefox: omit fps argument to avoid bugs
+    const stream = canvas.captureStream();
     const recorder = new MediaRecorder(stream, {
         mimeType: "video/webm;codecs=vp9"
     });
@@ -269,7 +268,7 @@ exportBtn.addEventListener("click", async () => {
         const a = document.createElement("a");
         a.style.display = "none";
         a.href = url;
-        a.download = `canvas-animation-${fps}fps.webm`;
+        a.download = `canvas-animation.webm`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -281,12 +280,18 @@ exportBtn.addEventListener("click", async () => {
     recorder.start();
 
     async function renderFrames() {
-        const frameDelay = (60 / tempo) * 1000; // ms per frame, same as playLoop
-        for (let frame = 0; frame < totalFrames; frame++) {
+        const frameDelay = (60 / tempo) * 1000; // match playLoop
+        // Kick Firefox into producing frames right away
+        advance();
+        console.log(`Rendering frame 1 / ${totalFrames}`);
+        await new Promise(r => setTimeout(r, frameDelay));
+
+        for (let frame = 1; frame < totalFrames; frame++) {
             advance();
             console.log(`Rendering frame ${frame + 1} / ${totalFrames}`);
             await new Promise(r => setTimeout(r, frameDelay));
         }
+
         setTimeout(() => recorder.stop(), 200);
     }
 
