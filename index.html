@@ -238,5 +238,52 @@
   <script src="pinwheel.js"></script>
   <script src="maneuvers.js"></script>
   <script src="controls.js"></script>
+<button id="exportVideoBtn">Export Video</button>
+
+<script>
+const exportBtn = document.getElementById("exportVideoBtn");
+
+exportBtn.addEventListener("click", async () => {
+    const totalFrames = parseInt(prompt("How many frames?"), 10);
+    if (isNaN(totalFrames) || totalFrames <= 0) return;
+
+    const fps = parseInt(prompt("Frames per second? (default 30)"), 10) || 30;
+
+    let chunks = [];
+    currentStep = 0; // reset animation
+
+    // Capture the canvas at fixed FPS
+    const stream = canvas.captureStream(fps);
+    const recorder = new MediaRecorder(stream, {
+        mimeType: "video/webm;codecs=vp9" // vp9 is smaller than vp8
+    });
+
+    recorder.ondataavailable = e => {
+        if (e.data.size > 0) chunks.push(e.data);
+    };
+
+    recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: "video/webm" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `canvas-animation-${fps}fps.webm`;
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    recorder.start();
+
+    async function renderFrames() {
+        for (let frame = 0; frame < totalFrames; frame++) {
+            advance(); // render one animation step
+            await new Promise(r => setTimeout(r, 1000 / fps));
+        }
+        recorder.stop();
+    }
+
+    renderFrames();
+});
+</script>
 </body>
 </html>
