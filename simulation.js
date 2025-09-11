@@ -1,4 +1,8 @@
 function advance(silent = false) {
+    if (!isPlaying) {
+        ctx.fillStyle = "#0b6623";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
     kids.forEach(kid => {
         const change = kid.ch.find(c => c.s === currentStep);
         var stepSize = 1;
