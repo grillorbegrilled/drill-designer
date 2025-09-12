@@ -1,5 +1,7 @@
 function render() {
     const { scaleX, scaleY } = drawField(ctx, stepSizeInches);
+    ctx.fillStyle = "#0b6623";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     drawKids(ctx, kids, scaleX, scaleY);
     updateStepDisplay();
     const slider = document.getElementById("scrubSlider");
