@@ -238,25 +238,16 @@
   <script src="pinwheel.js"></script>
   <script src="maneuvers.js"></script>
   <script src="controls.js"></script>
-
-<button id="exportBtn">Export video</button>
-
-<script type="module">
-import { createFFmpeg, fetchFile } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js';
-
+<button id="exportBtn">Export WebM</button>
+<script>
 document.getElementById("exportBtn").onclick = async () => {
-    console.log("Starting export...");
-    const ffmpeg = createFFmpeg({ log: true });
-    await ffmpeg.load();
-
-        // Prompt for total frames
     const totalFrames = parseInt(prompt("Enter total frames to export:"), 10);
     if (!totalFrames || totalFrames <= 0) {
         alert("Invalid number of frames");
         return;
     }
 
-    const fps = tempo / 60; // tempo-based fps
+    const fps = tempo / 60; // tempo-based FPS
     const interval = 1000 / fps;
 
     const stream = canvas.captureStream(fps);
@@ -265,22 +256,12 @@ document.getElementById("exportBtn").onclick = async () => {
 
     recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
 
-    recorder.onstop = async () => {
-        console.log("Recording finished, converting to MP4...");
+    recorder.onstop = () => {
         const webmBlob = new Blob(chunks, { type: "video/webm" });
-        const webmBuffer = await webmBlob.arrayBuffer();
-
-        ffmpeg.FS("writeFile", "input.webm", new Uint8Array(webmBuffer));
-        await ffmpeg.run("-i", "input.webm", "-c:v", "libx264", "-pix_fmt", "yuv420p", "output.mp4");
-
-        const data = ffmpeg.FS("readFile", "output.mp4");
-        const mp4Blob = new Blob([data.buffer], { type: "video/mp4" });
-
         const a = document.createElement("a");
-        a.href = URL.createObjectURL(mp4Blob);
-        a.download = "recording.mp4";
+        a.href = URL.createObjectURL(webmBlob);
+        a.download = "recording.webm";
         a.click();
-
         console.log("Export complete.");
     };
 
@@ -295,17 +276,17 @@ document.getElementById("exportBtn").onclick = async () => {
             return;
         }
 
-        // Draw background each frame
+        // Fill background every frame
         ctx.fillStyle = "#0b6623";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         advance(); // your existing animation logic
         frame++;
-        setTimeout(step, interval); // match tempo
+        setTimeout(step, interval); // tempo-based stepping
     };
 
     step();
 };
-                                 </script>
+</script>
 </body>
 </html>
