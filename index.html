@@ -238,55 +238,96 @@
   <script src="pinwheel.js"></script>
   <script src="maneuvers.js"></script>
   <script src="controls.js"></script>
-<button id="exportBtn">Export WebM</button>
+<button id="exportBtn">Export Video</button>
 <script>
-document.getElementById("exportBtn").onclick = async () => {
-    const totalFrames = parseInt(prompt("Enter total frames to export:"), 10);
-    if (!totalFrames || totalFrames <= 0) {
-        alert("Invalid number of frames");
-        return;
+document.getElementById("exportBtn").addEventListener("click", async () => {
+  const totalFrames = parseInt(prompt("Enter total frames to export:"), 10);
+  if (!totalFrames || totalFrames <= 0) {
+    alert("Invalid number of frames");
+    return;
+  }
+
+  if (typeof tempo !== "number" || tempo <= 0) {
+    alert("tempo is not defined or invalid");
+    return;
+  }
+
+  const fps = tempo / 60; // tempo-based fps (60 -> 1fps, 120 -> 2fps, etc.)
+  const interval = (60 / tempo) * 1000; // ms per frame
+
+  // pick a supported mime
+  let mime = "video/webm;codecs=vp9";
+  if (!MediaRecorder.isTypeSupported(mime)) {
+    mime = "video/webm;codecs=vp8";
+    if (!MediaRecorder.isTypeSupported(mime)) mime = "video/webm";
+  }
+
+  // ensure canvas exists in your page
+  if (typeof canvas === "undefined" || !canvas.captureStream) {
+    alert("canvas or canvas.captureStream() not available");
+    return;
+  }
+
+  const stream = canvas.captureStream(fps);
+  let chunks = [];
+
+  let recorder;
+  try {
+    recorder = new MediaRecorder(stream, { mimeType: mime });
+  } catch (err) {
+    alert("MediaRecorder not available: " + err);
+    return;
+  }
+
+  recorder.ondataavailable = (e) => {
+    if (e.data && e.data.size > 0) chunks.push(e.data);
+  };
+
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { type: "video/webm" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = url;
+    a.download = "recording.webm";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    console.log("Export complete.");
+  };
+
+  // Start recording, then immediately kick with an advance so stream becomes live (helps Firefox)
+  recorder.start();
+
+  // First frame: call advance() so we process frame 0
+  try {
+    advance(); // calls render() internally (per your implementation)
+  } catch (err) {
+    console.error("advance() threw:", err);
+    recorder.stop();
+    return;
+  }
+  console.log(`Rendering frame 1 / ${totalFrames}`);
+  await new Promise((r) => requestAnimationFrame(r)); // ensure paint
+
+  // Subsequent frames: tempo-timed
+  for (let f = 1; f < totalFrames; f++) {
+    await new Promise((r) => setTimeout(r, interval));
+    try {
+      advance();
+    } catch (err) {
+      console.error("advance() threw:", err);
+      break;
     }
+    console.log(`Rendering frame ${f + 1} / ${totalFrames}`);
+    await new Promise((r) => requestAnimationFrame(r)); // ensure paint
+  }
 
-    const fps = tempo / 60; // tempo-based FPS
-    const interval = 1000 / fps;
-
-    const stream = canvas.captureStream(fps);
-    const recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
-    const chunks = [];
-
-    recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
-
-    recorder.onstop = () => {
-        const webmBlob = new Blob(chunks, { type: "video/webm" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(webmBlob);
-        a.download = "recording.webm";
-        a.click();
-        console.log("Export complete.");
-    };
-
-    recorder.start();
-
-    let frame = 0;
-    console.log("Rendering...");
-
-    const step = () => {
-        if (frame >= totalFrames) {
-            recorder.stop();
-            return;
-        }
-
-        // Fill background every frame
-        ctx.fillStyle = "#0b6623";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        advance(); // your existing animation logic
-        frame++;
-        setTimeout(step, interval); // tempo-based stepping
-    };
-
-    step();
-};
+  // give recorder a moment to capture final frame
+  await new Promise((r) => setTimeout(r, 200));
+  recorder.stop();
+});
 </script>
 </body>
 </html>
