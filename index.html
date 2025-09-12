@@ -255,6 +255,12 @@ document.getElementById("exportBtn").onclick = async () => {
     const fps = tempo / 60; // tempo-based fps
     const interval = 1000 / fps;
 
+    const { createFFmpeg, fetchFile } = FFmpeg;
+    const ffmpeg = createFFmpeg({ log: true });
+    console.log("Loading FFmpeg.wasm, please wait...");
+    await ffmpeg.load();
+    console.log("FFmpeg loaded.");
+
     const stream = canvas.captureStream(fps);
     const recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
     const chunks = [];
@@ -265,16 +271,6 @@ document.getElementById("exportBtn").onclick = async () => {
         console.log("Recording finished, converting to MP4...");
         const webmBlob = new Blob(chunks, { type: "video/webm" });
         const webmBuffer = await webmBlob.arrayBuffer();
-
-        const FFmpegGlobal = window.FFmpeg || window.FFmpegWASM;
-        if (!FFmpegGlobal) {
-            alert("FFmpeg not loaded properly.");
-            return;
-        }
-        const { createFFmpeg, fetchFile } = FFmpegGlobal;
-
-        const ffmpeg = createFFmpeg({ log: true });
-        await ffmpeg.load();
 
         ffmpeg.FS("writeFile", "input.webm", new Uint8Array(webmBuffer));
         await ffmpeg.run("-i", "input.webm", "-c:v", "libx264", "-pix_fmt", "yuv420p", "output.mp4");
@@ -312,6 +308,6 @@ document.getElementById("exportBtn").onclick = async () => {
 
     step();
 };
-</script>
+                                 </script>
 </body>
 </html>
