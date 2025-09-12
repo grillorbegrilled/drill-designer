@@ -1,11 +1,10 @@
 
-function drawField(ctx, _stepSizeInches) {
+function drawField(ctx, _stepSizeInches) {  
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     //green
     ctx.fillStyle = "#0b6623";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
+  
 // Draw step grid (light gray)==========
 // Draw vertical grid lines (x axis)
 for (let x = 0; x <= fieldLengthSteps; x++) {
