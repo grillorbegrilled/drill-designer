@@ -239,62 +239,78 @@
   <script src="maneuvers.js"></script>
   <script src="controls.js"></script>
 
-<!-- ffmpeg.wasm via CDN -->
-<button id="exportBtn">Export Video</button>
+<button id="exportBtn">Export MP4</button>
 <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
 <script>
 document.getElementById("exportBtn").onclick = async () => {
-  console.log("Starting export...");
+    console.log("Starting export...");
 
-  const fps = tempo / 60; // tempo-based fps
-  const interval = 1000 / fps;
-
-  const stream = canvas.captureStream(fps);
-  const recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
-  const chunks = [];
-
-  recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
-  recorder.onstop = async () => {
-    console.log("Recording finished, converting to MP4...");
-    const webmBlob = new Blob(chunks, { type: "video/webm" });
-    const webmBuffer = await webmBlob.arrayBuffer();
-
-    const { createFFmpeg, fetchFile } = FFmpeg;
-    const ffmpeg = createFFmpeg({ log: true });
-    await ffmpeg.load();
-
-    ffmpeg.FS("writeFile", "input.webm", new Uint8Array(webmBuffer));
-    await ffmpeg.run("-i", "input.webm", "-c:v", "libx264", "-pix_fmt", "yuv420p", "output.mp4");
-    const data = ffmpeg.FS("readFile", "output.mp4");
-
-    const mp4Blob = new Blob([data.buffer], { type: "video/mp4" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(mp4Blob);
-    a.download = "recording.mp4";
-    a.click();
-    console.log("Export complete.");
-  };
-
-  recorder.start();
-
-  let frame = 0;
-  const totalFrames = 300; // adjust how many frames you want to render
-  console.log("Rendering...");
-
-  const step = () => {
-    if (frame >= totalFrames) {
-      recorder.stop();
-      return;
+    // Prompt for total frames
+    const totalFrames = parseInt(prompt("Enter total frames to export:"), 10);
+    if (!totalFrames || totalFrames <= 0) {
+        alert("Invalid number of frames");
+        return;
     }
-    ctx.fillStyle = "#0b6623"; // background every frame
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    advance(); // your existing animation step
-    frame++;
-    setTimeout(step, interval);
-  };
+    const fps = tempo / 60; // tempo-based fps
+    const interval = 1000 / fps;
 
-  step();
+    const stream = canvas.captureStream(fps);
+    const recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
+    const chunks = [];
+
+    recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+    recorder.onstop = async () => {
+        console.log("Recording finished, converting to MP4...");
+        const webmBlob = new Blob(chunks, { type: "video/webm" });
+        const webmBuffer = await webmBlob.arrayBuffer();
+
+        const FFmpegGlobal = window.FFmpeg || window.FFmpegWASM;
+        if (!FFmpegGlobal) {
+            alert("FFmpeg not loaded properly.");
+            return;
+        }
+        const { createFFmpeg, fetchFile } = FFmpegGlobal;
+
+        const ffmpeg = createFFmpeg({ log: true });
+        await ffmpeg.load();
+
+        ffmpeg.FS("writeFile", "input.webm", new Uint8Array(webmBuffer));
+        await ffmpeg.run("-i", "input.webm", "-c:v", "libx264", "-pix_fmt", "yuv420p", "output.mp4");
+
+        const data = ffmpeg.FS("readFile", "output.mp4");
+        const mp4Blob = new Blob([data.buffer], { type: "video/mp4" });
+
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(mp4Blob);
+        a.download = "recording.mp4";
+        a.click();
+
+        console.log("Export complete.");
+    };
+
+    recorder.start();
+
+    let frame = 0;
+    console.log("Rendering...");
+
+    const step = () => {
+        if (frame >= totalFrames) {
+            recorder.stop();
+            return;
+        }
+
+        // Draw background each frame
+        ctx.fillStyle = "#0b6623";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        advance(); // your existing animation logic
+        frame++;
+        setTimeout(step, interval); // match tempo
+    };
+
+    step();
 };
 </script>
 </body>
