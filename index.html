@@ -240,63 +240,7 @@
   <script src="controls.js"></script>
 
 <!-- ffmpeg.wasm via CDN -->
-<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
-<button id="exportBtn">Export MP4</button>
-
-<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
-
-<script>
-const exportBtn = document.getElementById("exportBtn");
-
-exportBtn.addEventListener("click", async () => {
-    const totalFrames = parseInt(prompt("How many frames?"), 10);
-    if (isNaN(totalFrames) || totalFrames <= 0) return;
-
-    await exportMP4(totalFrames);
-});
-
-async function exportMP4(totalFrames) {
-    let chunks = [];
-    currentStep = 0;
-
-    // Pick a decent capture FPS (doesn't change tempo)
-    const fps = 30;
-    const stream = canvas.captureStream(fps);
-    const recorder = new MediaRecorder(stream, { mimeType: "video/webm;codecs=vp9" });
-
-    recorder.ondataavailable = e => {
-        if (e.data && e.data.size > 0) chunks.push(e.data);
-    };
-
-    function download(blob, name) {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = name;
-        a.click();
-        URL.revokeObjectURL(url);
-    }
-
-    recorder.onstop = async () => {
-        const webm = new Blob(chunks, { type: "video/webm" });
-        console.log("✅ WebM recorded");
-
-        const { createFFmpeg, fetchFile } = FFmpeg;
-        const ffmpeg = createFFmpeg({ log: true });
-        await ffmpeg.load();
-
-        ffmpeg.FS("writeFile", "input.webm", await fetchFile(webm));
-        console.log("🔄 Converting to MP4...");
-        await ffmpeg.run("-i", "input.webm", "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "output.mp4");
-        const mp4Data = ffmpeg.FS("readFile", "output.mp4");
-
-        const mp4Blob = new Blob([mp4Data.buffer], { type: "video/mp4" });
-        console.log("✅ MP4 ready");
-        download(mp4Blob, `canvas-animation-tempo.mp4`);
-    };
-
-    recorder.start();
-
+<button id="exportBtn">Export Video</button>
     // Render frames based on TEMPO, not <button id="exportBtn">Export MP4</button>
 <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
 <script>
