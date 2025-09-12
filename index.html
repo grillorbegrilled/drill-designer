@@ -242,6 +242,9 @@
 
 <!-- ffmpeg.wasm via CDN -->
 <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
+<button id="exportBtn">Export MP4</button>
+
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
 
 <script>
 const exportBtn = document.getElementById("exportBtn");
@@ -250,19 +253,17 @@ exportBtn.addEventListener("click", async () => {
     const totalFrames = parseInt(prompt("How many frames?"), 10);
     if (isNaN(totalFrames) || totalFrames <= 0) return;
 
-    const fps = parseInt(prompt("Frames per second? (default 30)"), 10) || 30;
-
-    await exportMP4(totalFrames, fps);
+    await exportMP4(totalFrames);
 });
 
-async function exportMP4(totalFrames, fps) {
+async function exportMP4(totalFrames) {
     let chunks = [];
     currentStep = 0;
 
+    // Pick a decent capture FPS (doesn't change tempo)
+    const fps = 30;
     const stream = canvas.captureStream(fps);
-    const recorder = new MediaRecorder(stream, {
-        mimeType: "video/webm;codecs=vp9"
-    });
+    const recorder = new MediaRecorder(stream, { mimeType: "video/webm;codecs=vp9" });
 
     recorder.ondataavailable = e => {
         if (e.data && e.data.size > 0) chunks.push(e.data);
@@ -279,40 +280,40 @@ async function exportMP4(totalFrames, fps) {
 
     recorder.onstop = async () => {
         const webm = new Blob(chunks, { type: "video/webm" });
-        console.log("✅ WebM ready");
+        console.log("✅ WebM recorded");
 
-        // Initialize ffmpeg.wasm
         const { createFFmpeg, fetchFile } = FFmpeg;
         const ffmpeg = createFFmpeg({ log: true });
         await ffmpeg.load();
 
-        // Write WebM into ffmpeg’s virtual FS
         ffmpeg.FS("writeFile", "input.webm", await fetchFile(webm));
-
-        // Convert to MP4 (H.264)
         console.log("🔄 Converting to MP4...");
         await ffmpeg.run("-i", "input.webm", "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "output.mp4");
-
-        // Read MP4 back
         const mp4Data = ffmpeg.FS("readFile", "output.mp4");
-        const mp4Blob = new Blob([mp4Data.buffer], { type: "video/mp4" });
 
+        const mp4Blob = new Blob([mp4Data.buffer], { type: "video/mp4" });
         console.log("✅ MP4 ready");
-        download(mp4Blob, `canvas-animation-${fps}fps.mp4`);
+        download(mp4Blob, `canvas-animation-tempo.mp4`);
     };
 
     recorder.start();
 
-    // Render frames sequentially (no timing drift)
-    for (let frame = 0; frame < totalFrames; frame++) {
+    // Render frames based on TEMPO, not requestAnimationFrame
+    let frame = 0;
+    const frameInterval = (60 / tempo) * 1000; // match playLoop timing
+
+    function renderNext() {
+        if (frame >= totalFrames) {
+            recorder.stop();
+            return;
+        }
         advance(true);
         render();
         console.log(`Rendering frame ${frame + 1} / ${totalFrames}`);
-        await new Promise(r => requestAnimationFrame(r));
+        frame++;
+        setTimeout(renderNext, frameInterval);
     }
 
-    recorder.stop();
+    renderNext();
 }
 </script>
-</body>
-</html>
