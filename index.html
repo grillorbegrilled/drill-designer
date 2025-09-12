@@ -239,13 +239,17 @@
   <script src="maneuvers.js"></script>
   <script src="controls.js"></script>
 
-<button id="exportBtn">Export MP4</button>
-<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js"></script>
-<script>
+<button id="exportBtn">Export video</button>
+
+<script type="module">
+import { createFFmpeg, fetchFile } from 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.6/dist/ffmpeg.min.js';
+
 document.getElementById("exportBtn").onclick = async () => {
     console.log("Starting export...");
+    const ffmpeg = createFFmpeg({ log: true });
+    await ffmpeg.load();
 
-    // Prompt for total frames
+        // Prompt for total frames
     const totalFrames = parseInt(prompt("Enter total frames to export:"), 10);
     if (!totalFrames || totalFrames <= 0) {
         alert("Invalid number of frames");
@@ -254,12 +258,6 @@ document.getElementById("exportBtn").onclick = async () => {
 
     const fps = tempo / 60; // tempo-based fps
     const interval = 1000 / fps;
-
-    const { createFFmpeg, fetchFile } = FFmpeg;
-    const ffmpeg = createFFmpeg({ log: true });
-    console.log("Loading FFmpeg.wasm, please wait...");
-    await ffmpeg.load();
-    console.log("FFmpeg loaded.");
 
     const stream = canvas.captureStream(fps);
     const recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
