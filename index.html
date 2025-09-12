@@ -259,7 +259,10 @@ exportBtn.addEventListener("click", async () => {
 
     let recorder;
     try {
-        recorder = new MediaRecorder(stream, options);
+        //recorder = new MediaRecorder(stream, options);
+        recorder = new MediaRecorder(stream, {
+    mimeType: "video/mp4" // might fail in Chrome/Firefox
+        });
     } catch (e) {
         console.error("MediaRecorder not supported:", e);
         alert("Your browser does not support MediaRecorder.");
