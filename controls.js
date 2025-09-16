@@ -196,14 +196,11 @@ window.onload = () => {
         reader.readAsText(file);
     });
 
-    const slider = document.getElementById("tempo-slider");
-    const valueDisplay = document.getElementById("tempo-value");
-    slider.value = tempo;
-    valueDisplay.textContent = tempo;
-    slider.addEventListener("input", () => {
-      tempo = parseInt(slider.value, 10);
-      valueDisplay.textContent = tempo;
-    });
+const tempoInput = document.getElementById("tempo-input");
+tempoInput.value = tempo;
+tempoInput.addEventListener("input", () => {
+  tempo = parseInt(tempoInput.value, 10);
+});
     
     document.getElementById("playBtn").addEventListener("click", togglePlay);
     document.getElementById("rewindBtn").addEventListener("click", rewind);
