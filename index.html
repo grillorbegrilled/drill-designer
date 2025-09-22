@@ -68,6 +68,32 @@
     <button id="addKidConfirmBtn">✔️</button>
     <button id="addKidCancelBtn">❌</button>
   </div>
+    <!-- Reset Color Modal -->
+<div id="resetColorMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 300px; z-index: 1000;">
+  <h3>Reset Color</h3>
+  <label>
+    New Color:
+    <select id="resetColorSelect">
+      <option value="gold">Yellow</option>
+      <option value="black">Black</option>
+      <option value="red">Red</option>
+      <option value="limeGreen">Green</option>
+      <option value="blue">Blue</option>
+      <option value="purple">Purple</option>
+      <option value="cyan">Cyan</option>
+      <option value="white">White</option>
+      <option value="gray">Gray</option>
+      <option value="maroon">Maroon</option>
+      <option value="orange">Orange</option>
+      <option value="lightBlue">Light Blue</option>
+      <option value="magenta">Magenta</option>
+      <option value="brown">Brown</option>
+    </select>
+  </label>
+  <br><br>
+  <button id="resetColorConfirmBtn">✔️</button>
+  <button id="resetColorCancelBtn">❌</button>
+</div>
   <!--Step-Off Modal-->
   <div id="stepOffMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 500px; z-index: 1000;">
     <h3 id="stepOffTitle"></h3>
@@ -191,6 +217,7 @@
       <button id="addKidBtn">💂➕</button>
       <!--Removing kids-->
       <button id="removeKidBtn">💂➖</button>
+  <button id="openResetColorMenuBtn">🎨</button>
     </div>
     <div class="pad-row">
       <button id="selectAllBtn">Select All</button>
