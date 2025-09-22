@@ -419,6 +419,39 @@ tempoInput.addEventListener("input", () => {
     
       disableAddMode();
     });
+
+    // Reset Color menu
+const resetColorMenu = document.getElementById("resetColorMenu");
+const resetColorSelect = document.getElementById("resetColorSelect");
+const resetColorConfirmBtn = document.getElementById("resetColorConfirmBtn");
+const resetColorCancelBtn = document.getElementById("resetColorCancelBtn");
+const openResetColorMenuBtn = document.getElementById("openResetColorMenuBtn");
+
+function enableResetColorMenu() {
+  if (selectedIds.size === 0) {
+    alert("No kids selected.");
+    return;
+  }
+  resetColorMenu.style.display = "block";
+}
+
+function disableResetColorMenu() {
+  resetColorMenu.style.display = "none";
+}
+
+openResetColorMenuBtn.addEventListener("click", enableResetColorMenu);
+resetColorCancelBtn.addEventListener("click", disableResetColorMenu);
+
+resetColorConfirmBtn.addEventListener("click", () => {
+  const newColor = resetColorSelect.value;
+  for (let kid of kids) {
+    if (selectedIds.has(kid.id)) {
+      kid.c = newColor;
+    }
+  }
+  render();
+  disableResetColorMenu();
+});
     
     // Directional buttons
     document.getElementById("moveGridUp").addEventListener("click", () => {
