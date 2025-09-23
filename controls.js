@@ -444,11 +444,23 @@ resetColorCancelBtn.addEventListener("click", disableResetColorMenu);
 
 resetColorConfirmBtn.addEventListener("click", () => {
   const newColor = resetColorSelect.value;
+
+  // Update current kids
   for (let kid of kids) {
     if (selectedIds.has(kid.id)) {
       kid.c = newColor;
     }
   }
+
+  // Update all snapshots
+  for (let [step, snap] of snapshots) {
+    for (let kid of snap) {
+      if (selectedIds.has(kid.id)) {
+        kid.c = newColor;
+      }
+    }
+  }
+
   render();
   disableResetColorMenu();
 });
