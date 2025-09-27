@@ -98,6 +98,20 @@ function toggleSelectionInRect(p1, p2) {
 window.onload = () => {
   // Initialize viewport field
   //drawStaticField();
+
+ document.getElementById('snapshotBtn').addEventListener('click', () => {
+      const filteredKids = kids.map(({ ch, ...rest }) => rest);
+      const jsonStr = JSON.stringify(filteredKids, null, 2);
+      const blob = new Blob([jsonStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "kids.json";
+      a.click();
+
+      URL.revokeObjectURL(url);
+    });
     
   function resetDrag() {
     selectDragging = false;
