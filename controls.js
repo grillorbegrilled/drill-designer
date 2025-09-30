@@ -177,38 +177,43 @@ window.onload = () => {
       });
 
     document.getElementById('loadBtn').addEventListener('click', () => {
-      console.log("Load button clicked.");
-      const fileInput = document.getElementById('fileInput');
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Please select a JSON file first.");
+  console.log("Load button clicked.");
+  const fileInput = document.getElementById('fileInput');
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("Please select a JSON file first.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    console.log("Loading...");
+    try {
+      const json = JSON.parse(event.target.result);
+
+      if (!Array.isArray(json)) {
+        alert("Invalid format: JSON must be an array.");
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        console.log("Loading...");
-        try {
-          const json = JSON.parse(event.target.result);
-
-          if (!Array.isArray(json)) {
-            alert("Invalid format: JSON must be an array.");
-            return;
-          }
-
-          kids = json;
-          //alert("JSON loaded successfully! 'kids' array updated.");
-          console.log(`Loaded ${kids.length} kids`);
-          document.getElementById('projectName').value = file.name.replace(/\.json$/, "");
-          setStartingFormation();
-          render();
-        } catch (e) {
-          alert("Error parsing JSON: " + e.message);
+      kids = json.map(kid => {
+        if (!kid.hasOwnProperty('ch')) {
+          kid.ch = [];
         }
-      };
+        return kid;
+      });
 
-        reader.readAsText(file);
-    });
+      console.log(`Loaded ${kids.length} kids`);
+      document.getElementById('projectName').value = file.name.replace(/\.json$/, "");
+      setStartingFormation();
+      render();
+    } catch (e) {
+      alert("Error parsing JSON: " + e.message);
+    }
+  };
+
+  reader.readAsText(file);
+});
 
 const tempoInput = document.getElementById("tempo-input");
 tempoInput.value = tempo;
