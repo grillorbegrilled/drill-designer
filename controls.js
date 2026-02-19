@@ -624,6 +624,54 @@ resetColorConfirmBtn.addEventListener("click", () => {
         document.getElementById("stepOffConfirmBtn").style.display = 'none';
         enableStepOffMenu(); 
     });
+
+    document.getElementById("captureBtn").addEventListener("click", () => {
+      const originalCanvas = document.getElementById("fieldCanvas");
+      const origWidth = originalCanvas.width;
+      const origHeight = originalCanvas.height;
+    
+      // Letter-size landscape at 150 DPI
+      const DPI = 150;
+      const LETTER_WIDTH_IN = 11;
+      const LETTER_HEIGHT_IN = 8.5;
+    
+      const exportWidth = LETTER_WIDTH_IN * DPI;   // 1650
+      const exportHeight = LETTER_HEIGHT_IN * DPI; // 1275
+    
+      const scaleX = exportWidth / origWidth;
+      const scaleY = exportHeight / origHeight;
+    
+      const exportCanvas = document.createElement("canvas");
+      exportCanvas.width = exportWidth;
+      exportCanvas.height = exportHeight;
+      const exportCtx = exportCanvas.getContext("2d");
+    
+      // White background
+      exportCtx2.fillStyle = "#ffffff";
+      exportCtx2.fillRect(0, 0, exportWidth, exportHeight);
+    
+      exportCtx.save();
+      exportCtx.scale(scaleX, scaleY);
+    
+      // Re-render your field + objects in print colors
+      drawFieldBase(exportCtx);
+      drawObjects(exportCtx);
+    
+      exportCtx.restore();
+    
+      // Add currentStep in top-left
+      exportCtx.fillStyle = "#000";
+      exportCtx.font = "20px Arial";
+      exportCtx.fillText("Step: " + currentStep, 20, 30);
+    
+      // Export as compressed JPEG
+      const dataURL = exportCanvas.toDataURL("image/jpeg", 0.85);
+    
+      const link = document.createElement("a");
+      link.href = dataURL;
+      link.download = "step-" + currentStep + ".jpg";
+      link.click();
+    });
     
 ////////////////////////////////MUST BE LAST////////////////////////////////////    
     setStartingFormation();
