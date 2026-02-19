@@ -1,5 +1,5 @@
 
-function drawField(ctx, _stepSizeInches) {  
+function drawField(ctx) {  
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     //green
     ctx.fillStyle = "#0b6623";
