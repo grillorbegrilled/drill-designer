@@ -655,8 +655,8 @@ window.onload = () => {
     exportCtx.scale(scaleX, scaleY);
 
     // Re-render your field + objects in print colors
-    drawFieldBase(exportCtx);
-    drawObjects(exportCtx);
+    drawField(exportCtx);
+    render(exportCtx);
 
     exportCtx.restore();
 
