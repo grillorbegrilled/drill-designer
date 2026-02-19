@@ -1,80 +1,113 @@
-
-function drawField(ctx, forPrint = false) {  
+function drawField(ctx) {  
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     //green
-    ctx.fillStyle = forPrint ? "white" : "#0b6623";
+    ctx.fillStyle = "#0b6623";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+// Draw step grid (light gray)==========
+// Draw vertical grid lines (x axis)
+for (let x = 0; x <= fieldLengthSteps; x++) {
+    // Skip yardlines here, they’re drawn later
+    if (x % 8 === 0) continue;
 
-    //add yard lines and numbers============
-    ctx.lineWidth = 3;
-    ctx.font = `${scaleY * (72 / stepSizeInches)}px sans-serif`; // 2 yards tall
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    
-    const numberCenterSteps = 288 / stepSizeInches;
-    const numberYTop = numberCenterSteps * scaleY;
-    const numberYBottom = ctx.canvas.height - numberCenterSteps * scaleY;
-    
-    for (let x = 0; x <= fieldLengthSteps; x += 8) {
-        const px = x * scaleX;
+    ctx.beginPath();
+    ctx.moveTo(x * scaleX, 0);
+    ctx.lineTo(x * scaleX, ctx.canvas.height);
 
-        ctx.strokeStyle = forPrint ? "black" : "white";
-        ctx.beginPath();
-        ctx.moveTo(px, 0);
-        ctx.lineTo(px, ctx.canvas.height);
-        ctx.stroke();
-    
-        // Determine yard number
-        let yardsFromLeft = (x / 8) * 5;
-        let yardNumber = yardsFromLeft <= 50 ? yardsFromLeft : 100 - yardsFromLeft;
-    
-        // Only label multiples of 10 (not 5, 15, 25, etc.)
-        if (yardNumber % 10 === 0 && yardNumber !== 0) {
-            ctx.strokeStyle = forPrint ? "lightgray" : "white";
-            
-            const label = String(yardNumber);
-            // Bottom-facing number
-            ctx.fillText(label, px, numberYBottom);
-    
-            // Top-facing number (rotated)
-            ctx.save();
-            ctx.translate(px, numberYTop);
-            ctx.rotate(Math.PI);
-            ctx.fillText(label, 0, 0);
-            ctx.restore();
-        }
-
-    // Draw vertical grid lines (x axis)
-    for (let x = 0; x <= fieldLengthSteps; x++) {
-        // Skip yardlines here, they’re drawn later
-        if (x % 8 === 0) continue;
-    
-        ctx.beginPath();
-        ctx.moveTo(x * scaleX, 0);
-        ctx.lineTo(x * scaleX, ctx.canvas.height);
-    
-        if (x % 4 === 0) {
-            ctx.lineWidth = 1; // every 4th
-        } else {
-            ctx.lineWidth = 0.5; // normal
-        }
-        ctx.strokeStyle = forPrint ? "black" : "white";
-        ctx.stroke();
+    if (x % 4 === 0) {
+        ctx.lineWidth = 1; // every 4th
+    } else {
+        ctx.lineWidth = 0.5; // normal
     }
-    
-    // Draw horizontal grid lines (y axis)
-    for (let y = 0; y <= fieldWidthSteps; y++) {
-        ctx.beginPath();
-        ctx.moveTo(0, y * scaleY);
-        ctx.lineTo(ctx.canvas.width, y * scaleY);
-    
-        if (y % 4 === 0) {
-            ctx.lineWidth = 1; // every 4th (including multiples of 8)
-        } else {
-            ctx.lineWidth = 0.5; // normal
-        }
-        ctx.strokeStyle = forPrint ? "black" : "white";
-        ctx.stroke();
+    ctx.strokeStyle = "white";
+    ctx.stroke();
+}
+
+// Draw horizontal grid lines (y axis)
+for (let y = 0; y <= fieldWidthSteps; y++) {
+    ctx.beginPath();
+    ctx.moveTo(0, y * scaleY);
+    ctx.lineTo(ctx.canvas.width, y * scaleY);
+
+    if (y % 4 === 0) {
+        ctx.lineWidth = 1; // every 4th (including multiples of 8)
+    } else {
+        ctx.lineWidth = 0.5; // normal
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+    ctx.strokeStyle = "white";
+    ctx.stroke();
+}
+
+//add yard lines and numbers============
+ctx.lineWidth = 3;
+ctx.strokeStyle = "white";
+ctx.fillStyle = "white";
+ctx.font = `${scaleY * (72 / stepSizeInches)}px sans-serif`; // 2 yards tall
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+
+const numberCenterSteps = 288 / stepSizeInches;
+const numberYTop = numberCenterSteps * scaleY;
+const numberYBottom = ctx.canvas.height - numberCenterSteps * scaleY;
+
+for (let x = 0; x <= fieldLengthSteps; x += 8) {
+    const px = x * scaleX;
+
+    // Draw all yard lines
+    ctx.beginPath();
+    ctx.moveTo(px, 0);
+    ctx.lineTo(px, ctx.canvas.height);
+    ctx.stroke();
+
+    // Determine yard number
+    let yardsFromLeft = (x / 8) * 5;
+    let yardNumber = yardsFromLeft <= 50 ? yardsFromLeft : 100 - yardsFromLeft;
+
+    // Only label multiples of 10 (not 5, 15, 25, etc.)
+    if (yardNumber % 10 === 0 && yardNumber !== 0) {
+        const label = String(yardNumber);
+
+        // Bottom-facing number
+        ctx.fillText(label, px, numberYBottom);
+
+        // Top-facing number (rotated)
+        ctx.save();
+        ctx.translate(px, numberYTop);
+        ctx.rotate(Math.PI);
+        ctx.fillText(label, 0, 0);
+        ctx.restore();
     }
 }
 
@@ -87,7 +120,7 @@ function drawField(ctx, forPrint = false) {
     let topHashY = hashFromSidelineSteps * scaleY;
     let bottomHashY = ctx.canvas.height - topHashY;
 
-    ctx.strokeStyle = forPrint ? "black" : "white";
+    ctx.strokeStyle = "white";
     ctx.lineWidth = 3;
 
     for (let x = 0; x <= fieldLengthSteps; x += 8) {
@@ -102,7 +135,7 @@ function drawField(ctx, forPrint = false) {
         ctx.lineTo(px + 5, bottomHashY);
         ctx.stroke();
     }
-    
+
 //return========
     return { scaleX, scaleY };
 }
