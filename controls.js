@@ -631,19 +631,16 @@ window.onload = () => {
     const origWidth = originalCanvas.width;
     const origHeight = originalCanvas.height;
 
-    const DPI = 150;
+    const dpi = 150;
     const printWidthInches = 6;
 
-    const scaleX = (printWidthInches * DPI) / origWidth;
-    const scaleY = scaleX * origHeight;
-
     const exportCanvas = document.createElement("canvas");
-    exportCanvas.width = exportWidth;
-    exportCanvas.height = exportHeight;
+    exportCanvas.width = dpi * printWidthInches;
+    exportCanvas.height = targetWidth * (origHeight / origWidth);
+    
     const exportCtx = exportCanvas.getContext("2d");
-
     exportCtx.save();
-    exportCtx.scale(scaleX, scaleY);
+    ctx.scale(exportCanvas.width / origWidth, exportCanvas.height / originalHeight);
 
     // Re-render your field + objects in print colors
     drawField(exportCtx);
