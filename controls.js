@@ -633,14 +633,10 @@ window.onload = () => {
 
     // Letter-size landscape at 150 DPI
     const DPI = 150;
-    const LETTER_WIDTH_IN = 11;
-    const LETTER_HEIGHT_IN = 8.5;
+    const printWidthInches = 6;
 
-    const exportWidth = LETTER_WIDTH_IN * DPI;   // 1650
-    const exportHeight = LETTER_HEIGHT_IN * DPI; // 1275
-
-    const scaleX = exportWidth / origWidth;
-    const scaleY = exportHeight / origHeight;
+    const scaleX = (printWidthInches * DPI) / origWidth;
+    const scaleY = scaleX * origHeight;
 
     const exportCanvas = document.createElement("canvas");
     exportCanvas.width = exportWidth;
