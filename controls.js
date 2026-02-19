@@ -648,8 +648,8 @@ window.onload = () => {
     const exportCtx = exportCanvas.getContext("2d");
 
     // White background
-    exportCtx2.fillStyle = "#ffffff";
-    exportCtx2.fillRect(0, 0, exportWidth, exportHeight);
+    exportCtx.fillStyle = "#ffffff";
+    exportCtx.fillRect(0, 0, exportWidth, exportHeight);
 
     exportCtx.save();
     exportCtx.scale(scaleX, scaleY);
