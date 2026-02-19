@@ -658,7 +658,7 @@ window.onload = () => {
 
   document.getElementById("printModeBtn").addEventListener("click", () => {
     printMode = !printMode;
-    drawField();
+    drawField(ctx);
     render();
   });
 
