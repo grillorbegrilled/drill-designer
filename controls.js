@@ -627,39 +627,33 @@ window.onload = () => {
   });
 
   document.getElementById("captureBtn").addEventListener("click", () => {
-    const originalCanvas = document.getElementById("fieldCanvas");
-    const origWidth = originalCanvas.width;
-    const origHeight = originalCanvas.height;
+    const canvas = document.getElementById('fieldCanvas');
+    const imageDataURL = canvas.toDataURL('image/png');
 
-    const dpi = 150;
-    const printWidthInches = 6;
+    // Create a temporary canvas to overlay text
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    const tempCtx = tempCanvas.getContext('2d');
 
-    const exportCanvas = document.createElement("canvas");
-    exportCanvas.width = dpi * printWidthInches;
-    exportCanvas.height = exportCanvas.width * (origHeight / origWidth);
-    
-    const exportCtx = exportCanvas.getContext("2d");
-    exportCtx.save();
-    ctx.scale(exportCanvas.width / origWidth, exportCanvas.height / origHeight);
+    // Load the PNG into the temporary canvas
+    const img = new Image();
+    img.onload = () => {
+        tempCtx.drawImage(img, 0, 0);
 
-    // Re-render your field + objects in print colors
-    drawField(exportCtx);
-    render(exportCtx);
+        // Add the text
+        tempCtx.font = '20px Arial';
+        tempCtx.fillStyle = 'black';
+        tempCtx.textBaseline = 'top';
+        tempCtx.fillText(`Step ${currentStep}`, 10, 10);
 
-    exportCtx.restore();
-
-    // Add currentStep in top-left
-    exportCtx.fillStyle = "black";
-    exportCtx.font = "20px Arial";
-    exportCtx.fillText("Step: " + currentStep, 20, 30);
-
-    // Export as compressed JPEG
-    const dataURL = exportCanvas.toDataURL("image/jpeg", 0.85);
-
-    const link = document.createElement("a");
-    link.href = dataURL;
-    link.download = "step-" + currentStep + ".jpg";
-    link.click();
+        // Trigger download
+        const link = document.createElement('a');
+        link.download = `step_${currentStep}.png`;
+        link.href = tempCanvas.toDataURL('image/png');
+        link.click();
+    };
+    img.src = imageDataURL;
   });
 
   ////////////////////////////////MUST BE LAST////////////////////////////////////    
