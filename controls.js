@@ -636,7 +636,7 @@ window.onload = () => {
 
     const exportCanvas = document.createElement("canvas");
     exportCanvas.width = dpi * printWidthInches;
-    exportCanvas.height = targetWidth * (origHeight / origWidth);
+    exportCanvas.height = exportCanvas.width * (origHeight / origWidth);
     
     const exportCtx = exportCanvas.getContext("2d");
     exportCtx.save();
