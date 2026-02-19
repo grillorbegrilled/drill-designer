@@ -1,7 +1,7 @@
-function drawField(ctx) {  
+function drawField(ctx, forPrint = false) {  
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     //green
-    ctx.fillStyle = "#0b6623";
+    ctx.fillStyle = forPrint ? "white" : "#0b6623";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   
 // Draw step grid (light gray)==========
@@ -19,7 +19,7 @@ for (let x = 0; x <= fieldLengthSteps; x++) {
     } else {
         ctx.lineWidth = 0.5; // normal
     }
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle = forPrint ? "black" : "white";
     ctx.stroke();
 }
 
@@ -33,48 +33,16 @@ for (let y = 0; y <= fieldWidthSteps; y++) {
         ctx.lineWidth = 1; // every 4th (including multiples of 8)
     } else {
         ctx.lineWidth = 0.5; // normal
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle = forPrint ? "black" : "white";
     ctx.stroke();
 }
 
 //add yard lines and numbers============
 ctx.lineWidth = 3;
-ctx.strokeStyle = "white";
-ctx.fillStyle = "white";
-ctx.font = `${scaleY * (72 / stepSizeInches)}px sans-serif`; // 2 yards tall
+ctx.strokeStyle = forPrint ? "black" : "white";
+ctx.fillStyle = forPrint ? "lightgray" : "white";
+ctx.font = `${scaleY * (72 / stepSizeInches) * 1.5}px sans-serif`; // 2 yards tall
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
 
@@ -120,7 +88,7 @@ for (let x = 0; x <= fieldLengthSteps; x += 8) {
     let topHashY = hashFromSidelineSteps * scaleY;
     let bottomHashY = ctx.canvas.height - topHashY;
 
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle = forPrint ? "black" : "white";
     ctx.lineWidth = 3;
 
     for (let x = 0; x <= fieldLengthSteps; x += 8) {
