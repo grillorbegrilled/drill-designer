@@ -631,7 +631,6 @@ window.onload = () => {
     const origWidth = originalCanvas.width;
     const origHeight = originalCanvas.height;
 
-    // Letter-size landscape at 150 DPI
     const DPI = 150;
     const printWidthInches = 6;
 
@@ -643,10 +642,6 @@ window.onload = () => {
     exportCanvas.height = exportHeight;
     const exportCtx = exportCanvas.getContext("2d");
 
-    // White background
-    exportCtx.fillStyle = "#ffffff";
-    exportCtx.fillRect(0, 0, exportWidth, exportHeight);
-
     exportCtx.save();
     exportCtx.scale(scaleX, scaleY);
 
@@ -657,7 +652,7 @@ window.onload = () => {
     exportCtx.restore();
 
     // Add currentStep in top-left
-    exportCtx.fillStyle = "#000";
+    exportCtx.fillStyle = "black";
     exportCtx.font = "20px Arial";
     exportCtx.fillText("Step: " + currentStep, 20, 30);
 
