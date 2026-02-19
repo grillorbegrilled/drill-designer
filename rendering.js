@@ -1,8 +1,6 @@
-function render(context = ctx) {
+function render(context = ctx, forPrint = false) {
     const { scaleX, scaleY } = drawField(context);
-    //context.fillStyle = "#0b6623";
-    //context.fillRect(0, 0, canvas.width, canvas.height);
-    drawKids(context, kids, scaleX, scaleY);
+    drawKids(context, kids, scaleX, scaleY, forPrint);
     updateStepDisplay();
     const slider = document.getElementById("scrubSlider");
     slider.value = currentStep;
@@ -104,16 +102,16 @@ function drawDot(size, x, y, fill, stroke, isSelected, context) {
     context.restore();
 }
 
-function drawKids(context, kids, scaleX, scaleY) {
+function drawKids(context, kids, scaleX, scaleY, forPrint = false) {
   const size = 10;
   kids.forEach(kid => {
     const px = kid.x * scaleX;
     const py = kid.y * scaleY;
     const angleRad = (kid.d * Math.PI) / 180;
 
-    const fill = kid.c || "#ffff00"; // default to yellow
+    const fill = forPrint ? "black" : (kid.c || "#ffff00"); // default to yellow
     const isSelected = selectedIds.has(kid.id);
-    const stroke = "#000";
+    const stroke = "black";
 
     //drawDot(size, px, py, angleRad, fill, stroke, isSelected);
     drawTriangle(size, px, py, angleRad, fill, stroke, isSelected, context);
