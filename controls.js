@@ -640,7 +640,7 @@ window.onload = () => {
     
     const exportCtx = exportCanvas.getContext("2d");
     exportCtx.save();
-    ctx.scale(exportCanvas.width / origWidth, exportCanvas.height / originalHeight);
+    ctx.scale(exportCanvas.width / origWidth, exportCanvas.height / origHeight);
 
     // Re-render your field + objects in print colors
     drawField(exportCtx);
