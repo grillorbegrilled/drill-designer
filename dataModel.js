@@ -6,6 +6,7 @@ let startingFormation = null;
 let snapshots = new Map();
 
 let tempo = 180;
+let printMode = false;
 
 function setStartingFormation()
 {
