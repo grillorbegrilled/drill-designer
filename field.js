@@ -41,7 +41,7 @@ for (let y = 0; y <= fieldWidthSteps; y++) {
 //add yard lines and numbers============
 ctx.lineWidth = 3;
 ctx.strokeStyle = printMode ? "black" : "white";
-ctx.fillStyle = printMode ? "lightgray" : "white";
+ctx.fillStyle = printMode ? "gray" : "white";
 ctx.font = `${scaleY * (72 / stepSizeInches) * 1.5}px sans-serif`; // 2 yards tall
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
