@@ -1,5 +1,5 @@
 function render(context = ctx) {
-    const { scaleX, scaleY } = drawField(context, stepSizeInches);
+    const { scaleX, scaleY } = drawField(context);
     //context.fillStyle = "#0b6623";
     //context.fillRect(0, 0, canvas.width, canvas.height);
     drawKids(context, kids, scaleX, scaleY);
