@@ -656,6 +656,12 @@ window.onload = () => {
     img.src = imageDataURL;
   });
 
+  document.getElementById("printModeBtn").addEventListener("click", () => {
+    printMode = !printMode;
+    drawField();
+    render();
+  });
+
   ////////////////////////////////MUST BE LAST////////////////////////////////////    
   setStartingFormation();
   render();
