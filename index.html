@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Marching Drill Designer</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Marching Drill Designer</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <!-- Add Kid Modal -->
-  <div id="addKidMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 500px; z-index: 1000;">
+  <!--Modals--------------------------------------------------------------------------------->
+  <!-- Add Kids -->
+  <div id="addKidMenu"
+    style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 500px; z-index: 1000;">
     <h3>Add Marchers</h3>
     <label>
       Color:
@@ -36,22 +40,22 @@
     <label>Y spacing: <input type="number" id="addKidSpacingY" value="2" /></label>
     <br><br>
     <div class="maneuver-pad">
-    <label>Direction</label>
-    <div class="pad-row">
-      <button id="addKidNWBtn">↖️</button>
-      <button id="addKidNBtn">⬆️</button>
-      <button id="addKidNEBtn">↗️</button>
+      <label>Direction</label>
+      <div class="pad-row">
+        <button id="addKidNWBtn">↖️</button>
+        <button id="addKidNBtn">⬆️</button>
+        <button id="addKidNEBtn">↗️</button>
+      </div>
+      <div class="pad-row">
+        <button id="addKidWBtn">⬅️</button>
+        <button id="addKidEBtn">➡️</button>
+      </div>
+      <div class="pad-row">
+        <button id="addKidSWBtn">↙️</button>
+        <button id="addKidSBtn">⬇️</button>
+        <button id="addKidSEBtn">↘️</button>
+      </div>
     </div>
-    <div class="pad-row">
-      <button id="addKidWBtn">⬅️</button>
-      <button id="addKidEBtn">➡️</button>
-    </div>
-    <div class="pad-row">
-      <button id="addKidSWBtn">↙️</button>
-      <button id="addKidSBtn">⬇️</button>
-      <button id="addKidSEBtn">↘️</button>
-    </div>
-  </div>
     <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 4px;">
       <button id="moveGridUpBig">🔼8</button>
       <button id="moveGridUp">🔼</button>
@@ -63,39 +67,41 @@
       <button id="moveGridDown">🔽</button>
       <button id="moveGridDownBig">🔽8</button>
     </div>
-      
+
     <br>
     <button id="addKidConfirmBtn">✔️</button>
     <button id="addKidCancelBtn">❌</button>
   </div>
-    <!-- Reset Color Modal -->
-<div id="resetColorMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 300px; z-index: 1000;">
-  <h3>Reset Color</h3>
-  <label>
-    New Color:
-    <select id="resetColorSelect">
-      <option value="gold">Yellow</option>
-      <option value="black">Black</option>
-      <option value="red">Red</option>
-      <option value="limeGreen">Green</option>
-      <option value="blue">Blue</option>
-      <option value="purple">Purple</option>
-      <option value="cyan">Cyan</option>
-      <option value="white">White</option>
-      <option value="gray">Gray</option>
-      <option value="maroon">Maroon</option>
-      <option value="orange">Orange</option>
-      <option value="lightBlue">Light Blue</option>
-      <option value="magenta">Magenta</option>
-      <option value="brown">Brown</option>
-    </select>
-  </label>
-  <br><br>
-  <button id="resetColorConfirmBtn">✔️</button>
-  <button id="resetColorCancelBtn">❌</button>
-</div>
-  <!--Step-Off Modal-->
-  <div id="stepOffMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 500px; z-index: 1000;">
+  <!-- Reset Colors -->
+  <div id="resetColorMenu"
+    style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 300px; z-index: 1000;">
+    <h3>Reset Color</h3>
+    <label>
+      New Color:
+      <select id="resetColorSelect">
+        <option value="gold">Yellow</option>
+        <option value="black">Black</option>
+        <option value="red">Red</option>
+        <option value="limeGreen">Green</option>
+        <option value="blue">Blue</option>
+        <option value="purple">Purple</option>
+        <option value="cyan">Cyan</option>
+        <option value="white">White</option>
+        <option value="gray">Gray</option>
+        <option value="maroon">Maroon</option>
+        <option value="orange">Orange</option>
+        <option value="lightBlue">Light Blue</option>
+        <option value="magenta">Magenta</option>
+        <option value="brown">Brown</option>
+      </select>
+    </label>
+    <br><br>
+    <button id="resetColorConfirmBtn">✔️</button>
+    <button id="resetColorCancelBtn">❌</button>
+  </div>
+  <!--Step-Off/Stack-Up/Drop-Off-->
+  <div id="stepOffMenu"
+    style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 500px; z-index: 1000;">
     <h3 id="stepOffTitle"></h3>
     <!-- Direction Input -->
     <label>Direction</label>
@@ -128,13 +134,47 @@
     <input type="number" id="rippleInput" value="0" min="0" />
     <label for="rippleDelayInput">every</label>
     <input type="number" id="rippleDelayInput" value="8" min="0" />
-  
+
     <button id="stepOffConfirmBtn" style="display:none;">✔️</button>
     <button id="dropOffConfirmBtn" style="display:none;">✔️</button>
     <button id="stepOffCancelBtn">❌</button>
   </div>
-    <input type="text" id="projectName" placeholder="Project name" />
-    <input type="file" id="fileInput" accept=".json" />
+  <!--Pinwheels/Gates-->
+    <div id="pinwheelMenu"
+      style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 280px; z-index: 1000;">
+      <h3>Pinwheel/Gate Settings</h3>
+
+      <label>
+        Vertex:
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <label><input type="radio" name="vertex" value="1fromStart">⏮️</label>
+          <label><input type="radio" name="vertex" value="start">◀️</label>
+          <label><input type="radio" name="vertex" value="center" checked>⏺️</label>
+          <label><input type="radio" name="vertex" value="end">▶️</label>
+          <label><input type="radio" name="vertex" value="1fromEnd">⏭️</label>
+        </div>
+      </label>
+      <br /><br />
+
+      <label>
+        🔃:
+        <input type="checkbox" id="rotationToggle" />
+      </label>
+      <br /><br />
+
+      <label>
+        Steps:
+        <input type="number" id="stepCount" readonly style="width: 60px;" />
+      </label>
+      <br /><br />
+
+      <button id="confirmPinwheelBtn">✔️</button>
+      <button id="cancelPinwheelBtn">❌</button>
+    </div>
+  <!--Main UI--------------------------------------------------------------------------->
+  <!--File info-->
+  <input type="text" id="projectName" placeholder="Project name" />
+  <input type="file" id="fileInput" accept=".json" />
   <div class="pad-row">
     <button id="saveBtn">💾</button>
     <button id="snapshotBtn">📃</button>
@@ -142,6 +182,7 @@
     <label for="tempo-input">BPM:</label>
     <input type="number" id="tempo-input">
   </div>
+  <!--Play, pause, rewind, etc.-->
   <div class="controls">
     <div class="controls-top">
       <button id="rewindBtn">⏮️</button>
@@ -153,12 +194,13 @@
     <div class="controls-bottom">
       <input type="range" id="scrubSlider" min="0" value="0">
     </div>
+    <!--Directions-->
     <div class="maneuver-pad">
       <div class="pad-row">
-          <label>
+        <label>
           Turn & Halt:
           <input type="checkbox" id="turnHaltToggle" />
-          </label>
+        </label>
       </div>
       <div class="pad-row">
         <button id="obliqueLeftBtn">↖️</button>
@@ -182,78 +224,34 @@
       <button id="openStepOffMenuBtn">SO/SU</button>
       <button id="openDropOffMenuBtn">DO</button>
     </div>
-    <!-- Pinwheel modal container -->
-    <div id="pinwheelMenu" style="display:none; position: fixed; background: black; border: 1px solid #ccc; padding: 8px; width: 280px; z-index: 1000;">
-      <h3>Pinwheel/Gate Settings</h3>
-    
-        <label>
-          Vertex:
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <label><input type="radio" name="vertex" value="1fromStart">⏮️</label>
-            <label><input type="radio" name="vertex" value="start">◀️</label>
-            <label><input type="radio" name="vertex" value="center" checked>⏺️</label>
-            <label><input type="radio" name="vertex" value="end">▶️</label>
-            <label><input type="radio" name="vertex" value="1fromEnd">⏭️</label>
-          </div>
-        </label>
-        <br/><br/>
-        
-        <label>
-          🔃:
-          <input type="checkbox" id="rotationToggle" />
-        </label>
-        <br/><br/>
-    
-      <label>
-        Steps:
-        <input type="number" id="stepCount" readonly style="width: 60px;"/>
-      </label>
-      <br/><br/>
-    
-      <button id="confirmPinwheelBtn">✔️</button>
-      <button id="cancelPinwheelBtn">❌</button>
-    </div>
+    <!--Add/Remove/Edit kids-->
     <div class="pad-row">
       <!--Adding kids-->
       <button id="addKidBtn">💂➕</button>
       <!--Removing kids-->
       <button id="removeKidBtn">💂➖</button>
-  <button id="openResetColorMenuBtn">🎨</button>
+      <button id="openResetColorMenuBtn">🎨</button>
     </div>
     <div class="pad-row">
       <button id="selectAllBtn">Select All</button>
       <button id="deselectAllBtn">Deselect All</button>
     </div>
   </div>
-
+  <!--Field Display-->
   <div id="canvas-container">
     <canvas id="fieldCanvas" width="1000" height="500"></canvas>
     <div id="addKidBox" class="hidden"></div>
-  </div>  
-  
+  </div>
+  <!--Statusline and log-->
   <div id="statusDisplay" class="status-display"></div>
   <pre id="log" style="margin-top: 10px; font-family: monospace;"></pre>
-  <script>
-      (function () {
-          const originalLog = console.log;
-          const outputEl = document.getElementById('log');
-        
-          console.log = function (...args) {
-            // Keep original behavior
-            originalLog.apply(console, args);
-        
-            // Format output and write to the page
-            const message = args.map(arg =>
-              typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
-            ).join(' ');
-            
-            outputEl.textContent = message;
-          };
-        })();
+  <!--Video and image export-->
+  <div class="pad-row">
+    <button id="exportBtn">Export Video</button>
+    <button id="captureBtn" style="position: fixed; right: 20px;">📸</button>
+  </div>
 
-      console.log("Ready");
-  </script>
-    
+  <!--scripts--------------------------------------------------------------------->
   <script src="field.js"></script>
   <script src="canvasSetup.js"></script>
   <script src="viewport.js"></script>
@@ -263,99 +261,116 @@
   <script src="pinwheel.js"></script>
   <script src="maneuvers.js"></script>
   <script src="controls.js"></script>
-  <div class="pad-row">
-    <button id="exportBtn">Export Video</button>
-    <button id="captureBtn" style="position: fixed; right: 20px;">📸</button>
-  </div>
-<script>
-document.getElementById("exportBtn").addEventListener("click", async () => {
-  const totalFrames = parseInt(prompt("Enter total frames to export:"), 10);
-  if (!totalFrames || totalFrames <= 0) {
-    alert("Invalid number of frames");
-    return;
-  }
+  <script>
+    (function () {
+      const originalLog = console.log;
+      const outputEl = document.getElementById('log');
 
-  if (typeof tempo !== "number" || tempo <= 0) {
-    alert("tempo is not defined or invalid");
-    return;
-  }
+      console.log = function (...args) {
+        // Keep original behavior
+        originalLog.apply(console, args);
 
-  const fps = tempo / 60; // tempo-based fps (60 -> 1fps, 120 -> 2fps, etc.)
-  const interval = (60 / tempo) * 1000; // ms per frame
+        // Format output and write to the page
+        const message = args.map(arg =>
+          typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+        ).join(' ');
 
-  // pick a supported mime
-  let mime = "video/webm;codecs=vp9";
-  if (!MediaRecorder.isTypeSupported(mime)) {
-    mime = "video/webm;codecs=vp8";
-    if (!MediaRecorder.isTypeSupported(mime)) mime = "video/webm";
-  }
+        outputEl.textContent = message;
+      };
+    })();
 
-  // ensure canvas exists in your page
-  if (typeof canvas === "undefined" || !canvas.captureStream) {
-    alert("canvas or canvas.captureStream() not available");
-    return;
-  }
+    console.log("Ready");
+  </script>
+  <script>
+    document.getElementById("exportBtn").addEventListener("click", async () => {
+      const totalFrames = parseInt(prompt("Enter total frames to export:"), 10);
+      if (!totalFrames || totalFrames <= 0) {
+        alert("Invalid number of frames");
+        return;
+      }
 
-  const stream = canvas.captureStream(fps);
-  let chunks = [];
+      if (typeof tempo !== "number" || tempo <= 0) {
+        alert("tempo is not defined or invalid");
+        return;
+      }
 
-  let recorder;
-  try {
-    recorder = new MediaRecorder(stream, { mimeType: mime });
-  } catch (err) {
-    alert("MediaRecorder not available: " + err);
-    return;
-  }
+      const fps = tempo / 60; // tempo-based fps (60 -> 1fps, 120 -> 2fps, etc.)
+      const interval = (60 / tempo) * 1000; // ms per frame
 
-  recorder.ondataavailable = (e) => {
-    if (e.data && e.data.size > 0) chunks.push(e.data);
-  };
+      // pick a supported mime
+      let mime = "video/webm;codecs=vp9";
+      if (!MediaRecorder.isTypeSupported(mime)) {
+        mime = "video/webm;codecs=vp8";
+        if (!MediaRecorder.isTypeSupported(mime)) mime = "video/webm";
+      }
 
-  recorder.onstop = () => {
-    const blob = new Blob(chunks, { type: "video/webm" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.style.display = "none";
-    a.href = url;
-    a.download = "recording.webm";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    console.log("Export complete.");
-  };
+      // ensure canvas exists in your page
+      if (typeof canvas === "undefined" || !canvas.captureStream) {
+        alert("canvas or canvas.captureStream() not available");
+        return;
+      }
 
-  // Start recording, then immediately kick with an advance so stream becomes live (helps Firefox)
-  recorder.start();
+      const stream = canvas.captureStream(fps);
+      let chunks = [];
 
-  // First frame: call advance() so we process frame 0
-  try {
-    advance(); // calls render() internally (per your implementation)
-  } catch (err) {
-    console.error("advance() threw:", err);
-    recorder.stop();
-    return;
-  }
-  console.log(`Rendering frame 1 / ${totalFrames}`);
-  await new Promise((r) => requestAnimationFrame(r)); // ensure paint
+      let recorder;
+      try {
+        recorder = new MediaRecorder(stream, { mimeType: mime });
+      } catch (err) {
+        alert("MediaRecorder not available: " + err);
+        return;
+      }
 
-  // Subsequent frames: tempo-timed
-  for (let f = 1; f < totalFrames; f++) {
-    await new Promise((r) => setTimeout(r, interval));
-    try {
-      advance();
-    } catch (err) {
-      console.error("advance() threw:", err);
-      break;
-    }
-    console.log(`Rendering frame ${f + 1} / ${totalFrames}`);
-    await new Promise((r) => requestAnimationFrame(r)); // ensure paint
-  }
+      recorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) chunks.push(e.data);
+      };
 
-  // give recorder a moment to capture final frame
-  await new Promise((r) => setTimeout(r, 200));
-  recorder.stop();
-});
-</script>
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: "video/webm" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "recording.webm";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        console.log("Export complete.");
+      };
+
+      // Start recording, then immediately kick with an advance so stream becomes live (helps Firefox)
+      recorder.start();
+
+      // First frame: call advance() so we process frame 0
+      try {
+        advance(); // calls render() internally (per your implementation)
+      } catch (err) {
+        console.error("advance() threw:", err);
+        recorder.stop();
+        return;
+      }
+      console.log(`Rendering frame 1 / ${totalFrames}`);
+      await new Promise((r) => requestAnimationFrame(r)); // ensure paint
+
+      // Subsequent frames: tempo-timed
+      for (let f = 1; f < totalFrames; f++) {
+        await new Promise((r) => setTimeout(r, interval));
+        try {
+          advance();
+        } catch (err) {
+          console.error("advance() threw:", err);
+          break;
+        }
+        console.log(`Rendering frame ${f + 1} / ${totalFrames}`);
+        await new Promise((r) => requestAnimationFrame(r)); // ensure paint
+      }
+
+      // give recorder a moment to capture final frame
+      await new Promise((r) => setTimeout(r, 200));
+      recorder.stop();
+    });
+  </script>
 </body>
+
 </html>
