@@ -139,8 +139,8 @@
     <button id="saveBtn">💾</button>
     <button id="snapshotBtn">📃</button>
     <button id="loadBtn">📂</button>
-        <label for="tempo-input">BPM:</label>
-<input type="number" id="tempo-input">
+    <label for="tempo-input">BPM:</label>
+    <input type="number" id="tempo-input">
   </div>
   <div class="controls">
     <div class="controls-top">
@@ -263,7 +263,10 @@
   <script src="pinwheel.js"></script>
   <script src="maneuvers.js"></script>
   <script src="controls.js"></script>
-<button id="exportBtn">Export Video</button>
+  <div class="pad-row">
+    <button id="exportBtn">Export Video</button>
+    <button id="captureBtn" style="position: fixed; right: 20px;">📸</button>
+  </div>
 <script>
 document.getElementById("exportBtn").addEventListener("click", async () => {
   const totalFrames = parseInt(prompt("Enter total frames to export:"), 10);
