@@ -6,8 +6,7 @@ function drawField(ctx, forPrint = false) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     //add yard lines and numbers============
-    ctx.strokeStyle = forPrint ? "black" : "white";
-    ctx.fillStyle = forPrint ? "lightgray" : "white";
+    ctx.lineWidth = 3;
     ctx.font = `${scaleY * (72 / stepSizeInches)}px sans-serif`; // 2 yards tall
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -18,8 +17,8 @@ function drawField(ctx, forPrint = false) {
     
     for (let x = 0; x <= fieldLengthSteps; x += 8) {
         const px = x * scaleX;
-    
-        ctx.lineWidth = 3;
+
+        ctx.strokeStyle = forPrint ? "black" : "white";
         ctx.beginPath();
         ctx.moveTo(px, 0);
         ctx.lineTo(px, ctx.canvas.height);
@@ -31,8 +30,9 @@ function drawField(ctx, forPrint = false) {
     
         // Only label multiples of 10 (not 5, 15, 25, etc.)
         if (yardNumber % 10 === 0 && yardNumber !== 0) {
+            ctx.strokeStyle = forPrint ? "lightgray" : "white";
+            
             const label = String(yardNumber);
-            ctx.lineWidth = 0; //no outline for numbers
             // Bottom-facing number
             ctx.fillText(label, px, numberYBottom);
     
