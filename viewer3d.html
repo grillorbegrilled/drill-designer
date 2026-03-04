@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Drill Viewer — 3D</title>
+  <script src="https://unpkg.com/mp4-muxer@5.1.1/build/mp4-muxer.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap');
 
@@ -854,98 +855,134 @@ document.getElementById('loadBtn').addEventListener('click', () => {
   reader.readAsText(file);
 });
 
-// ─── Video Export ─────────────────────────────────────────────────────────────
+// ─── Video Export (MP4 via WebCodecs + mp4-muxer) ────────────────────────────
 const exportBtn = document.getElementById('exportBtn');
 
-exportBtn.addEventListener('click', () => {
+exportBtn.addEventListener('click', async () => {
   if (kids.length === 0) { alert('Load a drill file first.'); return; }
 
-  // Detect supported MIME type
-  const mimeTypes = [
-    'video/webm;codecs=vp9',
-    'video/webm;codecs=vp8',
-    'video/webm',
-  ];
-  const mimeType = mimeTypes.find(m => MediaRecorder.isTypeSupported(m)) || 'video/webm';
+  if (typeof VideoEncoder === 'undefined') {
+    alert('Your browser does not support VideoEncoder (WebCodecs). Try Firefox or Chrome.');
+    return;
+  }
 
-  // Capture canvas stream at display framerate
-  const fps = 60;
-  const stream = canvas.captureStream(fps);
-  const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 2_000_000 });
-  const chunks = [];
+  // Parameters
+  const FPS        = 60;                          // video frame rate
+  const BITRATE    = 1_000_000;                   // 1 Mbps — small file, good quality for flat graphics
+  const codecStr   = 'avc1.640028';              // H.264 High Profile Level 4
+  const secPerStep = 60 / tempo;                  // real-time seconds per drill step
+  const usPerStep  = secPerStep * 1_000_000;      // microseconds per drill step
+  const framesPerStep = Math.max(1, Math.round(FPS * secPerStep)); // video frames per drill step
 
-  recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+  // Check codec support
+  const support = await VideoEncoder.isConfigSupported({
+    codec: codecStr, width: W, height: H, bitrate: BITRATE, framerate: FPS
+  });
+  if (!support.supported) {
+    alert('H.264 encoding not supported in this browser. Try Chrome or Firefox.');
+    return;
+  }
 
-  recorder.onstop = () => {
-    const blob = new Blob(chunks, { type: mimeType });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = 'drill-animation.webm';
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
-
-    exportBtn.textContent = '⬇ Export Video';
-    exportBtn.classList.remove('recording');
-    exportBtn.disabled = false;
-    document.getElementById('marcher-count').textContent =
-      `${kids.length} marcher${kids.length !== 1 ? 's' : ''} — export complete ✓`;
-  };
-
-  // Pause live playback
   stopPlay();
-
-  // Rewind to step 0
-  applySnapshot(snapshots.get(0));
-  currentStep = 0;
-  render();
 
   // Find end step
   let maxStep = 0;
   for (const s of snapshots.keys()) if (s > maxStep) maxStep = s;
 
-  exportBtn.textContent = '● Recording…';
+  exportBtn.textContent = '⏳ Encoding…';
   exportBtn.classList.add('recording');
   exportBtn.disabled = true;
+  document.getElementById('marcher-count').textContent = 'Encoding MP4… step 0 / ' + maxStep;
 
-  document.getElementById('marcher-count').textContent =
-    `Recording… step 0 / ${maxStep}`;
+  // Set up muxer
+  const { Muxer, ArrayBufferTarget } = Mp4Muxer;
+  const muxer = new Muxer({
+    target: new ArrayBufferTarget(),
+    video: { codec: 'avc', width: W, height: H },
+    fastStart: 'in-memory'
+  });
 
-  recorder.start();
+  const encoder = new VideoEncoder({
+    output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
+    error: e => { console.error(e); alert('Encoder error: ' + e.message); }
+  });
 
-  // Drive animation frame-by-frame using requestAnimationFrame at the drill tempo
-  const msPerStep = (60 / tempo) * 1000;
-  let lastTime = null;
-  let accumulated = 0;
+  encoder.configure({ codec: codecStr, width: W, height: H, bitrate: BITRATE, framerate: FPS });
 
-  function exportFrame(timestamp) {
-    if (!lastTime) lastTime = timestamp;
-    const delta = timestamp - lastTime;
-    lastTime = timestamp;
-    accumulated += delta;
+  // Render into an OffscreenCanvas so we don't disturb the visible canvas
+  const offscreen = new OffscreenCanvas(W, H);
+  const offCtx    = offscreen.getContext('2d');
 
-    // Advance as many drill steps as time has elapsed
-    while (accumulated >= msPerStep && currentStep <= maxStep) {
-      advance(true);
-      accumulated -= msPerStep;
-    }
+  // Helper: render one drill state onto offscreen, return a VideoFrame
+  function renderOffscreen(timestampUs) {
+    // Copy the visible canvas to offscreen via drawImage
+    offCtx.drawImage(canvas, 0, 0);
+    return new VideoFrame(offscreen, { timestamp: timestampUs });
+  }
 
-    render();
-    document.getElementById('marcher-count').textContent =
-      `Recording… step ${currentStep} / ${maxStep}`;
+  // Rewind simulation to step 0
+  applySnapshot(snapshots.get(0));
+  currentStep = 0;
 
-    if (currentStep <= maxStep) {
-      requestAnimationFrame(exportFrame);
-    } else {
-      // Give the stream one more frame then stop
-      requestAnimationFrame(() => {
-        render();
-        recorder.stop();
-      });
+  let videoFrameIndex = 0;
+
+  // Process in small async chunks so the UI stays responsive
+  async function encodeChunk(fromStep, toStep) {
+    for (let step = fromStep; step <= toStep; step++) {
+      // Draw this drill step onto the visible canvas
+      drawField3D();
+      drawMarchers();
+      drawVignette();
+
+      // Emit framesPerStep video frames for this drill step
+      for (let f = 0; f < framesPerStep; f++) {
+        const timestampUs = Math.round(videoFrameIndex * (1_000_000 / FPS));
+        const frame = renderOffscreen(timestampUs);
+        encoder.encode(frame, { keyFrame: videoFrameIndex % (FPS * 2) === 0 });
+        frame.close();
+        videoFrameIndex++;
+      }
+
+      if (step < maxStep) advance(true);
+
+      document.getElementById('marcher-count').textContent =
+        'Encoding MP4… step ' + step + ' / ' + maxStep;
     }
   }
 
-  requestAnimationFrame(exportFrame);
+  // Encode in chunks of 32 steps, yielding between each so UI updates
+  const CHUNK = 32;
+  for (let s = 0; s <= maxStep; s += CHUNK) {
+    const end = Math.min(s + CHUNK - 1, maxStep);
+    await encodeChunk(s, end);
+    await new Promise(r => setTimeout(r, 0)); // yield to event loop
+  }
+
+  // Flush and finalize
+  await encoder.flush();
+  encoder.close();
+  muxer.finalize();
+
+  const { buffer } = muxer.target;
+  const blob = new Blob([buffer], { type: 'video/mp4' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'drill-animation.mp4';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+
+  // Restore visible canvas to step 0
+  applySnapshot(snapshots.get(0));
+  currentStep = 0;
+  render();
+
+  exportBtn.textContent = '⬇ Export Video';
+  exportBtn.classList.remove('recording');
+  exportBtn.disabled = false;
+  document.getElementById('marcher-count').textContent =
+    kids.length + ' marcher' + (kids.length !== 1 ? 's' : '') +
+    ' — export complete (' + (buffer.byteLength / 1024 / 1024).toFixed(2) + ' MB)';
 });
 
 // ─── Initial draw ─────────────────────────────────────────────────────────────
