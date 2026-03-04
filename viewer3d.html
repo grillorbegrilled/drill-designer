@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drill Viewer — 3D</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap');
+
+    :root {
+      --grass: #0a4a1a;
+      --grass-light: #0d5c20;
+      --line: rgba(255,255,255,0.7);
+      --ui-bg: #0d0d0d;
+      --ui-border: #1e3a1e;
+      --accent: #c8ff00;
+      --accent-dim: #7aaa00;
+      --text: #e8ffe8;
+      --dim: #4a6a4a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--ui-bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      width: 100%;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--ui-border);
+      background: #080808;
+    }
+
+    header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(200,255,0,0.3);
+    }
+
+    header .subtitle {
+      font-size: 0.7rem;
+      color: var(--dim);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    #load-zone {
+      margin: 20px auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 24px;
+      border: 1px dashed var(--ui-border);
+      border-radius: 4px;
+      background: #111;
+      width: 90%;
+      max-width: 900px;
+    }
+
+    #load-zone label {
+      font-size: 0.72rem;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    #fileInput {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text);
+      background: transparent;
+      border: none;
+      outline: none;
+      flex: 1;
+    }
+
+    #fileInput::file-selector-button {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      background: var(--ui-border);
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      padding: 5px 14px;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-right: 12px;
+      letter-spacing: 0.1em;
+    }
+
+    #loadBtn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    #loadBtn:hover { background: #d8ff33; }
+
+    #canvas-wrap {
+      width: 92%;
+      max-width: 960px;
+      position: relative;
+      border: 1px solid var(--ui-border);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(0,0,0,0.8), 0 0 0 1px #1a1a1a;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Controls bar */
+    #controls {
+      width: 92%;
+      max-width: 960px;
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #transport {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ctrl-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 1.3rem;
+      background: #161616;
+      color: var(--text);
+      border: 1px solid var(--ui-border);
+      border-radius: 4px;
+      width: 52px;
+      height: 44px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.1s, border-color 0.1s;
+    }
+
+    .ctrl-btn:hover { background: #1e2e1e; border-color: var(--accent-dim); }
+    .ctrl-btn:active { background: #0a1a0a; }
+
+    .ctrl-btn.active {
+      background: #1a2e00;
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    #step-info {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      min-width: 100px;
+      text-align: center;
+    }
+
+    #bpm-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+      font-size: 0.7rem;
+      color: var(--dim);
+      letter-spacing: 0.12em;
+    }
+
+    #tempo-input {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      background: #161616;
+      color: var(--accent);
+      border: 1px solid var(--ui-border);
+      border-radius: 3px;
+      width: 60px;
+      padding: 4px 8px;
+      text-align: center;
+    }
+
+    #camera-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #camera-row input[type=number] {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      background: #161616;
+      color: var(--accent);
+      border: 1px solid var(--ui-border);
+      border-radius: 3px;
+      width: 56px;
+      padding: 4px 6px;
+      text-align: center;
+    }
+
+    #camera-row input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      background: var(--accent-dim);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    #scrub-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #scrubSlider {
+      flex: 1;
+      height: 6px;
+      appearance: none;
+      background: #1e2e1e;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    #scrubSlider::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(200,255,0,0.5);
+    }
+
+    #scrubSlider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .scrub-label {
+      font-size: 0.65rem;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+      min-width: 28px;
+    }
+
+    #status-bar {
+      font-size: 0.65rem;
+      color: var(--dim);
+      letter-spacing: 0.12em;
+      padding: 6px 0 20px;
+      text-align: center;
+    }
+
+    #status-bar span { color: var(--accent-dim); }
+
+    #exportBtn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      background: #161616;
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      padding: 7px 18px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-left: auto;
+      transition: background 0.1s, border-color 0.1s;
+    }
+
+    #exportBtn:hover { background: #1a2e00; border-color: var(--accent); }
+    #exportBtn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background: #161616;
+    }
+
+    #exportBtn.recording {
+      background: #3a0000;
+      border-color: #ff4444;
+      color: #ff6666;
+      animation: pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Drill Viewer</h1>
+    <div class="subtitle">Faux-3D Perspective</div>
+  </div>
+  <div style="font-size:0.65rem; color:var(--dim); text-align:right; letter-spacing:0.1em;">
+    Load a .json file<br>from Drill Designer
+  </div>
+</header>
+
+<!-- File load -->
+<div id="load-zone">
+  <label>Formation file:</label>
+  <input type="file" id="fileInput" accept=".json" />
+  <button id="loadBtn">Load</button>
+</div>
+
+<!-- 3D Canvas -->
+<div id="canvas-wrap">
+  <canvas id="fieldCanvas" width="1920" height="1080"></canvas>
+</div>
+
+<!-- Controls -->
+<div id="controls">
+  <div id="transport">
+    <button class="ctrl-btn" id="rewindBtn" title="Rewind">⏮</button>
+    <button class="ctrl-btn" id="stepBackBtn" title="Step Back">⏪</button>
+    <button class="ctrl-btn" id="playBtn" title="Play/Stop">▶</button>
+    <button class="ctrl-btn" id="stepFwdBtn" title="Step Forward">⏩</button>
+    <div id="step-info">STEP 0</div>
+    <div id="bpm-wrap">
+      BPM
+      <input type="number" id="tempo-input" value="180" min="40" max="300" />
+    </div>
+    <button id="exportBtn" title="Export animation to video (WebM)">⬇ Export Video</button>
+   </div>
+  <div id="camera-row">
+    <span class="scrub-label" style="min-width:fit-content">DIST FROM FRONT</span>
+    <input type="number" id="camYInput" value="28" min="1" max="300" />
+    <span class="scrub-label" style="min-width:fit-content; margin-left:16px">HEIGHT</span>
+    <input type="number" id="camHInput" value="8" min="1" max="80" />
+  </div>
+  <div id="scrub-row">
+    <span class="scrub-label">0</span>
+    <input type="range" id="scrubSlider" min="0" max="0" value="0" />
+    <span class="scrub-label" id="scrubMax">0</span>
+  </div>
+</div>
+
+<div id="status-bar">
+  <span id="marcher-count">0 marchers loaded</span>
+  &nbsp;·&nbsp; high-Y = front of field
+</div>
+
+<script>
+// ─── Constants matching main app ────────────────────────────────────────────
+const STEP_SIZE_INCHES = 22.5;
+const FIELD_LENGTH_STEPS = (300 * 12) / STEP_SIZE_INCHES; // 160
+const FIELD_WIDTH_STEPS  = 84;
+
+// ─── State ───────────────────────────────────────────────────────────────────
+let kids = [];
+let snapshots = new Map();
+let currentStep = 0;
+let isPlaying = false;
+let tempo = 180;
+let playTimer = null;
+
+// ─── Canvas ──────────────────────────────────────────────────────────────────
+const canvas = document.getElementById('fieldCanvas');
+const ctx    = canvas.getContext('2d');
+const W = canvas.width;   // 1920
+const H = canvas.height;  // 1080
+
+// ─── Perspective camera params ────────────────────────────────────────────────
+// Field grid: X = 0..160 (sideline to sideline), Y = 0..84 (back=0 to front=84)
+// Camera described by:
+//   CAM_DIST_FRONT : horizontal ground distance from eye to near edge (y=84)  [steps]
+//   CAM_HEIGHT     : eye height above the field plane                         [steps]
+//
+// These define a right triangle → θ = atan2(H, L)
+// project(x, y) uses the markdown formulae with PW=160, PH=84, d=perpendicular dist
+//
+// The viewport is anchored so that (40,84) is always bottom-left and
+// (112,84) is always bottom-right, regardless of canvas size.
+
+// CAM_DIST_FRONT is the distance from the eye to the FRONT edge (y=84).
+// The control labelled "CAM Y" is this value (distance from front).
+let CAM_DIST_FRONT = 28;   // default: 28 steps (~63 ft) in front of front sideline
+let CAM_HEIGHT     = 8;
+
+const PW = FIELD_LENGTH_STEPS;  // 160
+const PH = FIELD_WIDTH_STEPS;   // 84
+
+// Derived camera geometry (recomputed on every camera change)
+let theta_rad, d_perp, camScale, oy;
+
+const CROP_X_MIN = 40;
+const CROP_X_MAX = 112;
+
+function recomputeCamera() {
+  // L = horizontal ground distance from eye to near edge (y=84)
+  // eyeH = eye height above field plane
+  const L    = CAM_DIST_FRONT;
+  const eyeH = CAM_HEIGHT;
+
+  // Viewing angle from horizontal (markdown §1)
+  theta_rad = Math.atan2(eyeH, L);
+
+  // Perpendicular distance from eye to the near-edge plane (d in markdown §2)
+  // d = sqrt(eyeH² + L²) — the hypotenuse of the viewing triangle
+  d_perp = Math.sqrt(eyeH * eyeH + L * L);
+
+  // project() maps field coords → paper-unit projected space.
+  // The markdown defines paper_y=0 as the NEAR edge (field y=84 here),
+  // and paper_y=PH as the FAR edge (field y=0). We remap inside project().
+  //
+  // At the near edge (paper_y=0), s=1, so xp = fieldX exactly.
+  // The viewport anchors: (40,84)→canvas bottom-left, (112,84)→canvas bottom-right.
+  // Those both have paper_y=0 → xp = 40 and 112.
+  // So [40..112] paper units = 72 units span the full canvas width.
+
+  camScale = W / (CROP_X_MAX - CROP_X_MIN);   // pixels per paper unit
+
+  // oy: canvas pixel row for paper_y=0 (the near edge / front sideline).
+  // Sits near the bottom of the canvas.
+  oy = Math.round(H * 0.97);   // H here is the canvas height constant (1080)
+}
+recomputeCamera();
+
+// Core perspective transform (markdown §2)
+// paper_y=0 is near edge (field y=84), paper_y=PH is far edge (field y=0)
+function project(fieldX, fieldY) {
+  const py = PH - fieldY;   // remap: field near(84)→paper near(0), field far(0)→paper far(PH)
+  const px = fieldX;
+
+  const s   = d_perp / (d_perp + py * Math.cos(theta_rad));
+  const xp  = (px - PW / 2) * s + PW / 2;
+  const yp  = py * Math.sin(theta_rad) * s;
+  return { xp, yp, s };
+}
+
+// Convert paper-space (xp, yp) → canvas pixels (markdown §3)
+function toCanvas(xp, yp) {
+  const cx = (xp - CROP_X_MIN) * camScale;   // anchored so xp=40 → cx=0, xp=112 → cx=W
+  const cy = oy - yp * camScale;              // yp increases away from viewer → up on screen
+  return { cx, cy };
+}
+
+function projectPoint(fieldX, fieldY) {
+  const { xp, yp, s } = project(fieldX, fieldY);
+  const { cx, cy } = toCanvas(xp, yp);
+  return { cx, cy, scale: s };
+}
+
+// ─── Field drawing ────────────────────────────────────────────────────────────
+function drawField3D() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Pre-compute corners
+  const farLeft   = projectPoint(0, 0);
+  const farRight  = projectPoint(FIELD_LENGTH_STEPS, 0);
+  const nearLeft  = projectPoint(0, FIELD_WIDTH_STEPS);
+  const nearRight = projectPoint(FIELD_LENGTH_STEPS, FIELD_WIDTH_STEPS);
+
+  // Sky — only fills the region above the far sideline
+  const sky = ctx.createLinearGradient(0, 0, 0, farLeft.cy);
+  sky.addColorStop(0, '#020a02');
+  sky.addColorStop(1, '#071407');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, W, farLeft.cy);
+
+  // Clip all field drawing to the trapezoid so nothing bleeds above the back edge
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(farLeft.cx,   farLeft.cy);
+  ctx.lineTo(farRight.cx,  farRight.cy);
+  ctx.lineTo(nearRight.cx, nearRight.cy);
+  ctx.lineTo(nearLeft.cx,  nearLeft.cy);
+  ctx.closePath();
+  ctx.clip();
+
+  // Draw field surface with perspective gradient
+  const fieldGrad = ctx.createLinearGradient(0, farLeft.cy, 0, oy);
+  fieldGrad.addColorStop(0,   '#0b5a1f');
+  fieldGrad.addColorStop(0.5, '#0d6e25');
+  fieldGrad.addColorStop(1,   '#0f7a2a');
+  ctx.fillStyle = fieldGrad;
+
+  ctx.beginPath();
+  ctx.moveTo(farLeft.cx,   farLeft.cy);
+  ctx.lineTo(farRight.cx,  farRight.cy);
+  ctx.lineTo(nearRight.cx, nearRight.cy);
+  ctx.lineTo(nearLeft.cx,  nearLeft.cy);
+  ctx.closePath();
+  ctx.fill();
+
+  // Alternating mow stripes (every 8 steps = 5 yards)
+  for (let x = 0; x < FIELD_LENGTH_STEPS; x += 8) {
+    const stripe = (Math.floor(x / 8) % 2 === 0);
+    if (!stripe) continue;
+    const tl = projectPoint(x,   0);
+    const tr = projectPoint(x+8, 0);
+    const br = projectPoint(x+8, FIELD_WIDTH_STEPS);
+    const bl = projectPoint(x,   FIELD_WIDTH_STEPS);
+    ctx.beginPath();
+    ctx.moveTo(tl.cx, tl.cy);
+    ctx.lineTo(tr.cx, tr.cy);
+    ctx.lineTo(br.cx, br.cy);
+    ctx.lineTo(bl.cx, bl.cy);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(0,0,0,0.08)';
+    ctx.fill();
+  }
+
+  // Grid lines – horizontal (across field width, parallel to sidelines)
+  const yLines = [0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80, 84];
+  for (const fy of yLines) {
+    const L = projectPoint(0, fy);
+    const R = projectPoint(FIELD_LENGTH_STEPS, fy);
+    const isMajor = fy % 8 === 0;
+    ctx.beginPath();
+    ctx.moveTo(L.cx, L.cy);
+    ctx.lineTo(R.cx, R.cy);
+    ctx.strokeStyle = isMajor ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.07)';
+    ctx.lineWidth = isMajor ? 1.2 : 0.5;
+    ctx.stroke();
+  }
+
+  // Grid lines – vertical (down the field)
+  for (let fx = 0; fx <= FIELD_LENGTH_STEPS; fx += 4) {
+    const isYardLine = fx % 8 === 0;
+    const T = projectPoint(fx, 0);
+    const B = projectPoint(fx, FIELD_WIDTH_STEPS);
+    ctx.beginPath();
+    ctx.moveTo(T.cx, T.cy);
+    ctx.lineTo(B.cx, B.cy);
+    ctx.strokeStyle = isYardLine ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.07)';
+    ctx.lineWidth = isYardLine ? 1.5 : 0.5;
+    ctx.stroke();
+  }
+
+  // Hash marks
+  for (let fx = 0; fx <= FIELD_LENGTH_STEPS; fx += 8) {
+    for (const hy of [28, FIELD_WIDTH_STEPS - 28]) {
+      const p  = projectPoint(fx, hy);
+      const p2 = projectPoint(fx + 0.3, hy);
+      ctx.beginPath();
+      ctx.moveTo(p.cx - (p2.cx - p.cx) * 2, p.cy);
+      ctx.lineTo(p.cx + (p2.cx - p.cx) * 2, p.cy);
+      ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  }
+
+  // Sideline boundary (all 4 edges, inside clip)
+  ctx.beginPath();
+  ctx.moveTo(farLeft.cx,   farLeft.cy);
+  ctx.lineTo(farRight.cx,  farRight.cy);
+  ctx.lineTo(nearRight.cx, nearRight.cy);
+  ctx.lineTo(nearLeft.cx,  nearLeft.cy);
+  ctx.closePath();
+  ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // End clip region
+  ctx.restore();
+
+
+
+}
+
+function drawVignette() {
+  // Subtle vignette over the whole canvas, drawn after field+marchers
+  const vig = ctx.createRadialGradient(W/2, H*0.6, W*0.15, W/2, H*0.6, W*0.75);
+  vig.addColorStop(0, 'rgba(0,0,0,0)');
+  vig.addColorStop(1, 'rgba(0,0,0,0.5)');
+  ctx.fillStyle = vig;
+  ctx.fillRect(0, 0, W, H);
+}
+
+// ─── Marcher drawing ──────────────────────────────────────────────────────────
+function drawMarchers() {
+  // Sort back-to-front (painters algorithm: low Y first)
+  const sorted = [...kids].sort((a, b) => a.y - b.y);
+
+  for (const kid of sorted) {
+    const { cx, cy, scale } = projectPoint(kid.x, kid.y);
+
+    const baseSize = 14 * scale;
+
+    // Derive step width in pixels at this marcher's y depth, then size the
+    // pill so it is exactly 3 field steps tall (≈ 3 × 22.5" = 5'7½")
+    const { cx: cx1 } = projectPoint(kid.x,     kid.y);
+    const { cx: cx2 } = projectPoint(kid.x + 1, kid.y);
+    const stepPx = Math.abs(cx2 - cx1);
+
+    // Body dimensions — cy is the ground contact point
+    const bodyW = stepPx * 1.2;
+    const bodyH = stepPx * 3;
+
+    const rx = cx - bodyW / 2;
+    const ry = cy - bodyH;
+    const rr = bodyW * 0.4;
+
+    // Draw body as a rounded pill, rising up from cy
+    ctx.beginPath();
+    ctx.roundRect(rx, ry, bodyW, bodyH, rr);
+    ctx.fillStyle = kid.c || '#ffff00';
+    ctx.fill();
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Direction nub: a white circle at ¼ down the pill, offset by direction
+    // direction=0 → right edge, direction=90 → center, direction=180 → left edge
+    // direction>180 → not drawn
+    const dir = kid.d ?? kid.direction;
+    if (dir !== undefined && dir <= 180) {
+      // t=0 at dir=0 (right), t=0.5 at dir=90 (center), t=1 at dir=180 (left)
+      const t = dir / 180;
+      const nubR = bodyW * 0.33;
+      // horizontal: right edge of pill body to left edge, with nub radius margin
+      const nubXRight = cx + bodyW / 2 - nubR * 0.5;
+      const nubXLeft  = cx - bodyW / 2 + nubR * 0.5;
+      const nubX = nubXRight + t * (nubXLeft - nubXRight);
+      const nubY = ry + bodyH * 0.25;
+
+      ctx.beginPath();
+      ctx.arc(nubX, nubY, nubR, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,0.92)';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.92)';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+
+  }
+}
+
+// ─── Simulation (mirrors main app logic) ────────────────────────────────────
+function cloneKids() {
+  return kids.map(k => ({ ...k, ch: k.ch ? [...k.ch] : [] }));
+}
+
+function applySnapshot(state) {
+  kids.forEach(kid => {
+    const match = state.find(s => s.id === kid.id);
+    if (match) {
+      kid.x = match.x;
+      kid.y = match.y;
+      kid.d = match.d;
+      kid.m = match.m;
+      kid.c = match.c;
+    }
+  });
+}
+
+function cloneKidStates() {
+  return kids.map(kid => ({
+    id: kid.id, x: kid.x, y: kid.y,
+    d: kid.d,  m: kid.m, c: kid.c
+  }));
+}
+
+function advance(silent = false) {
+  kids.forEach(kid => {
+    const change = kid.ch ? kid.ch.find(c => c.s === currentStep) : null;
+    let stepSize = 1;
+
+    if (change) {
+      if (change.d  !== undefined) kid.d = change.d;
+      if (change.m  !== undefined) kid.m = change.m;
+      if (change.ss !== undefined) stepSize = change.ss;
+      if (change.x  !== undefined) kid.x = change.x;
+      if (change.y  !== undefined) kid.y = change.y;
+    }
+
+    if (kid.m && change?.x === undefined && change?.y === undefined) {
+      const radians = (kid.d * Math.PI) / 180;
+      kid.x += Math.cos(radians) * stepSize;
+      kid.y += Math.sin(radians) * stepSize;
+    }
+  });
+
+  currentStep++;
+  if (currentStep % 16 === 0) {
+    snapshots.set(currentStep, cloneKidStates());
+  }
+
+  if (!silent) render();
+}
+
+function simulateToStep(targetStep) {
+  let nearestSnap = 0;
+  for (const s of [...snapshots.keys()].sort((a, b) => b - a)) {
+    if (s <= targetStep) { nearestSnap = s; break; }
+  }
+  applySnapshot(snapshots.get(nearestSnap));
+  currentStep = nearestSnap;
+  for (let i = nearestSnap; i < targetStep; i++) advance(true);
+  render();
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+function render() {
+  drawField3D();
+  drawMarchers();
+  drawVignette();
+  updateUI();
+}
+
+function updateUI() {
+  document.getElementById('step-info').textContent = `STEP ${currentStep}`;
+  const slider = document.getElementById('scrubSlider');
+  slider.value = currentStep;
+  const maxStep = snapshots.size > 0 ? Math.max(...snapshots.keys()) : 0;
+  slider.max = maxStep;
+  document.getElementById('scrubMax').textContent = maxStep;
+}
+
+// ─── Controls ─────────────────────────────────────────────────────────────────
+function startPlay() {
+  isPlaying = true;
+  document.getElementById('playBtn').textContent = '⏹';
+  document.getElementById('playBtn').classList.add('active');
+  scheduleNext();
+}
+
+function stopPlay() {
+  isPlaying = false;
+  document.getElementById('playBtn').textContent = '▶';
+  document.getElementById('playBtn').classList.remove('active');
+  if (playTimer) { clearTimeout(playTimer); playTimer = null; }
+}
+
+function scheduleNext() {
+  if (!isPlaying) return;
+  advance();
+  playTimer = setTimeout(scheduleNext, (60 / tempo) * 1000);
+}
+
+function rewind() {
+  stopPlay();
+  applySnapshot(snapshots.get(0));
+  currentStep = 0;
+  render();
+}
+
+document.getElementById('playBtn').addEventListener('click', () => {
+  if (isPlaying) stopPlay(); else startPlay();
+});
+
+document.getElementById('rewindBtn').addEventListener('click', rewind);
+
+document.getElementById('stepBackBtn').addEventListener('click', () => {
+  stopPlay();
+  if (currentStep > 0) simulateToStep(currentStep - 1);
+});
+
+document.getElementById('stepFwdBtn').addEventListener('click', () => {
+  stopPlay();
+  advance();
+});
+
+document.getElementById('scrubSlider').addEventListener('input', e => {
+  stopPlay();
+  simulateToStep(parseInt(e.target.value));
+});
+
+document.getElementById('tempo-input').addEventListener('input', e => {
+  tempo = Math.max(40, parseInt(e.target.value) || 180);
+});
+
+function onCamChange() { recomputeCamera(); render(); }
+
+document.getElementById('camYInput').addEventListener('input', e => {
+  CAM_DIST_FRONT = Math.max(1, parseInt(e.target.value) || 28);
+  onCamChange();
+});
+document.getElementById('camHInput').addEventListener('input', e => {
+  CAM_HEIGHT = Math.max(1, parseInt(e.target.value) || 8);
+  onCamChange();
+});
+
+// ─── File loading ─────────────────────────────────────────────────────────────
+document.getElementById('loadBtn').addEventListener('click', () => {
+  const file = document.getElementById('fileInput').files[0];
+  if (!file) { alert('Select a .json file first.'); return; }
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const json = JSON.parse(e.target.result);
+      if (!Array.isArray(json)) { alert('Invalid format.'); return; }
+
+      stopPlay();
+      kids = json.map(kid => ({ ...kid, ch: kid.ch || [] }));
+      currentStep = 0;
+      snapshots = new Map();
+      snapshots.set(0, cloneKidStates());
+
+      document.getElementById('marcher-count').textContent =
+        `${kids.length} marcher${kids.length !== 1 ? 's' : ''} loaded — ${file.name}`;
+
+      // Pre-compute snapshots by simulating forward silently
+      // Find max step in changes
+      let maxChangeStep = 0;
+      for (const kid of kids) {
+        if (kid.ch) {
+          for (const c of kid.ch) {
+            if (c.s > maxChangeStep) maxChangeStep = c.s;
+          }
+        }
+      }
+
+      // Restore to step 0, pre-warm snapshots silently
+      applySnapshot(snapshots.get(0));
+      currentStep = 0;
+      for (let i = 0; i < maxChangeStep + 32; i++) advance(true);
+
+      // Go back to start
+      applySnapshot(snapshots.get(0));
+      currentStep = 0;
+      render();
+
+    } catch (err) {
+      alert('Error parsing JSON: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+});
+
+// ─── Video Export ─────────────────────────────────────────────────────────────
+const exportBtn = document.getElementById('exportBtn');
+
+exportBtn.addEventListener('click', () => {
+  if (kids.length === 0) { alert('Load a drill file first.'); return; }
+
+  // Detect supported MIME type
+  const mimeTypes = [
+    'video/webm;codecs=vp9',
+    'video/webm;codecs=vp8',
+    'video/webm',
+  ];
+  const mimeType = mimeTypes.find(m => MediaRecorder.isTypeSupported(m)) || 'video/webm';
+
+  // Capture canvas stream at display framerate
+  const fps = 60;
+  const stream = canvas.captureStream(fps);
+  const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 8_000_000 });
+  const chunks = [];
+
+  recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { type: mimeType });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'drill-animation.webm';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+    exportBtn.textContent = '⬇ Export Video';
+    exportBtn.classList.remove('recording');
+    exportBtn.disabled = false;
+    document.getElementById('marcher-count').textContent =
+      `${kids.length} marcher${kids.length !== 1 ? 's' : ''} — export complete ✓`;
+  };
+
+  // Pause live playback
+  stopPlay();
+
+  // Rewind to step 0
+  applySnapshot(snapshots.get(0));
+  currentStep = 0;
+  render();
+
+  // Find end step
+  let maxStep = 0;
+  for (const s of snapshots.keys()) if (s > maxStep) maxStep = s;
+
+  exportBtn.textContent = '● Recording…';
+  exportBtn.classList.add('recording');
+  exportBtn.disabled = true;
+
+  document.getElementById('marcher-count').textContent =
+    `Recording… step 0 / ${maxStep}`;
+
+  recorder.start();
+
+  // Drive animation frame-by-frame using requestAnimationFrame at the drill tempo
+  const msPerStep = (60 / tempo) * 1000;
+  let lastTime = null;
+  let accumulated = 0;
+
+  function exportFrame(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    const delta = timestamp - lastTime;
+    lastTime = timestamp;
+    accumulated += delta;
+
+    // Advance as many drill steps as time has elapsed
+    while (accumulated >= msPerStep && currentStep <= maxStep) {
+      advance(true);
+      accumulated -= msPerStep;
+    }
+
+    render();
+    document.getElementById('marcher-count').textContent =
+      `Recording… step ${currentStep} / ${maxStep}`;
+
+    if (currentStep <= maxStep) {
+      requestAnimationFrame(exportFrame);
+    } else {
+      // Give the stream one more frame then stop
+      requestAnimationFrame(() => {
+        render();
+        recorder.stop();
+      });
+    }
+  }
+
+  requestAnimationFrame(exportFrame);
+});
+
+// ─── Initial draw ─────────────────────────────────────────────────────────────
+drawField3D();
+drawVignette();
+</script>
+</body>
+</html>
