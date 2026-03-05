@@ -855,37 +855,35 @@ document.getElementById('loadBtn').addEventListener('click', () => {
   reader.readAsText(file);
 });
 
-// ─── Video Export (MP4 via WebCodecs + mp4-muxer) ────────────────────────────
+// ─── Video Export (MP4 via WebCodecs + mp4-muxer StreamTarget) ───────────────
 const exportBtn = document.getElementById('exportBtn');
 
 exportBtn.addEventListener('click', async () => {
   if (kids.length === 0) { alert('Load a drill file first.'); return; }
 
   if (typeof VideoEncoder === 'undefined') {
-    alert('Your browser does not support VideoEncoder (WebCodecs). Try Firefox or Chrome.');
+    alert('Your browser does not support VideoEncoder (WebCodecs). Try Chrome or Firefox desktop.');
     return;
   }
 
   // Parameters
-  const FPS        = 60;                          // video frame rate
-  const BITRATE    = 1_000_000;                   // 1 Mbps — small file, good quality for flat graphics
-  const codecStr   = 'avc1.640028';              // H.264 High Profile Level 4
-  const secPerStep = 60 / tempo;                  // real-time seconds per drill step
-  const usPerStep  = secPerStep * 1_000_000;      // microseconds per drill step
-  const framesPerStep = Math.max(1, Math.round(FPS * secPerStep)); // video frames per drill step
+  const FPS        = 60;
+  const BITRATE    = 1_000_000;         // 1 Mbps
+  const codecStr   = 'avc1.640028';    // H.264 High Profile Level 4
+  const secPerStep = 60 / tempo;
+  const framesPerStep = Math.max(1, Math.round(FPS * secPerStep));
 
   // Check codec support
   const support = await VideoEncoder.isConfigSupported({
     codec: codecStr, width: W, height: H, bitrate: BITRATE, framerate: FPS
   });
   if (!support.supported) {
-    alert('H.264 encoding not supported in this browser. Try Chrome or Firefox.');
+    alert('H.264 encoding not supported in this browser.');
     return;
   }
 
   stopPlay();
 
-  // Find end step
   let maxStep = 0;
   for (const s of snapshots.keys()) if (s > maxStep) maxStep = s;
 
@@ -894,12 +892,20 @@ exportBtn.addEventListener('click', async () => {
   exportBtn.disabled = true;
   document.getElementById('marcher-count').textContent = 'Encoding MP4… step 0 / ' + maxStep;
 
-  // Set up muxer
-  const { Muxer, ArrayBufferTarget } = Mp4Muxer;
+  // StreamTarget: collect chunks incrementally — no single large buffer in memory
+  const { Muxer, StreamTarget } = Mp4Muxer;
+  const outputChunks = [];
+
   const muxer = new Muxer({
-    target: new ArrayBufferTarget(),
+    target: new StreamTarget({
+      chunked: true,
+      chunkSize: 1024 * 512,   // 512 KB chunks
+      onData: (data, position) => {
+        outputChunks.push({ data: data.slice(), position });
+      }
+    }),
     video: { codec: 'avc', width: W, height: H },
-    fastStart: 'in-memory'
+    fastStart: 'fragmented'   // fMP4 — required for StreamTarget to flush incrementally
   });
 
   const encoder = new VideoEncoder({
@@ -909,35 +915,27 @@ exportBtn.addEventListener('click', async () => {
 
   encoder.configure({ codec: codecStr, width: W, height: H, bitrate: BITRATE, framerate: FPS });
 
-  // Render into an OffscreenCanvas so we don't disturb the visible canvas
+  // OffscreenCanvas — draw here without touching the visible canvas
   const offscreen = new OffscreenCanvas(W, H);
   const offCtx    = offscreen.getContext('2d');
 
-  // Helper: render one drill state onto offscreen, return a VideoFrame
-  function renderOffscreen(timestampUs) {
-    // Copy the visible canvas to offscreen via drawImage
-    offCtx.drawImage(canvas, 0, 0);
-    return new VideoFrame(offscreen, { timestamp: timestampUs });
-  }
-
-  // Rewind simulation to step 0
   applySnapshot(snapshots.get(0));
   currentStep = 0;
 
   let videoFrameIndex = 0;
 
-  // Process in small async chunks so the UI stays responsive
-  async function encodeChunk(fromStep, toStep) {
+  async function encodeSteps(fromStep, toStep) {
     for (let step = fromStep; step <= toStep; step++) {
-      // Draw this drill step onto the visible canvas
       drawField3D();
       drawMarchers();
       drawVignette();
 
-      // Emit framesPerStep video frames for this drill step
+      // Copy visible canvas → offscreen → VideoFrame
+      offCtx.drawImage(canvas, 0, 0);
+
       for (let f = 0; f < framesPerStep; f++) {
         const timestampUs = Math.round(videoFrameIndex * (1_000_000 / FPS));
-        const frame = renderOffscreen(timestampUs);
+        const frame = new VideoFrame(offscreen, { timestamp: timestampUs });
         encoder.encode(frame, { keyFrame: videoFrameIndex % (FPS * 2) === 0 });
         frame.close();
         videoFrameIndex++;
@@ -950,29 +948,30 @@ exportBtn.addEventListener('click', async () => {
     }
   }
 
-  // Encode in chunks of 32 steps, yielding between each so UI updates
-  const CHUNK = 32;
-  for (let s = 0; s <= maxStep; s += CHUNK) {
-    const end = Math.min(s + CHUNK - 1, maxStep);
-    await encodeChunk(s, end);
-    await new Promise(r => setTimeout(r, 0)); // yield to event loop
+  // Process in batches of 16 steps, yielding between each so browser stays alive
+  const BATCH = 16;
+  for (let s = 0; s <= maxStep; s += BATCH) {
+    await encodeSteps(s, Math.min(s + BATCH - 1, maxStep));
+    await new Promise(r => setTimeout(r, 0));
   }
 
-  // Flush and finalize
   await encoder.flush();
   encoder.close();
   muxer.finalize();
 
-  const { buffer } = muxer.target;
-  const blob = new Blob([buffer], { type: 'video/mp4' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
+  // Reassemble streamed chunks into a single Blob for download
+  // Chunks may arrive out-of-position order, so sort and stitch
+  outputChunks.sort((a, b) => a.position - b.position);
+  const blob = new Blob(outputChunks.map(c => c.data), { type: 'video/mp4' });
+  const totalMB = (blob.size / 1024 / 1024).toFixed(2);
+
+  const url = URL.createObjectURL(blob);
+  const a   = document.createElement('a');
+  a.href    = url;
   a.download = 'drill-animation.mp4';
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 10000);
 
-  // Restore visible canvas to step 0
   applySnapshot(snapshots.get(0));
   currentStep = 0;
   render();
@@ -982,7 +981,7 @@ exportBtn.addEventListener('click', async () => {
   exportBtn.disabled = false;
   document.getElementById('marcher-count').textContent =
     kids.length + ' marcher' + (kids.length !== 1 ? 's' : '') +
-    ' — export complete (' + (buffer.byteLength / 1024 / 1024).toFixed(2) + ' MB)';
+    ' — export complete (' + totalMB + ' MB)';
 });
 
 // ─── Initial draw ─────────────────────────────────────────────────────────────
